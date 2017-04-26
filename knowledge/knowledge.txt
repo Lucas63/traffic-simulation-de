@@ -1,0 +1,24 @@
+# Road Traffic simulation theory
+
+Gamma project: Traffic Simulation, Reconstruction, and Route Planning
+http://gamma.cs.unc.edu/research/traffic/
+
+Continuum Traffic Simulation
+http://gamma.cs.unc.edu/CTS/cts-paper.pdf
+
+Interactive Hybrid Simulation of Large-Scale Traffic
+http://gamma.cs.unc.edu/HYBRID_TRAFFIC/hybrid-traffic-2011.pdf
+
+
+Great book about road traffic simulation
+http://www.informatik.htw-dresden.de/~fritzsch/SE/Belegaufgaben/ampelagenten/VIS_SIM_V1.0/finalReport.pdf
+
+Sample Chapter from "Traffic Flow Dynamics" written by M.Treiber and A.Kesting
+Chapter 11
+Car-Following Models based on Driving Strategies
+http://traffic-flow-dynamics.org/res/SampleChapter11.pdf
+
+# Theory for our project
+
+Longitudinal Traffic model: The IDM
+http://www.traffic-simulation.de/info/IDM.html
