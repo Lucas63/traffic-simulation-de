@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <link href="css/sliders.css" rel="stylesheet" type="text/css" />
+    <link href="css/styleResponsive.css" rel="stylesheet" type="text/css" />
+    <link href="css/styleULandscape.css" rel="stylesheet" type="text/css"/>
+    <link href="css/styleUPortrait.css" rel="stylesheet" type="text/css"/>
+    <link href="css/styleUphill.css" rel="stylesheet" type="text/css"/>
+
+    <title> Microsimulation of Traffic Flow: Uphill</title>
+</head>
+
+
+<body>
+  
+<!-- ############################################## -->
+<!-- outer container                                -->
+<!-- ############################################## -->
+
+<div id="container">
+
+
+
+<!-- ############################################## -->
+<!-- header: title image loaded as background image via css -->
+<!-- ############################################## -->
+
+<div id="header"> 
+  <img class="title" src="figs/title.png"  width="100%"/>
+</div> 
+
+
+<!-- ############################################## -->
+<!-- Buttons                                        -->
+<!-- ############################################## -->
+
+<!-- redirects to other scenarios, defines myRedirectX -->
+<script src="js/redirect.js" type="text/javascript"></script>
+
+<div id="scenarios">
+<center>
+  <button id="startStop" onclick="myStartStopFunction()">Stop</button>
+  <button onclick="myRedirectRing()">Ringroad</button>
+  <button onclick="myRedirectOnramp()">Onramp</button>
+  <button onclick="myRedirectOfframp()">Offramp</button>
+  <button onclick="myRedirectRoadworks()">RoadWorks</button>
+  <button onclick="myRedirectUphill()">Uphill</button>
+  <button onclick="myRedirectRouting()">Routing</button>
+</center>
+
+<br>
+<center>
+  <button onclick="disturbOneVehicle(0.7,8)">Disturb Traffic</button>
+</center>
+
+</div> 
+
+<div id="buttonsInsideSimulations">
+<center>
+  <button id="overtakingBan" class="action" 
+    onclick="toggleTruckOvertakingBan()">
+    Enforce Truck Overtaking Ban
+  </button>
+</center>
+</div> 
+
+
+<!-- ############################################## -->
+<!-- the actual simulation canvas -->
+<!-- ############################################## -->
+
+<div id="contents">
+  <canvas id="canvas_uphill" width="800" height="600">
+    You are probably using a very ancient web browser (or an Internet Explorer) 
+    not supporting html5 canvas. Please switch to another browser for
+    running this simulation.
+  </canvas>
+</div>
+
+
+<!-- ################################################# -->
+<!-- Sliders 1: global simulation and demand variables -->
+<!-- ################################################# -->
+
+<div id="sliders1">
+<table id="mainTable" border="0" cellspacing="1" cellpadding="0" >
+<!-- !! ">Timewarp<", not "> Timewarp <" etc because of engl2ger. bash-->
+
+
+<tr>
+<td> Truck Fraction</td>
+<td> <div id="track_truckFrac"> <div id="slider_truckFrac"></div></div></td>
+<td> <div id="valueField_truckFrac"></div>
+</tr>
+
+<tr>
+<td> Inflow</td>
+<td> <div id="track_qIn"> <div id="slider_qIn"></div></div></td>
+<td> <div id="valueField_qIn"></div>
+</tr>
+
+<tr>
+<td> Speed Limit</td>
+<td> <div id="track_speedL"> <div id="slider_speedL"></div></div></td>
+<td> <div id="valueField_speedL"></div>
+</tr>
+
+<tr>
+ <td> <font color="red"><b>Uphill Truck Speed</b> </td>
+ <td> <div id="track_IDM_v0Up"> <div id="slider_IDM_v0Up"></div></div></td>
+ <td> <div id="valueField_IDM_v0Up" style="color:red; font-weight:bold;"></div>
+</tr>
+
+
+</table>
+</div>
+
+<!-- ################################################# -->
+<!-- Sliders 2: Main model parameters and specific controls-->
+<!-- ################################################# -->
+
+<div id="sliders2">
+<table border="0" cellspacing="1" cellpadding="0">
+
+
+<tr>
+ <td>Timewarp</td>
+ <td> <div id="track_timewarp"> <div id="slider_timewarp"></div></div></td>
+ <td> <div id="valueField_timewarp"></div>
+</tr>
+
+<tr>
+ <td> Max Speed v<sub>0</sub></td>
+ <td> <div id="track_IDM_v0"> <div id="slider_IDM_v0"></div></div></td>
+ <td> <div id="valueField_IDM_v0"></div>
+</tr>
+
+<tr>
+ <td> Time Gap T</td>
+ <td> <div id="track_IDM_T"> <div id="slider_IDM_T"></div></div></td>
+ <td> <div id="valueField_IDM_T"></div>
+</tr>
+
+<tr>
+ <td> Max Acceleration a</td>
+ <td> <div id="track_IDM_a"> <div id="slider_IDM_a"></div></div></td>
+ <td> <div id="valueField_IDM_a"></div>
+</tr>
+
+
+</table>
+</div>
+
+
+<!-- ############################################## -->
+<!-- language switching
+<!-- ############################################## -->
+
+<div id="infoFlags">
+<a href = "uphill.html">
+ <img src="icons/flagUSA.png" width="45%" />
+</a>
+
+<a href = "uphill_ger.html">
+ <img src="icons/flagGerman.png" width="45%" />
+</a>
+</div>
+
+
+
+<!-- ############################################## -->
+<!-- here comes the former navigation*.html frame   -->
+<!-- ############################################## -->
+
+<div id="footWhiteSpace"> </div> <!--white space below sim if portrait-->
+<div id="infoModels"> <link data-wi-src="infoModels.html" /></div>
+<div id="infoScenarios"> <link data-wi-src="infoScenarios.html" /></div>
+<div id="infoLinks"> <link data-wi-src="infoLinks.html" /></div>
+<div id="impressum"> <a href="impressum.html">
+  &copy; Martin Treiber</a></div>
+
+<!-- ############################################## -->
+<!-- end former navigation*.html frame   -->
+<!-- ############################################## -->
+
+
+</div> <!-- end outer container -->
+
+
+
+<!-- specific scripts; position after def of canvas! -->
+
+<script src="js/dw_slider.js" type="text/javascript"></script>
+<!-- <script src="js/canvasresize.js" type="text/javascript"></script>-->
+
+<script src="js/uphill_gui.js"></script> 
+<script src="js/colormanip.js"></script>
+<script src="js/models.js"></script> 
+<script src="js/vehicle.js"></script>
+<!--<script src="js/myMath.js"></script> -->
+<script src="js/paths.js"></script>
+<script src="js/road.js"></script>
+<script src="js/uphill.js"></script> 
+
+<script src="wm-html-include/wm-html-include.js"> </script>
+
+</body>
+</html>
