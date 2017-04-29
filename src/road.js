@@ -42,35 +42,35 @@ function Road( roadConfig )
 // Update leader car on lane
 Road.prototype.updateLeader = function( index )
 {
-        console.log("updateLeader() for " + index + " car");
+    console.log("updateLeader() for " + index + " car");
 }
 
 // update a lagger (presently I don't know is it the last car or not)
 Road.prototype.updateLagger = function( index )
 {
-        console.log("updateLagger() for " + index + " car");
+    console.log("updateLagger() for " + index + " car");
 }
 
 // leader at the right lane for car specified by index
 Road.prototype.updateLeaderAtRight = function( index )
 {
-        console.log("updateLeaderAtRight() for " + index + " car");
+    console.log("updateLeaderAtRight() for " + index + " car");
 }
 
 Road.prototype.updateLaggerAtRight = function( index )
 {
-        console.log("updateLaggerAtRight() for " + index + " car");
+    console.log("updateLaggerAtRight() for " + index + " car");
 }
 
 // leader at the left lane for car specified by index
 Road.prototype.updateLeaderAtLeft = function( index )
 {
-        console.log("updateLeaderAtLeft() for " + index + " car");
+    console.log("updateLeaderAtLeft() for " + index + " car");
 }
 
 Road.prototype.updateLaggerAtLeft = function( index )
 {
-        console.log("updateLaggerAtLeft() for ", index, " car");
+    console.log("updateLaggerAtLeft() for ", index, " car");
 }
 
 // update positions of all cars on all lanes
