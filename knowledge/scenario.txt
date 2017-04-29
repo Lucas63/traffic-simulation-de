@@ -1,0 +1,25 @@
+This is proposed work flow:
+
+There are several re-spawn points where bot cars appeared.
+All these points located on some map board borders.
+First 3 seconds our main car is waiting, this time bot cars appeared
+and moved to their destination. This delay is required to create real traffic
+before main car starts.
+
+Main car knows own destination point, calculates the shortest path
+and move according to it. For now no changes in route according to real road traffic.
+
+There is predefined destination point for all cars in re-spawn point.
+It means all of them move on the same route.
+
+
+Cars:
+There are 2 types of cars: car and truck.
+Car has less length, width, but more maximum velocity and time headway.
+Trucks have more length, width, but less maximum velocity and time headway.
+
+
+Goal:
+The very first prototype must contain two cars: main and companion
+and they must interact in appropriate way. It means move according to
+programmed model.
