@@ -20,5 +20,22 @@ http://traffic-flow-dynamics.org/res/SampleChapter11.pdf
 
 # Theory for our project
 
+Project we stolen:)
+https://github.com/movsim/movsim-js
+
 Longitudinal Traffic model: The IDM
 http://www.traffic-simulation.de/info/IDM.html
+
+
+Intelligent-Driver Model
+
+(there is code example)
+http://itp.uni-frankfurt.de/~gros/StudentProjects/Applets_2014_IntelligentDriverModel/IDM.html
+
+IDM with ACC(Adaptive Cruise Control) in details
+http://tigerprints.clemson.edu/cgi/viewcontent.cgi?article=2936&context=all_theses
+
+
+The Runge-Kutta method for approximation
+This is how new position and velocity approximated and evaluated
+https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods
