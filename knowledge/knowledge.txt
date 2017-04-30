@@ -20,6 +20,23 @@ http://traffic-flow-dynamics.org/res/SampleChapter11.pdf
 
 # Theory for our project
 
+##############################################
+MUST HAVE TO READ:
+The Lane-Change Model MOBIL used in project
+http://www.traffic-simulation.de/info/MOBIL.html
+
+Theory for MOBIL
+http://www.mtreiber.de/publications/MOBIL_TRB.pdf
+
+
+IDM used in project
+http://www.traffic-simulation.de/info/IDM.html
+
+Theory for Intelligent Driver model
+http://tigerprints.clemson.edu/cgi/viewcontent.cgi?article=2936&context=all_theses
+
+##############################################
+
 Project we stolen:)
 https://github.com/movsim/movsim-js
 
