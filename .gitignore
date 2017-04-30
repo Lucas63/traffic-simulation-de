@@ -27,3 +27,5 @@ css_old
 trafficSimulationLocalVersion
 testNetwork
 js/save
+
+js/*.js
