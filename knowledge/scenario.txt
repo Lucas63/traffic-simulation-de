@@ -23,3 +23,97 @@ Goal:
 The very first prototype must contain two cars: main and companion
 and they must interact in appropriate way. It means move according to
 programmed model.
+
+
+Workflow:
+
+1. Load info for map.
+It stored in .json file and contains next data:
+Roads: start point, end point, direction: from bottom to up, from up to bottom,
+from left to right, from right to left. This information used for rendering.
+
+Each vehicle just move forward during calculation with no knowledge about road
+direction.
+
+Each road has 2 forward and backward lanes:
+Backward  Forward
+ |↓||↓|   |↑||↑|
+ |↓||↓|   |↑||↑|
+ |↓||↓|   |↑||↑|
+
+We use right-hand traffic, we are not dump British ones.
+
+Width of each lane is fixed, lane's length equal to road's length.
+Map creates special object Hurdle at any roads connection point to make
+vehicles decrease velocity.
+
+
+After that spawn points are listed. They assigned to some lane.
+Each spawn point has appropriate destination point.
+
+Main car origin and destination points. The main car is the one which
+route we model and calculate.
+Also road id and lane id provided to know beforehand where to add the main car.
+
+
+Next data are traffic lights: location - it is junction of 4 roads.
+Traffic light used also for denoting intersections: each vehicle slows down
+before any hurdle.
+
+Traffic light has next properties: time and light.
+Time is a spent time after last light change.
+Each light has own period:
+Red light 20s
+Yellow light 3s
+Green light 30s
+
+Map is a square, for example, 1000x1000.
+Calculations are free from representation and renderer only use info after
+calculations on each step.
+
+2. Create initial traffic
+
+First 3 seconds used for creating vehicles on the map before car is of the
+interest to make "crowd".
+This time spawn points generate vehicles: trucks and cars with some interval.
+Proposed values: 20% probability to create truck and 80% for car.
+Initial velocity is in range [15-30] km/h for trucks and [30-45] km/h.
+
+Spawn point logic:
+The point has predefined route: starting lane where a vehicle appeared and
+destination point where the vehicle is moving. Path calculated by Dijkstra's
+algorithm and never changed. Or can be set manually.
+
+Start simulation.
+
+
+3. Simulation
+
+3.1 Vehicle properties
+Each car has next properties:
+- position;
+- velocity;
+- acceleration;
+- type: Truck or Car.
+- global parameters
+- politeness factor;
+- state: moving, changing lane, idle.
+- - Moving state: vehicle on move (no matter, increasing or decreasing velocity)
+    only du > 0, dv = 0. du - moving along lane, dv - moving across lane
+- - Changing lane: du > 0, dv > 0
+- - idle: the vehicle doesn't move, du = dv = 0
+- index of leading the vehicle (vehicle before current one)
+
+3.2 Lane properties
+Lane has array of vehicles, sorted in the same order they are on the lane
+orientation: forward or backward (used in rendering)
+
+3.3 Road properties
+Each road has overall width and length.
+Forward lanes: array[2]
+Backward lanes: array[2]
+
+3.4 Junction
+
+?. Add Main Car to the road
+Calculate the shortest path for the main car. Add it to the lane.
