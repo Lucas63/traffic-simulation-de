@@ -6,13 +6,18 @@ var LANE_DIRECTION =
 }
 
 
-function Lane( _cars, _direction )
+function Lane( _vehicles, _direction )
 {
-    this.cars = cars;
+    this.vehicles = _vehicles;
     this.direction = _direction;
 }
 
-Lane.prototype.addCar = function( car )
+Lane.prototype.addVehicle = function( vehicle )
 {
-    this.cars.push( car );
+    this.vehicle.push( vehicle );
+}
+
+Lane.prototype.sortVehicles()
+{
+    console.log("sortVehicles()")
 }

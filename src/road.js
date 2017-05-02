@@ -1,6 +1,6 @@
 // Layout of road, orientation used in calculation of car positions
 // also used by map for rendering
-var DirectionEnum =
+var RoadDirectionEnum =
 {
     LEFT_TO_RIGTH : 0,
     RIGHT_TO_LEFT : 1,
@@ -15,17 +15,16 @@ var DirectionEnum =
  * \param _roadLength - length in distance units
  * \param _laneWidth - width of the single lane
  * \param _lanes - array with all lanes related to current road
- * \param _orientation - Direction.HORIZONTAL or Direction.VERTICAL
+ * \param _orientation - value from RoadDirectionEnum
  */
-function RoadConfig( _roadLength, _laneWidth, _lanes[], _orientation,
-                     _cars[] )
+function RoadConfig( _roadLength, _laneWidth, _lanes, _direction, _cars )
 {
     this.roadLength = _roadLength;
 
     // Lane length is equal to road length
     this.laneWidth = _laneWidth;
     this.lanes = _lanes;
-    this.orientation = _orientation;
+    this.direction = _direction;
     this.cars = _cars;
 }
 
@@ -37,6 +36,17 @@ function Road( roadConfig )
     this.roadLength = roadConfig.laneWidth;
     this.roadWidth = roadConfig.lanesWidth * roadConfig.lanes.length;
     this.lanes = roadConfig.lanes;
+}
+
+Road.prototype.addVehicleToLane( vehicle, laneIndex )
+{
+    if (laneIndex < 0 || laneIndex >= this.lanes.length)
+    {
+        return false;
+    }
+
+    this.lanes[laneIndex].addVehicle( vehicle );
+    return true;
 }
 
 // Update leader car on lane
@@ -76,19 +86,25 @@ Road.prototype.updateLaggerAtLeft = function( index )
 // update positions of all cars on all lanes
 Road.prototype.update = function()
 {
-    for (i = 0; i < this.cars.length; i++)
+    lane = null;
+    for (i = 0; i < this.lanes.length; ++i)
     {
-        this.updateLeader( i );
+        lane = this.lanes[i];
 
-        this.updateLagger( i );
+        for (j = 0; j < lane.cars.length; j++)
+        {
+            this.updateLeader( j );
 
-        this.updateLeaderAtLeft( i );
+            this.updateLagger( j );
 
-        this.updateLaggerAtLeft( i );
+            this.updateLeaderAtLeft( j );
 
-        this.updateLeaderAtRight( i );
+            this.updateLaggerAtLeft( j );
 
-        this.updateLaggerAtRight( i );
+            this.updateLeaderAtRight( j );
+
+            this.updateLaggerAtRight( j );
+        }
     }
 }
 
