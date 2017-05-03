@@ -117,3 +117,76 @@ Backward lanes: array[2]
 
 ?. Add Main Car to the road
 Calculate the shortest path for the main car. Add it to the lane.
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////
+
+Workflow from routing.js
+1. Create IDM and MOBIL objects for different vehicles.
+lines 253-265
+
+2. Create 2 roads: main and deviation.
+Initialize properties of roads.
+lines 272-288
+
+3. Add virtual vehicle at the end of on-ramp (it served as an obstacle) to the
+beginning of deviation road.
+lines 295-300
+
+4. Add virtual roadwork vehicles(also served as obstacles).
+After that sort vehicles according to position on lane by u coordinate
+in descending order.(the less index the closer vehicle to the end of lane).
+updateEnvironment() sets leader and follower vehicle for each vehicle on the
+present, left and right lanes.
+lines 308-322
+
+5. Set route for each vehicle on main road.
+fracOff is a fraction of offramps and can be changed by UI.
+
+6. Next part is the very important updateU() function.
+There are 2 roads: main - road with 2 straight parts and one arc and
+deviation - road with on-ramp and offramp and laid below main road.
+lDev is a length of deviation
+lrampDev is a length of merge and diverge points on main road
+diverge point is a on-ramp - ability to switch to another road, namely deviation
+merge point is a location where vehicles leave deviation and again move on
+main road.
+-------------------------------------------------------
+7. updateTruckFrac() looks for current percentage of trucks among all vehicles
+and decide whether add more trucks to reach desired fraction or car.
+
+8. updateModelsOfAllVehicles()
+- select model object for each type of vehicle
+- find index of the nearest offramp by getNextOffIndex()
+- look if the vehicle has route with this offramp
+- decide whether turn left or right
+- update Lane Change (LC) model
+
+9. setLCMandatory()
+if a vehicle in the range [umin; umax], set its LC model as mandatory.
+It means make the vehicle change lane.
+
+10. call setCFModelsInRange() for deviation
+if a vehicle in the range [umin; umax], set it longModel (may be longitudinal
+model) to CF model. CF is a flow-conserving, used to set behaviour model in
+bottlenecks.
+
+11. updateLastLCtimes()
+add dt to fields dt_lastLC - time after the last lane change
+the same for dt_lastPassiveLC
+
+12. calcAccelerations() - calculate accelerations of each vehicle
+
+13. changeLanes()
+- iterate over all vehicles on lane and check whether it moves to the right lane
+- the same, but for the left lane
+
+14. updateSpeedPositions()
+- update acceleration for each vehicle
+- update speed for each vehicle
+- update info about leaders/followers for all vehicles
