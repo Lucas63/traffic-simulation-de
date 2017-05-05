@@ -99,7 +99,7 @@ Each car has next properties:
 - politeness factor;
 - state: moving, changing lane, idle.
 - - Moving state: vehicle on move (no matter, increasing or decreasing velocity)
-    only du > 0, dv = 0. du - moving along lane, dv - moving across lane
+	only du > 0, dv = 0. du - moving along lane, dv - moving across lane
 - - Changing lane: du > 0, dv > 0
 - - idle: the vehicle doesn't move, du = dv = 0
 - index of leading the vehicle (vehicle before current one)
@@ -190,3 +190,13 @@ the same for dt_lastPassiveLC
 - update acceleration for each vehicle
 - update speed for each vehicle
 - update info about leaders/followers for all vehicles
+
+15. updateBCdown()
+Check if vehicle on downstream, if yes, remove the first vehicle
+
+16. updateBCup()
+Check if vehicle on upstream
+inVehBuffer used, it is a number of waiting vehicles, if >= 1 -> then used.
+If more than 1 waiting vehicle, create new one and try to insert to road.
+At first vehicle suggested for insert to the right lane, if failed, try to
+insert to any lane. Decrease the number of waiting vehicles.
