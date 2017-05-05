@@ -2,10 +2,10 @@
 // also used by map for rendering
 var RoadDirectionEnum =
 {
-    LEFT_TO_RIGTH : 0,
-    RIGHT_TO_LEFT : 1,
-    BOTTOM_TO_UP : 2,
-    UP_TO_BOTTOM : 3
+	LEFT_TO_RIGTH : 0,
+	RIGHT_TO_LEFT : 1,
+	BOTTOM_TO_UP : 2,
+	UP_TO_BOTTOM : 3
 };
 
 
@@ -17,15 +17,20 @@ var RoadDirectionEnum =
  * \param _lanes - array with all lanes related to current road
  * \param _orientation - value from RoadDirectionEnum
  */
-function RoadConfig( _roadLength, _laneWidth, _lanes, _direction, _cars )
+function RoadConfig( _id, _roadLength, _laneWidth,
+					 _forwardLanesAmount, _backwardLanesAmount,
+					 _direction, _cars )
 {
-    this.roadLength = _roadLength;
+	this.id = _id;
+	this.direction = _direction;
 
-    // Lane length is equal to road length
-    this.laneWidth = _laneWidth;
-    this.lanes = _lanes;
-    this.direction = _direction;
-    this.cars = _cars;
+	// Lane length is equal to road length
+	this.roadLength = _roadLength;
+
+	this.forwardLanesAmount = _forwardLanesAmount;
+	this.backwardLanesAmount = _backwardLanesAmount;
+
+	this.laneWidth = _laneWidth;
 }
 
 /*
@@ -33,89 +38,105 @@ function RoadConfig( _roadLength, _laneWidth, _lanes, _direction, _cars )
  */
 function Road( roadConfig )
 {
-    this.roadLength = roadConfig.laneWidth;
-    this.roadWidth = roadConfig.lanesWidth * roadConfig.lanes.length;
-    this.lanes = roadConfig.lanes;
+	this.id = roadConfig.id;
+	this.direction = roadConfig.direction;
+
+	this.roadLength = roadConfig.laneWidth;
+
+	this.forwardLanes = new Array(roadConfig.forwardLanesAmount);
+	this.backwardLanes = new Array(roadConfig.backwardLanesAmount);
+
+	let lanesAmount = roadConfig.forwardLanesAmount +
+					  roadConfig.backwardLanesAmount;
+
+	this.roadWidth = roadConfig.laneWidth * lanesAmount;
+}
+
+// lane - object of Lane class
+// laneDirection - forward or backward
+// laneIndex - index within forwardLanes or backwardLanes array
+// return true if added, otherwise false
+Road.prototype.addLane = function( lane, laneDirection, laneIndex)
+{
+	if (lane == null || laneIndex < 0)
+	{
+		console.log("addLane(): Input parameters are wrong!");
+		return false;
+	}
+
+	if (laneDirection == LaneDirection.FORWARD)
+	{
+		if ( this.forwardLanes.length < laneIndex)
+		{
+			return false;
+		}
+
+		this.forwardLanes.splice(laneIndex, 0, lane);
+	}
+	else
+	{
+		if ( this.backwardLanes.length < laneIndex )
+		{
+			return false;
+		}
+
+		this.backwardLanes.splice(laneIndex, 0, lane);
+	}
+
+	return true;
 }
 
 Road.prototype.addVehicleToLane( vehicle, laneIndex )
 {
-    if (laneIndex < 0 || laneIndex >= this.lanes.length)
-    {
-        return false;
-    }
+	if (laneIndex < 0 || laneIndex >= this.lanes.length)
+	{
+		return false;
+	}
 
-    this.lanes[laneIndex].addVehicle( vehicle );
-    return true;
+	this.lanes[laneIndex].addVehicle( vehicle );
+	return true;
 }
 
-// Update leader car on lane
-Road.prototype.updateLeader = function( index )
+// Update leading and following vehicles for all vehicles on the lane *laneIndex*
+Road.prototype.updateNeighbours = function( lane, laneIndex, lanesArray )
 {
-    console.log("updateLeader() for " + index + " car");
+	console.log("updateNeighbours() for " + laneIndex + " lane");
 }
 
-// update a lagger (presently I don't know is it the last car or not)
-Road.prototype.updateLagger = function( index )
+
+Road.prototype.updateNeighboursForAdjacentLane =
+	function( lane, laneIndex, lanesArray)
 {
-    console.log("updateLagger() for " + index + " car");
+	console.log("updateNeighboursForAdjacentLane for " + laneIndex + " lane ");
 }
 
-// leader at the right lane for car specified by index
-Road.prototype.updateLeaderAtRight = function( index )
+Road.prototype.updateVehicles = function( vehicle, vehicleIndex, vehiclesArray)
 {
-    console.log("updateLeaderAtRight() for " + index + " car");
-}
-
-Road.prototype.updateLaggerAtRight = function( index )
-{
-    console.log("updateLaggerAtRight() for " + index + " car");
-}
-
-// leader at the left lane for car specified by index
-Road.prototype.updateLeaderAtLeft = function( index )
-{
-    console.log("updateLeaderAtLeft() for " + index + " car");
-}
-
-Road.prototype.updateLaggerAtLeft = function( index )
-{
-    console.log("updateLaggerAtLeft() for ", index, " car");
+	vehicle.longitudinalModel.calculateAcceleration();
 }
 
 // update positions of all cars on all lanes
-Road.prototype.update = function()
+Road.prototype.updateLanes = function()
 {
-    lane = null;
-    for (i = 0; i < this.lanes.length; ++i)
-    {
-        lane = this.lanes[i];
+	lane = null;
 
-        for (j = 0; j < lane.cars.length; j++)
-        {
-            this.updateLeader( j );
+	this.forwardLanes.forEach( updateNeighbours );
+	this.forwardLanes.forEach( updateNeighboursForAdjacentLane );
+	this.forwardLanes.forEach( updateVehicles );
 
-            this.updateLagger( j );
-
-            this.updateLeaderAtLeft( j );
-
-            this.updateLaggerAtLeft( j );
-
-            this.updateLeaderAtRight( j );
-
-            this.updateLaggerAtRight( j );
-        }
-    }
+	this.backwardLanes.forEach( updateNeighbours );
+	this.backwardLanes.forEach( updateNeighboursForAdjacentLane );
+	this.backwardLanes.forEach( updateVehicles );
 }
 
 // Traverse over each car and decide whether it moves to the right lane
-Road.prototype.checkRightLane = function()
+Road.prototype.checkChangeToRightLane = function()
 {
-    console.log("checkRightLane()")
+	console.log("checkRightLane()")
 }
 
 // Traverse over each car and decide whether it moves to the left lane
-Road.prototype.checkLeftLane = function()
+Road.prototype.checkChangeToLeftLane = function()
 {
-    console.log("checkLeftLane()")
+	console.log("checkLeftLane()")
 }

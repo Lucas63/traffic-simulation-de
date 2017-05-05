@@ -8,17 +8,17 @@
  * change lane
  */
 
-const bSafe = 4;
-const bSafeMax = 17;
-const bThreshold = 0.2;
+const safeDeceleration = 4; // bSafe
+const bSafeMax = 17; // bSafeMax
+const bThreshold = 0.2; // bThreshold
 
 
-function MOBIL( _bSafe, _bSafeMax, _bThreshold, _bBias )
+function MOBIL( _safeDeceleration, _bSafeMax, _bThreshold, _bBias )
 {
-    this.bSafe = _bSafe;
-    this.bSafeMax = _bSafeMax;
-    this.bThreshold = _bThreshold;
-    this.bBias = _bBias;
+	this.safeDeceleration = _safeDeceleration;
+	this.bSafeMax = _bSafeMax;
+	this.bThreshold = _bThreshold;
+	this.bBias = _bBias;
 }
 
 /*
@@ -28,19 +28,19 @@ function MOBIL( _bSafe, _bSafeMax, _bThreshold, _bBias )
  * \param follower_acc -
  */
 MOBIL.prototype.doLaneChange = function( velocityRate, curAcceleration,
-                                         newAcceleration,
-                                         newFollowerAcceleration )
+										 newAcceleration,
+										 newFollowerAcceleration )
 {
-    let bSafeActual = velocityRate * this.bSafe;
+	let bSafeActual = velocityRate * this.safeDeceleration;
 	bSafeActual += (1 - velocityRate) * this.bSafeMax;
 
 	if (newFollowerAcceleration < -bSafeActual)
-    {
-        return false;
-    }
+	{
+		return false;
+	}
 
-    let delta_a = newAcceleration - curAcceleration;
-    delta_a += this.bBias - this.bThreshold;
+	let delta_a = newAcceleration - curAcceleration;
+	delta_a += this.bBias - this.bThreshold;
 
 	return (delta_a > 0);
 }
