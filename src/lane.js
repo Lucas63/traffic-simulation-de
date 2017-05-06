@@ -12,6 +12,9 @@ function Lane( _vehicles, _direction, _length, _spawnPoint )
 	this.direction = _direction;
 	this.length = _length;
 
+	this.onramps = [];
+	this.offramps = [];
+
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;
 }
