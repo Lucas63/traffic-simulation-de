@@ -1,0 +1,73 @@
+// Configuration file with all information for traffic simulation
+// To parse this file without comments call JSON.parse(JSON.minify("filename"))
+
+/*
+ *          Map
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+
+{
+	"roads":
+	[
+		{
+			"id" : 1,
+			"direction" : "BOTTOM_TO_UP",
+			"length" : 200,
+
+			"startX" : 100,
+			"startY" : 0,
+			"finishX" : 100,
+			"finishY" : 200,
+
+			"forwardLanes" : [ null, 1 ],
+			"backwardLanes" : [ null, null ],
+
+			"startConnection": { "type": "void", "id": null },
+			"finishConnection": { "type": "junction", "id": 1 }
+		},
+		{
+			"id" : 2,
+			"direction" : "LEFT_TO_RIGHT",
+			"length" : 100,
+
+			"startX" : 0,
+			"startY" : 210,
+			"finishX" : 100,
+			"finishY" : 210,
+
+			"forwardLanes" : [ 2, null ],
+			"backwardLanes" : [ null, null ],
+
+			"startConnection" : { "type": "void", "id": null },
+			"finishConnection" : { "type": "junction", "id": 1 }
+		}
+
+	],
+
+	"junctions":
+	[
+		{
+			"id": 1,
+			"verticalTrafficLight":
+			{
+				"exists": "yes", "initialLight": "green"
+			},
+			"horizontalTrafficLight":
+			{
+				"exists": "yes", "initialLight": "yellow"
+			}
+		}
+	]
+}

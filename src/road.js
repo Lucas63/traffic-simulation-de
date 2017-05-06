@@ -2,10 +2,10 @@
 // also used by map for rendering
 var RoadDirection =
 {
-	LEFT_TO_RIGTH : 0,
-	RIGHT_TO_LEFT : 1,
-	BOTTOM_TO_UP : 2,
-	UP_TO_BOTTOM : 3
+	LEFT_TO_RIGHT : { value: 0, name: "LEFT_TO_RIGHT" },
+	RIGHT_TO_LEFT : { value: 1, name: "RIGHT_TO_LEFT" },
+	BOTTOM_TO_UP  : { value: 2, name: "BOTTOM_TO_UP"  },
+	UP_TO_BOTTOM  : { value: 3, name: "UP_TO_BOTTOM"  }
 };
 
 var RoadObject =
@@ -80,13 +80,13 @@ var RoadObject =
  * \param _finishX - x cooridinate of the road's finish on the map
  * \param _finishY - y cooridinate of the road's finish on the map
  *
- * \param _forwardLanesAmount - amount of forward lanes on the road
- * \param _backwardLanesAmount - amount of backward lanes on the road
+ * \param _forwardLanes - list with forward lanes
+ * \param _backwardLanes - list with backward lanes
  */
 function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 					 _startX, _startY, _finishX, _finishY,
 					 _startConnection, _finishConnection,
-					 _forwardLanesAmount, _backwardLanesAmount)
+					 _forwardLanes, _backwardLanes)
 {
 	this.id = _id;
 	this.direction = _direction;
@@ -104,8 +104,8 @@ function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 	this.startConnection = _startConnection;
 	this.finishConnection = _finishConnection;
 
-	this.forwardLanesAmount = _forwardLanesAmount;
-	this.backwardLanesAmount = _backwardLanesAmount;
+	this.forwardLanes = _forwardLanes;
+	this.backwardLanes = _backwardLanes;
 }
 
 /*
@@ -118,13 +118,25 @@ function Road( roadConfig )
 
 	this.roadLength = roadConfig.laneWidth;
 
-	this.forwardLanes = new Array(roadConfig.forwardLanesAmount);
-	this.backwardLanes = new Array(roadConfig.backwardLanesAmount);
 
-	let lanesAmount = roadConfig.forwardLanesAmount +
-					  roadConfig.backwardLanesAmount;
+	this.forwardLanes = roadConfig.forwardLanes);
+	this.backwardLanes = roadConfig.backwardLanes;
 
+	let lanesAmount = this.forwardLanes.length +
+					  roadConfig.backwardLanes.length;
 	this.roadWidth = roadConfig.laneWidth * lanesAmount;
+
+	this.startX = roadConfig.startX;
+	this.startY = roadConfig.startY;
+
+	this.finishX = roadConfig.finishX;
+	this.finishY = roadConfig.finishY;
+
+	this.startConnection = roadConfig.startConnection;
+	this.finishConnection = roadConfig.finishConnection;
+
+	this.forwardLanesAmount = roadConfig.forwardLanesAmount;
+	this.backwardLanesAmount = roadConfig.backwardLanesAmount;
 }
 
 // lane - object of Lane class

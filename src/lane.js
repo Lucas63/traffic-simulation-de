@@ -6,10 +6,8 @@ var LaneDirection =
 }
 
 
-function Lane( _vehicles, _direction, _length, _spawnPoint )
+function Lane( _length, _spawnPoint )
 {
-	this.vehicles = _vehicles;
-	this.direction = _direction;
 	this.length = _length;
 
 	this.onramps = [];
