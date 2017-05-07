@@ -5,25 +5,25 @@
 /*
 Number represents each side of the junction
 		 0
-	――――――――――――
+	 ――――――――――
 	|          |
 	|          |
   3 |          | 1
 	|          |
 	|          |
-	――――――――――――
+	 ――――――――――
 		 2
 */
 
 var JunctionSides =
 {
-	TOP : { value: 0, name: "top"} ,
-	RIGHT : { value: 1, name: "right" },
-	BOTTOM : { value: 2, name: "bottom" },
-	LEFT : { value: 3, name: "left" }
+	"top"   : 0,
+	"right" : 1,
+	"bottom": 2,
+	"left"  : 3
 }
 
-function Junction( _id, _pos, _width, _connectedRoads,
+function Junction( _id, _pos, _width,
 				   _verticalTrafficLight,
 				   _horizontalTrafficLight)
 {
@@ -31,26 +31,50 @@ function Junction( _id, _pos, _width, _connectedRoads,
 	this.centralPosition = _pos;
 	this.width = _width;
 
-	this.connectedRoads = _connectedRoads;
-
 	this.verticalTrafficLight = _verticalTrafficLight;
 	this.horizontalTrafficLight = _horizontalTrafficLight;
+}
+
+Junction.prototype.addRoadToSide( _side, _road )
+{
+    switch(_side)
+    {
+    case JunctionSides["top"]:
+        this.connectedRoads["top"] = _road;
+        break;
+
+    case JunctionSides["right"]:
+        this.connectedRoads["right"] = _road;
+        break;
+
+    case JunctionSides["bottom"]:
+        this.connectedRoads["bottom"] = _road;
+        break;
+
+    case JunctionSides["left"]:
+        this.connectedRoads["left"] = _road;
+        break;
+
+    default:
+        console.log("Unknown junction side " + _side + "!!!");
+        return false;
+    }
 }
 
 Junction.prototype.getSideForRoad( roadID )
 {
 	switch ( roadID ) {
-	case this.connectedRoads[ JunctionSides.TOP.name ]:
-		return JunctionSides.TOP.value;
+	case this.connectedRoads["top"]:
+		return JunctionSides["top"];
 
-	case this.connectedRoads[ JunctionSides.RIGHT.name ]:
-		return JunctionSides.RIGHT.value;
+	case this.connectedRoads["right"]:
+		return JunctionSides["right"];
 
-	case this.connectedRoads[ JunctionSides.BOTTOM.name ]:
-		return JunctionSides.BOTTOM.value;
+	case this.connectedRoads["bottom"]:
+		return JunctionSides["bottom"];
 
-	case this.connectedRoads[ JunctionSides.LEFT.name ]:
-		return JunctionSides.RIGHT.value;
+	case this.connectedRoads["left"]:
+		return JunctionSides["left"];
 
 	default:
 		console.log("Road with id " + roadID + "is not connected to junction "
@@ -59,12 +83,18 @@ Junction.prototype.getSideForRoad( roadID )
 	}
 }
 
+Junction.prototype.findMoveFromRoad = function( fromRoadId, toRoadId )
+{
+    fromRoadSide = this.getSideForRoad( fromRoadId );
+    toRoadSide = this.getSideForRoad( toRoadId );
+}
+
 // return LaneDirection.FORWARD if vehicle turn from *currentRoadId*
 // to forward lane of *newRoadId*
 // return LaneDirection.BACKWARD if vehicle turn from *currentRoadId*
 // to backward lane of *newRoadId*
 // if cannot turn, return null
-Junction.prototype.turnToLane( currentRoadId, newRoadId)
+Junction.prototype.turnToLane = function( currentRoadId, newRoadId)
 {
 	// it's impossible to turn
 	if (currentRoadId == newRoadId)
