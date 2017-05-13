@@ -1,0 +1,22 @@
+{
+    "minimalTurnTime": 0.5,
+
+    "turns":
+    [
+        {
+            "id": 1,
+            "source": 9,
+            "destination": 8
+        },
+        {
+            "id": 2,
+            "source": 8,
+            "destination": 7
+        },
+        {
+            "id": 3,
+            "source": 19,
+            "destination": 16
+        }
+    ]
+}

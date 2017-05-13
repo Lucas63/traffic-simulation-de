@@ -1,0 +1,11 @@
+{
+    "offramps":
+    [
+        {
+            "id": 1,
+            "source": 16,
+            "destination": 18,
+            "inflow": 15
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+	"roads":
+	[
+		{
+			"id": 1,
+			"direction": "UP_TO_BOTTOM",
+			"length": 200,
+
+			"startX": 100,
+			"startY": 0,
+			"finishX": 100,
+			"finishY": 200,
+
+			"forwardLanes": 2,
+            "forwardLanesSpawnPoints": [ null, null ],
+
+			"backwardLanes": 2,
+            "backwardLanesSpawnPoints": [ 1, null ],
+
+			"startConnection": { "type": "junction", "id": 1 },
+			"finishConnection": { "type": "void", "id": null }
+		},
+		{
+			"id" : 2,
+			"direction" : "LEFT_TO_RIGHT",
+			"length" : 100,
+
+			"startX" : 0,
+			"startY" : 210,
+			"finishX" : 100,
+			"finishY" : 210,
+
+			"forwardLanes" : [ 2, null ],
+			"backwardLanes" : [ null, null ],
+
+			"startConnection" : { "type": "void", "id": null },
+			"finishConnection" : { "type": "junction", "id": 1 }
+		}
+
+	]
+}
