@@ -6,17 +6,20 @@
         {
             "id": 1,
             "source": 9,
-            "destination": 8
+            "destination": 8,
+            "type": "right"
         },
         {
             "id": 2,
             "source": 8,
-            "destination": 7
+            "destination": 7,
+            "type": "left"
         },
         {
             "id": 3,
             "source": 19,
-            "destination": 16
+            "destination": 16,
+            "type": "left"
         }
     ]
 }
