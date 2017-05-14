@@ -89,16 +89,17 @@ function Vehicle( config )
 
 	// id of route this vehicle keeps to
 	this.routeId = config.routeId;
+	this.routeItemIndex = 0;
 
 	if ( config.type == VehicleType.CAR )
 	{
-		this.length       = CAR_LENGTH;
-		this.desiredSpeed = CAR_DESIRED_SPEED;
+	this.length       = CAR_LENGTH;
+	this.desiredSpeed = CAR_DESIRED_SPEED;
 	}
 	else
 	{
-		this.length       = TRUCK_LENGTH;
-		this.desiredSpeed = TRUCK_DESIRED_SPEED;
+	this.length       = TRUCK_LENGTH;
+	this.desiredSpeed = TRUCK_DESIRED_SPEED;
 	}
 
 	// Default values
@@ -127,4 +128,19 @@ function Vehicle( config )
 
 	this.leaderAtRight   = VIRTUAL_VEHICLE;
 	this.followerAtRight = VIRTUAL_VEHICLE;
+
+
+	this.TargetLane = null;
+
+	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
+	// coordinate on Bezier curve
+	this.turnCompletion = 0;
+	this.turnElapsedTime = 0;
+	this.turnFullTime = 0;
+}
+
+Vehicle.prototype.updateTurn = function( dt )
+{
+	this.turnElapsedTime += dt;
+	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
 }

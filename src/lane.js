@@ -49,10 +49,10 @@ Lane.prototype.hasEnoughSpace = function( requiredSpace )
 		return true;
 	}
 
-	let no_vehicles = this.vehicles.length;
-	let lastVehicle = this.vehicles[no_vehicles - 1];
+	let lastVehicle = this.vehicles.slice(-1)[0];
 
 	// u_coord is a coordinate of vehicle's bumper
+	// check whether there is enough space between vehicle and road's finish
 	return (lastVehicle.u_coord - lastVehicle.length) >= requiredSpace;
 }
 

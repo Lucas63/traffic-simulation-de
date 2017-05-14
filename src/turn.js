@@ -1,18 +1,34 @@
-var TurnOrientation =
+var TurnType =
 {
 	"left": 0,
 	"right": 1
 }
 
-// _from - road id vehicle moves from
-// _to - road id vehicle moves to
-function Turn( _from, _to )
+// _source - road id vehicle moves from
+// _destination - road id vehicle moves to
+// _type - turn's type: "left" or "right"
+// _lanesNumber - number of lanes on turn, source and destination roads
+// must have the same lanes quantity!
+function Turn( _destination, _source, _type, _lanesNumber )
 {
-	this.from = _from;
-	this.to = _to;
+	this.source = _source;
+	this.destination = _destination;
+	this.type = _type;
 
-	let fromDirection = _from.direction;
-	let toDirection = _to.direction;
+	// time elapsed from last update
+	this.delta = 0;
+
+	this.lanes = new Array( _lanesNumber );
+
+	for (let i = 0; i < _lanes; ++i)
+	{
+		// each lane has array of vehicles on this lane
+		this.lanes[i] = [];
+	}
+
+	// Renderer store here information about Start, Control and End points
+	// to draw Bezier curve for each lane
+	this.renderInfo = {};
 
 	// this formula used to decide direction of this turn
 	// switching to the road with orientation UP_TO_BOTTOM is a different
@@ -26,14 +42,78 @@ function Turn( _from, _to )
 	// RIGHT_TO_LEFT: 3 ←  → LEFT_TO_RIGHT: 1
 	//                   ↓
 	//               UP_TO_BOTTOM: 2
-	let diff = ((fromDirection - toDirection) + 4) % 4;
+}
 
-	if (diff == 1)
+Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
+{
+	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
+	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
+			"lanes amount is " + this.lanes.length);
+
+	assert( destinationLane["id"] == this.to)
+
+	// get the last vehicle from selected lane
+	let lastVehicle = this.lanes[laneIndex].slice(-1)[0];
+
+	// if last vehicle on selected lane made turn less for 50%,
+	// then vehicle on source road cannot start turning
+	if (lastVehicle.turnCompletion < 0.5)
 	{
-		this.orientation = TurnOrientation["left"];
+		console.debug("Last vehicle on lane " + laneIndex + " completed turn " +
+					"for " + lastVehicle.turnCompletion * 100 + "%");
+		return false;
 	}
-	else
+
+	// check whether lane on destination road has enough space for new vehicle
+	// if does, everything is OK, otherwise reject turn request
+	return destinationLane.hasEnoughSpace( vehicleLength + MINIMAL_GAP );
+}
+
+Turn.prototype.startTurn = function( laneIndex, vehicle )
+{
+	vehicle.turnElapsedTime = 0;
+	vehicle.turnCompletion = 0;
+
+	// TODO add turn time
+	vehicle.turnFullTime = -1;
+
+	this.lanes[laneIndex].push( vehicle );
+}
+
+function updateTurn( vehicle )
+{
+	vehicle.turnElapsedTime += this.delta;
+	vehicle.turnCompletion = vehicle.turnElapsedTime / vehicle.turnFullTime;
+
+	// it possible that vehicle waits on turn to move on destination road
+	// if destination road is congested and no space for new vehicle
+	Math.max( vehicle.turnCompletion, 1 );
+}
+
+Turn.prototype.update = function( dt )
+{
+	this.delta = dt;
+
+	for (let i = 0; this.lanes.length; ++i)
 	{
-		this.orientation = TurnOrientation["right"];
+		let lane = this.lanes[i];
+
+		// update turn for all vehicles on lane
+		lane.forEach( updateTurn );
 	}
+}
+
+Turn.prototype.turnCompleted( laneIndex )
+{
+	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
+	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
+			"lanes amount is " + this.lanes.length);
+
+	if ( this.lanes[laneIndex].length == 0 )
+	{
+		return false;
+	}
+
+	// check whether first first vehicle on lane has finished turn
+	return this.lanes[lanesIndex][0].turnCompletion == 1;
 }
