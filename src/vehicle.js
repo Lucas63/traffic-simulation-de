@@ -103,7 +103,7 @@ function Vehicle( config )
 	}
 
 	// Default values
-	this.VehicleState = VehicleState.MOVING;
+	this.vehicleState = VehicleState.MOVING;
 	this.trafficState = TrafficState.FREE_ROAD;
 	this.movementState = MovementState.FREE_MOVEMENT;
 
@@ -143,4 +143,14 @@ Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+}
+
+Vehicle.prototype.getMinimalGap()
+{
+	return this.length + MINIMAL_GAP;
+}
+
+Vehicle.prototype.farFrom( distance )
+{
+	return (this.uCoord - this.length) > distance;
 }

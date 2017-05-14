@@ -119,7 +119,7 @@ function Road( roadConfig )
 	this.roadLength = roadConfig.laneWidth;
 
 
-	this.forwardLanes = roadConfig.forwardLanes);
+	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;
 
 	let lanesAmount = this.forwardLanes.length +
@@ -139,17 +139,33 @@ function Road( roadConfig )
 	this.backwardLanesAmount = roadConfig.backwardLanesAmount;
 }
 
+Road.prototype.getId = function()
+{
+	return this.id;
+}
+
+Road.prototype.getLanesAmount = function()
+{
+	return this.forwardLanes.length + this.backwardLanes.length;
+}
+
+Road.prototype.getForwardLanesAmount = function()
+{
+	return this.forwardLanes.length;
+}
+
+Road.prototype.getBackwardLanesAmount = function()
+{
+	return this.backwardLanes.length;
+}
+
 // lane - object of Lane class
 // laneDirection - forward or backward
 // laneIndex - index within forwardLanes or backwardLanes array
 // return true if added, otherwise false
 Road.prototype.pushLane = function( lane, laneDirection )
 {
-	if (lane == null || laneIndex < 0)
-	{
-		console.log("addLane(): Input parameters are wrong!");
-		return false;
-	}
+	assert( lane, "pushLane(): lane object is null!")
 
 	switch(laneDirection)
 	{
@@ -167,48 +183,6 @@ Road.prototype.pushLane = function( lane, laneDirection )
 	}
 
 	return true;
-}
-
-// onramp - Onramp object connected to the lane
-// lane - the lane onramp connected to
-Road.prototype.addOnramp( onramp, lane )
-{
-	let index = this.backwardLanes.indexOf( lane );
-	if (index != -1)
-	{
-		this.backwardLanes[ index ].onramps.push( onramp );
-		return true;
-	}
-
-	index = this.forwardLanes.indexOf( lane );
-	if (index != -1)
-	{
-		this.forwardLanes[ laneIndex ].onramps.push(onramp);
-		return true;
-	}
-
-	return false;
-}
-
-// offramp - Offramp object connected to the lane
-// lane - the lane offramp connected to
-Road.prototype.addOfframp( offramp, lane )
-{
-	let index = this.backwardLanes.indexOf( lane );
-	if (index != -1)
-	{
-		this.backwardLanes[ index ].offramps.push( offramp );
-		return true;
-	}
-
-	index = this.forwardLanes.indexOf( lane );
-	if (index != -1)
-	{
-		this.forwardLanes[ laneIndex ].offramps.push(offramp);
-		return true;
-	}
-
-	return false;
 }
 
 // Update leading and following vehicles for all vehicles on the lane *laneIndex*

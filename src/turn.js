@@ -28,7 +28,22 @@ function Turn( _destination, _source, _type, _lanesNumber )
 
 	// Renderer store here information about Start, Control and End points
 	// to draw Bezier curve for each lane
-	this.renderInfo = {};
+	this.renderInfo = new Array( _lanesNumber );
+
+	for (let i = 0; i < _lanesNumber; ++i)
+	{
+		// TODO add real calculation of coordinates
+		// TODO set coordinates of center i-th lane on source road
+		this.renderInfo[i].StartPoint = { "x": 0, "y": 0 };
+
+		// Canvas implementation of Bezier curve requires 2 control points,
+		// but use only one point twice for simplicity's sake
+		// TODO set x of source lane's center and y of destination lane's center
+		this.renderInfo[i].ControlPoint = { "x": 0, "y": 0 };
+
+		// TODO set coordinates of center i-th lane on destination road
+		this.renderInfo[i].EndPoint = { "x": 0, "y": 0};
+	}
 
 	// this formula used to decide direction of this turn
 	// switching to the road with orientation UP_TO_BOTTOM is a different
@@ -53,7 +68,7 @@ Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
 	assert( destinationLane["id"] == this.to)
 
 	// get the last vehicle from selected lane
-	let lastVehicle = this.lanes[laneIndex].slice(-1)[0];
+	let lastVehicle = this.lanes[laneIndex].last();
 
 	// if last vehicle on selected lane made turn less for 50%,
 	// then vehicle on source road cannot start turning

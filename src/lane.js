@@ -1,5 +1,4 @@
-
-var LaneDirection =
+var LaneType =
 {
 	FORWARD : { value: 0, name: "forward" },
 	BACKWARD : { value: 1, name: "backward" }
