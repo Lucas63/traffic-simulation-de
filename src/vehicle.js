@@ -137,12 +137,50 @@ function Vehicle( config )
 	this.turnCompletion = 0;
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
+
+	// lane on destination road where vehicle appeared after turn
+	this.turnDestinationLane = 0;
+}
+
+Vehicle.prototype.update = function( dt )
+{
+	switch (this.vehicleState)
+	{
+		case VehicleState.MOVING:
+			this.updateStraightMove( dt );
+			break;
+
+		case VehicleState.TURNING:
+			this.updateTurn( dt );
+			break;
+
+		case VehicleState.CHANGE_LANE:
+			this.updateLaneChange( dt );
+			break;
+	}
+}
+
+Vehicle.prototype.updateStraightMove = function( dt )
+{
+	// TODO implement me!
 }
 
 Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+}
+
+Vehicle.prototype.updateLaneChange = function( dt )
+{
+	// TODO implement me!
+}
+
+function updateVehicles( vehicles, dt )
+{
+	vehicles.forEach( function(vehicle) {
+		vehicle.update( dt );
+	})
 }
 
 Vehicle.prototype.getMinimalGap()
