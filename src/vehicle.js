@@ -36,8 +36,10 @@ var MovementState =
 	FREE_MOVEMENT: 4
 }
 
+const var MINIMAL_GAP = 2;
+
 // if vehicle has no leader or follower
-const VIRTUAL_VEHICLE = -1;
+const var VIRTUAL_VEHICLE = -1;
 
 // Used length units independent from actual visualization scale
 // Updated after reading and parsing config files
@@ -93,8 +95,8 @@ function Vehicle( config )
 
 	if ( config.type == VehicleType.CAR )
 	{
-	this.length       = CAR_LENGTH;
-	this.desiredSpeed = CAR_DESIRED_SPEED;
+		this.length       = CAR_LENGTH;
+		this.desiredSpeed = CAR_DESIRED_SPEED;
 	}
 	else
 	{

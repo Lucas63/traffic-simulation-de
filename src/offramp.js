@@ -56,7 +56,7 @@ Offramp.prototype.canTurn( vehicleRequiredSpace)
 	let vehicles = this.connectedLane.vehicles;
 	let vehiclesAmount = vehicles.length;
 
-	for (let i = vehiclesAmount - 1; i>= 0)
+	for (let i = vehiclesAmount - 1; i >= 0; --i)
 	{
 		if ( vehicles[i].vehicleState == VehicleState.TURNING )
 		{
@@ -75,7 +75,7 @@ Offramp.prototype.canTurn( vehicleRequiredSpace)
 	let freeLaneIndex = INVALID;
 
 	let destLanes = this.destination.forwardLanes;
-	for (let i = this.destLanesAmount - 0; i >= 0; --i)
+	for (let i = this.destLanesAmount - 1; i >= 0; --i)
 	{
 		if (destLanes[i].hasEnoughSpace( vehicleRequiredSpace ))
 		{
@@ -139,12 +139,6 @@ Offramp.prototype.canPassThrough( vehicle, roadId, laneType, laneIndex )
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
-	if (laneIndex < 0 || laneIndex >= this.destLanesAmount)
-	{
-		printError(arguments.callee.name, "Wrong lane index " + laneIndex);
-		return false;
-	}
-
 	vehicle.trafficState = TrafficState.FREE_ROAD;
 	vehicle.vehicleState = VehicleState.TURNING;
 	vehicle.movementState = MovementState.ON_OFFRAMP;
@@ -155,8 +149,6 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 	vehicle.turnDestinationLane = laneIndex;
 
 	this.connectedLane.vehicles.push( vehicle );
-
-	return true;
 }
 
 Offramp.prototype.startPassThrough = function( roadId, laneType,
