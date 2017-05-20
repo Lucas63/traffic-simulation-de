@@ -20,7 +20,7 @@ function Turn( _destination, _source, _type, _lanesNumber )
 
 	this.lanes = new Array( _lanesNumber );
 
-	for (let i = 0; i < _lanes; ++i)
+	for (let i = 0; i < _lanesNumber; ++i)
 	{
 		// each lane has array of vehicles on this lane
 		this.lanes[i] = [];
@@ -109,7 +109,7 @@ Turn.prototype.update = function( dt )
 {
 	this.delta = dt;
 
-	for (let i = 0; this.lanes.length; ++i)
+	for (let i = 0; i < this.lanes.length; ++i)
 	{
 		let lane = this.lanes[i];
 
