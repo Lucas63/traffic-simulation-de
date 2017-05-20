@@ -12,7 +12,8 @@ function Offramp( _source, _destination, _outflow, _turnType,
 
 	this.destLanesAmount = this.destination.getLanesAmount();
 
-	this.turn = turnType;
+	// turn at lefr or right
+	this.turnType = turnType;
 
 	this.connectedLaneType = _connectedLaneType;
 	this.connectedLaneIndex = _connectedLaneIndex;
@@ -48,8 +49,24 @@ function Offramp( _source, _destination, _outflow, _turnType,
 
 // check is it possible to turn now and return index of lane on destination
 // road in case of success, otherwise INVALID
-Offramp.prototype.canTurn()
+Offramp.prototype.canTurn( vehicleRequiredSpace)
 {
+	// check whether last turning vehicle has completed turn for
+	// at least 50%
+	let vehicles = this.connectedLane.vehicles;
+	let vehiclesAmount = vehicles.length;
+
+	for (let i = vehiclesAmount - 1; i>= 0)
+	{
+		if ( vehicles[i].vehicleState == VehicleState.TURNING )
+		{
+			// if turn completed for less than 50%,
+			// then another car cannot start turn
+			if ( vehicles[i].turnCompletion < 0.5 )
+				return INVALID;
+		}
+	}
+
 	// find closest free lane on destination road
 	// because right-hand traffic is in use in this simulation,
 	// vehicle turns only at right and thus iterate over destination lanes
@@ -57,9 +74,10 @@ Offramp.prototype.canTurn()
 
 	let freeLaneIndex = INVALID;
 
+	let destLanes = this.destination.forwardLanes;
 	for (let i = this.destLanesAmount - 0; i >= 0; --i)
 	{
-		if (this.forwardLanes[i].hasEnoughSpace())
+		if (destLanes[i].hasEnoughSpace( vehicleRequiredSpace ))
 		{
 			freeLaneIndex = i;
 			break;
@@ -69,6 +87,7 @@ Offramp.prototype.canTurn()
 	if ( freeLaneIndex == INVALID )
 	{
 		printWarning(arguments.callee.name, "No free lanes");
+		return freeLaneIndex;
 	}
 
 	return freeLaneIndex;
@@ -122,7 +141,7 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
 	if (laneIndex < 0 || laneIndex >= this.destLanesAmount)
 	{
-		printError("Wrong lane index " + laneIndex);
+		printError(arguments.callee.name, "Wrong lane index " + laneIndex);
 		return false;
 	}
 
