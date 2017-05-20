@@ -151,10 +151,10 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 	this.connectedLane.vehicles.push( vehicle );
 }
 
-Offramp.prototype.startPassThrough = function( roadId, laneType,
-											  laneIndex, vehicle)
+Offramp.prototype.startPassThrough = function( vehicle,roadId,
+											   laneType, laneIndex )
 {
-	// TODO think is free road state?
+	// TODO think about is free road state actual one?
 	vehicle.trafficState = trafficState.FREE_ROAD;
 	vehicle.vehicleState = VehicleState.MOVING;
 	vehicle.movementState = MovementState.ON_OFFRAMP;
@@ -188,7 +188,7 @@ Offramp.prototype.turnCompeleted = function( laneIndex )
 				// it will be added to destination road
 				this.connectedLane.vehicles.splice(i, 1);
 
-				return vehicle.turnDestinationLane;
+				return vehicle;
 			}
 		}
 	}
