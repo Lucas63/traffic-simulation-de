@@ -2,6 +2,16 @@
 // value denoting error, I prefer it to numerical variables instead of null
 const var INVALID = -1;
 
+const var TURN_DURATION_BASE = 0.5;
+const var TURN_DURATION_FOR_LANE = 0.5;
+
+if ( !Array.prototype.first )
+{
+	Array.prototype.first = function()
+	{
+		return this[0];
+	};
+}
 
 // simple way to get last element of any array
 if ( !Array.prototype.last )

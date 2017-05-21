@@ -36,8 +36,10 @@ var MovementState =
 	FREE_MOVEMENT: 4
 }
 
+const var MINIMAL_GAP = 2;
+
 // if vehicle has no leader or follower
-const VIRTUAL_VEHICLE = -1;
+const var VIRTUAL_VEHICLE = -1;
 
 // Used length units independent from actual visualization scale
 // Updated after reading and parsing config files
@@ -75,14 +77,12 @@ function Vehicle( config )
 	this.speed = config.speed;
 	this.acceleration = 0;
 
-	// index within array of vehicles, maybe not used yet
-	this.position = _position;
-
 	// position along lane and it is independent of lane orientation
 	// each vehicle just move alone lane and only renderer know how to present
 	// this moving
 	this.uCoord = config.uCoord; // u in UV coordinates
-// coordinate used for turnes and lane change
+
+	// coordinate used for turnes and lane change
 	// this is position when vehicle moves not in a straight, but diagonally
 	// by default, vehicle moves in the straight direction
 	this.vCoord = 0; // v in UV coordinates
@@ -93,13 +93,13 @@ function Vehicle( config )
 
 	if ( config.type == VehicleType.CAR )
 	{
-	this.length       = CAR_LENGTH;
-	this.desiredSpeed = CAR_DESIRED_SPEED;
+		this.length       = CAR_LENGTH;
+		this.desiredSpeed = CAR_DESIRED_SPEED;
 	}
 	else
 	{
-	this.length       = TRUCK_LENGTH;
-	this.desiredSpeed = TRUCK_DESIRED_SPEED;
+		this.length       = TRUCK_LENGTH;
+		this.desiredSpeed = TRUCK_DESIRED_SPEED;
 	}
 
 	// Default values
@@ -129,7 +129,6 @@ function Vehicle( config )
 	this.leaderAtRight   = VIRTUAL_VEHICLE;
 	this.followerAtRight = VIRTUAL_VEHICLE;
 
-
 	this.TargetLane = null;
 
 	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
@@ -137,12 +136,50 @@ function Vehicle( config )
 	this.turnCompletion = 0;
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
+
+	// lane on destination road where vehicle appeared after turn
+	this.turnDestinationLane = 0;
+}
+
+Vehicle.prototype.update = function( dt )
+{
+	switch (this.vehicleState)
+	{
+		case VehicleState.MOVING:
+			this.updateStraightMove( dt );
+			break;
+
+		case VehicleState.TURNING:
+			this.updateTurn( dt );
+			break;
+
+		case VehicleState.CHANGE_LANE:
+			this.updateLaneChange( dt );
+			break;
+	}
+}
+
+Vehicle.prototype.updateStraightMove = function( dt )
+{
+	// TODO implement me!
 }
 
 Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+}
+
+Vehicle.prototype.updateLaneChange = function( dt )
+{
+	// TODO implement me!
+}
+
+function updateVehicles( vehicles, dt )
+{
+	vehicles.forEach( function(vehicle) {
+		vehicle.update( dt );
+	})
 }
 
 Vehicle.prototype.getMinimalGap()
