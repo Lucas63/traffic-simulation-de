@@ -1,9 +1,11 @@
-function Onramp( _source, _destination, _inflow, _turnType,
+function Onramp( _source, _destination, _inflow, _turnType, _length,
 				 _connectedLaneType, _connectedLaneIndex )
 {
 	this.source = _source;
 	this.destination = _destination;
 	this.inflow = _inflow;
+
+	this.length = _length;
 
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();
@@ -36,40 +38,32 @@ function Onramp( _source, _destination, _inflow, _turnType,
 	}
 
 	let sourceLanesAmount = this.source.getLanesAmount();
-	this.turnDuration[] = new Array( sourceLanesAmount );
 
+	// virtual lanes for turning vehicles
+	this.turnLanes = new Array( sourceLanesAmount );
+	for (let i = 0;i < sourceLanesAmount; ++i)
+	{
+		this.turnLanes[i].vehicles = [];
+	}
+
+	this.turnDuration[] = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
 	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
 	}
 }
 
-Onramp.prototype.canTurn = function( sourceLaneIndex )
+Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
 {
-	// check the most obvious case
-	if ( this.connectedLane.vehicles.empty())
-	{
-		return true;
-	}
-
 	// at first check first vehicle at inflow road
-	let inflowLane = null;
-	if ( this.connectedLaneType == LaneType.FORWARD)
-	{
-		inflowLane = this.inflow.forwardLanes.last();
-	}
-	else
-	{
-		inflowLane = this.inflow.backwardLanes.first();
-	}
-
+	let inflowLane = this.inflow.forwardLanes.last();
 
 	if (inflowLane.vehicles.empty() == false)
 	{
 		let firstVehicle = inflowLane.vehicles.first();
 
 		// distance between vehicle's bumper and road's end
-		let requiredSpace = inflowLane.length - 2 *firstVehicle.getMinimalGap();
+		let requiredSpace = inflowLane.length - 2*firstVehicle.getMinimalGap();
 
 		// if vehicle too close for road's end
 		if (firstVehicle.uCoord >= requiredSpace)
@@ -78,6 +72,40 @@ Onramp.prototype.canTurn = function( sourceLaneIndex )
 		}
 	}
 
+	return true;
+}
+
+Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
+{
+	let freeLaneIndex = INVALID;
+
+	// check the most obvious case
+	if ( this.connectedLane.vehicles.empty() &&
+		 this.turnLanes.vehicles.empty())
+	{
+		return true;
+	}
+
+	// check whether last turning vehicle has completed turn for at least 50%
+	let vehicles = null;
+	let lastVehicle = null;
+	let vehiclesAmount = 0;
+
+	for (let i = 0; i < this.turnLanes.length; ++i)
+	{
+		vehicles = this.turnLanes[i].vehicles;
+		lastVehicle = vehicles.last();
+
+		// if turn completed for less than 50%,
+		// then another car cannot start turn
+		if ( lastVehicle.turnCompletion < 0.5 )
+			return false;
+	}
+
+	if ( this.inflowRoadIsFree(requiredSpace) == false )
+	{
+		return false;
+	}
 
 	let vehicles = this.connectedLane.vehicles;
 	let vehiclesAmount = vehicles.length;
@@ -89,14 +117,6 @@ Onramp.prototype.canTurn = function( sourceLaneIndex )
 		let vehicle = this.connectedLane.vehicles[i];
 		switch( vehicle.vehicleState )
 		{
-			case VehicleState.TURNING:
-				// if turn completed for less than 50%,
-				// then another car cannot start turn
-				if ( vehicle.turnCompletion < 0.5 )
-					return false;
-
-				break;
-
 			case VehicleState.MOVING:
 				// no turn if any vehicle is moving right through the
 				// onramp. It done for the simplicity's sake
@@ -116,6 +136,51 @@ Onramp.prototype.canTurn = function( sourceLaneIndex )
 	return true;
 }
 
+Onramp.prototype.isConnectedLane = function( laneType, laneIndex )
+{
+	if (laneType != this.connectedLaneType)
+		return false;
+
+	if (laneIndex != this.connectedLaneIndex)
+		return false;
+
+	return true;
+}
+
+Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
+{
+	let vehicles = this.turnLanes;
+	var vehicles = null;
+	var lastVehicle = null;
+
+	for (let i = 0; i < lanesAmount; ++i)
+	{
+		vehicles = this.turnlanes[i].vehicles.
+		if (vehicles.empty())
+			continue;
+
+		lastVehicle = vehicles.last();
+
+		// if turn completed for less than 50%,
+		// then another car cannot start turn
+		if ( lastVehicle.turnCompletion < 0.5 )
+			return false;
+	}
+
+	if (this.inflowRoadIsFree() == false)
+	{
+		return false;
+	}
+
+	vehicles = this.connectedLane.vehicles;
+	if (vehicles.empty())
+		return true;
+
+	let lastVehicle = vehicles.last();
+
+	return lastVehicle.farFrom( vehicle.requiredSpace );
+}
+
 Onramp.prototype.canPassThrough = function( vehicle, roadId,
 											laneType, laneIndex)
 {
@@ -124,6 +189,11 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 	///////////////////////////////////////////////////////////////////////////
 	assert( roadId == this.source || roadId == this.inflow,
 			"Wrong road id " + roadId);
+
+	if (this.isConnectedLane( laneType, laneIndex ))
+	{
+		return this.canPassThroughConnectedLane( vehicle );
+	}
 
 	let selectedLane = null;
 	if ( laneType == LaneType.BACKWARD.value )
@@ -148,13 +218,15 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 
 	switch( state )
 	{
-		case VehicleState.TURNING:
-			return lastVehicle.turnCompletion >= 0.5;
-
 		// check whether enough space for new vehicle
 		case VehicleState.MOVING:
 			return lastVehicle.farFrom( vehicle.getMinimalGap() );
 
+		// last vehicle inside the onramp has stopped
+		case VehicleState.IDLE:
+			return false;
+
+		case VehicleState.CHANGE_LANE:
 		default:
 			printError( arguments.callee.name, "Wrong vehicle state " + state);
 			return false;
@@ -171,7 +243,9 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 	vehicle.turnCompletion = vehicle.turnElapsedTime = 0;
 	vehicle.turnFullTime = this.turnDuration[ laneIndex ];
 
-	this.connectedLane.vehicles.push( vehicle );
+	vehicle.turnDestinationLane = this.connectedLaneIndex;
+
+	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
 
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
@@ -180,6 +254,7 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 	vehicle.trafficState = trafficState.FREE_ROAD;
 	vehicle.vehicleState = VehicleState.MOVING;
 	vehicle.movementState = MovementState.ON_ONRAMP;
+
 	vehicle.uCoord = 0;
 
 	if ( laneType == LaneType.FORWARD )
@@ -192,37 +267,39 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 	}
 }
 
-Onramp.prototype.turnCompeleted = function()
+Onramp.prototype.turnCompeleted = function( laneIndex )
 {
+	let lane = this.turnLanes[laneIndex];
+	let vehicles = lane.vehicles;
 	var vehicle = null;
-	let vehiclesAmount = this.connectedLane.vehicles.length;
 
-	for (let i = 0; i < vehiclesAmount; i++)
+	for (let i = 0; i < vehicles.length; i++)
 	{
-		vehicle = this.connectedLane.vehicles[i];
+		vehicle = vehicles[i];
 
-		// if this vehicle is turning now
-		if ( vehicle.vehicleState == VehicleState.TURNING )
+		// if turn completed
+		if ( vehicle.turnCompletion == 1 )
 		{
-			// if turn completed
-			if ( vehicle.turnCompletion == 1 )
-			{
-				// delete vehicle from offramp
-				// it will be added to destination road
-				this.connectedLane.vehicles.splice(i, 1);
+			// delete vehicle from offramp
+			// it will be added to destination road
+			this.connectedLane.vehicles.splice(i, 1);
 
-				return vehicle;
-			}
+			return vehicle;
 		}
 	}
+
+	return null;
 }
 
-Onramp.prototype.passCompleted = function( laneType, laneIndex )
+// check vehicles completed pass to the road *roadId*
+// i.e., roadId - id of destination or inflow
+Onramp.prototype.passCompleted = function( roadId, laneIndex )
 {
 	let lanes = null;
 	let vehicle = null;
 
 	if ( laneType == LaneType.FORWARD )
+	if ( roadId == this.sourceId )
 	{
 		lanes = this.forwardLanes;
 	}
@@ -238,7 +315,7 @@ Onramp.prototype.passCompleted = function( laneType, laneIndex )
 
 	vehicle = lanes[ laneIndex ].vehicles.first();
 
-	if ( vehicle.vehicleState == VehicleState.IDLE )
+	if ( vehicle.uCoord == this.length )
 	{
 		// remove vehicle from onramp
 		lanes[ laneIndex ].vehicles.splice( 0, 1);
