@@ -77,14 +77,12 @@ function Vehicle( config )
 	this.speed = config.speed;
 	this.acceleration = 0;
 
-	// index within array of vehicles, maybe not used yet
-	this.position = _position;
-
 	// position along lane and it is independent of lane orientation
 	// each vehicle just move alone lane and only renderer know how to present
 	// this moving
 	this.uCoord = config.uCoord; // u in UV coordinates
-// coordinate used for turnes and lane change
+
+	// coordinate used for turnes and lane change
 	// this is position when vehicle moves not in a straight, but diagonally
 	// by default, vehicle moves in the straight direction
 	this.vCoord = 0; // v in UV coordinates
@@ -100,8 +98,8 @@ function Vehicle( config )
 	}
 	else
 	{
-	this.length       = TRUCK_LENGTH;
-	this.desiredSpeed = TRUCK_DESIRED_SPEED;
+		this.length       = TRUCK_LENGTH;
+		this.desiredSpeed = TRUCK_DESIRED_SPEED;
 	}
 
 	// Default values
@@ -130,7 +128,6 @@ function Vehicle( config )
 
 	this.leaderAtRight   = VIRTUAL_VEHICLE;
 	this.followerAtRight = VIRTUAL_VEHICLE;
-
 
 	this.TargetLane = null;
 

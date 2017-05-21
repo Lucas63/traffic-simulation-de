@@ -180,6 +180,7 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 	vehicle.trafficState = trafficState.FREE_ROAD;
 	vehicle.vehicleState = VehicleState.MOVING;
 	vehicle.movementState = MovementState.ON_ONRAMP;
+	vehicle.uCoord = 0;
 
 	if ( laneType == LaneType.FORWARD )
 	{

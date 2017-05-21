@@ -159,6 +159,8 @@ Offramp.prototype.startPassThrough = function( vehicle,roadId,
 	vehicle.vehicleState = VehicleState.MOVING;
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
+	vehicle.uCoord = 0;
+
 	if ( laneType == LaneType.FORWARD )
 	{
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
