@@ -144,6 +144,24 @@ function addVehiclesArray( road )
 	road.turnLeftLanes.forEach(initArray);
 }
 
+Junction.prototype.getTrafficLight( _roadId )
+{
+	let side = this.getSideForRoad( _roadId );
+	if (null == side )
+		return null;
+
+	switch( side )
+	{
+		case JunctionSides["top"]:
+		case JunctionSides["bottom"]:
+			return this.verticalTrafficLight.light;
+
+		case JunctionSides["left"]:
+		case JunctionSides["right"]:
+			return this.horizontalTrafficLight.light;
+	}
+}
+
 Junction.prototype.getJunctionRoadFromSide( _side )
 {
 	switch(_side)
