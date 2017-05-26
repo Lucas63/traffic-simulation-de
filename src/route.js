@@ -1,11 +1,11 @@
-const var MovementType =
+const MovementType =
 {
 	"pass": 0,
 	"turnLeft": 1,
 	"turnRight": 2
 }
 
-const var RouteItemType =
+const RouteItemType =
 {
 	"road": 0,
 	"turn": 1,

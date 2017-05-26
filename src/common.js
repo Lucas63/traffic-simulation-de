@@ -1,9 +1,9 @@
 
 // value denoting error, I prefer it to numerical variables instead of null
-const var INVALID = -1;
+const INVALID = -1;
 
-const var TURN_DURATION_BASE = 0.5;
-const var TURN_DURATION_FOR_LANE = 0.5;
+const TURN_DURATION_BASE = 0.5;
+const TURN_DURATION_FOR_LANE = 0.5;
 
 if ( !Array.prototype.first )
 {

@@ -4,8 +4,8 @@ var RoadDirection =
 {
 	BOTTOM_TO_UP  : { value: 0, name: "BOTTOM_TO_UP"  },
 	LEFT_TO_RIGHT : { value: 1, name: "LEFT_TO_RIGHT" },
-	UP_TO_BOTTOM  : { value: 2, name: "UP_TO_BOTTOM"  }
-	RIGHT_TO_LEFT : { value: 3, name: "RIGHT_TO_LEFT" },
+	UP_TO_BOTTOM  : { value: 2, name: "UP_TO_BOTTOM"  },
+	RIGHT_TO_LEFT : { value: 3, name: "RIGHT_TO_LEFT" }
 };
 
 var RoadObject =
@@ -116,8 +116,9 @@ function Road( roadConfig )
 	this.id = roadConfig.id;
 	this.direction = roadConfig.direction;
 
-	this.roadLength = roadConfig.laneWidth;
+	this.length = roadConfig.laneWidth;
 
+	this.minimumGap = this.length - MINIMAL_GAP;
 
 	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;

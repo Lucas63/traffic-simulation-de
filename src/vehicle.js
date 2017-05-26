@@ -32,19 +32,26 @@ var MovementState =
 	ON_TURN:       0,
 	ON_ONRAMP:     1, // turn to another road
 	ON_OFFRAMP:    2, // keep the same road, but changing lane
-	ON_JUNCTION:   3 // stop and wait, velocity is 0
+	ON_JUNCTION:   3, // stop and wait, velocity is 0
 	FREE_MOVEMENT: 4
 }
 
-const var MINIMAL_GAP = 2;
+const MINIMAL_GAP = 2;
 
 // if vehicle has no leader or follower
-const var VIRTUAL_VEHICLE = -1;
+const VIRTUAL_VEHICLE = -1;
+
+
+var virtualFreeRoadVehicle = null;
+var virtualUpstreamVehicle = null;
+var virtualDownstreamVehicle = null;
+var virtualJamVehicle = null;
+
 
 // Used length units independent from actual visualization scale
 // Updated after reading and parsing config files
 
-const var INVALID = -1;
+const INVALID = -1;
 
 var CAR_LENGTH = INVALID;
 var CAR_WIDTH  = INVALID;
@@ -57,6 +64,13 @@ var TRUCK_DESIRED_SPEED = INVALID;
 
 var CAR_INITIAL_SPEED   = INVALID;
 var TRUCK_INITIAL_SPEED = INVALID;
+
+// Safe distance it's a distance before road's end where vehicle moves slower
+// before new map object ahead: junction/turn/etc.
+// When vehicle has reached own safe distance on road, its traffic state become
+// upstream.
+var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
+var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
 function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed,
 						_leader, _follower )
@@ -82,6 +96,9 @@ function Vehicle( config )
 	// this moving
 	this.uCoord = config.uCoord; // u in UV coordinates
 
+	// true if vehicle has reached end of map object it moves on
+	this.arrived = false;
+
 	// coordinate used for turnes and lane change
 	// this is position when vehicle moves not in a straight, but diagonally
 	// by default, vehicle moves in the straight direction
@@ -95,11 +112,13 @@ function Vehicle( config )
 	{
 		this.length       = CAR_LENGTH;
 		this.desiredSpeed = CAR_DESIRED_SPEED;
+		this.safeDistance = CAR_ROAD_SAFE_DISTANCE;
 	}
 	else
 	{
 		this.length       = TRUCK_LENGTH;
 		this.desiredSpeed = TRUCK_DESIRED_SPEED;
+		this.safeDistance = TRUCK_ROAD_SAFE_DISTANCE;
 	}
 
 	// Default values
@@ -123,11 +142,11 @@ function Vehicle( config )
 
 	// leader on the lane from the left
 	// if vehicle on the leftmost lane, these variables are not used
-	this.leaderAtLeft   = VIRTUAL_VEHICLE;
-	this.followerAtLeft = VIRTUAL_VEHICLE;
+	this.leaderAtLeft   = null;
+	this.followerAtLeft = null;
 
-	this.leaderAtRight   = VIRTUAL_VEHICLE;
-	this.followerAtRight = VIRTUAL_VEHICLE;
+	this.leaderAtRight   = null;
+	this.followerAtRight = null;
 
 	this.TargetLane = null;
 
@@ -141,12 +160,28 @@ function Vehicle( config )
 	this.turnDestinationLane = 0;
 }
 
-Vehicle.prototype.update = function( dt )
+// virtual vehicles with different models used for leading vehicle,
+// namely the very first vehicle on each map object
+function createVirtualVehicles()
+{
+	// TODO implement me!
+}
+
+Vehicle.prototype.stop = function( _uCoord )
+{
+	this.uCoord = _uCoord;
+	this.speed = this.acceleration = 0;
+	this.vehicleState = VehicleState.IDLE;
+}
+
+// dt - delta of time
+// length - length of map object vehicle moves at
+Vehicle.prototype.update = function( dt, length )
 {
 	switch (this.vehicleState)
 	{
 		case VehicleState.MOVING:
-			this.updateStraightMove( dt );
+			this.updateStraightMove( dt, length );
 			break;
 
 		case VehicleState.TURNING:
@@ -156,18 +191,45 @@ Vehicle.prototype.update = function( dt )
 		case VehicleState.CHANGE_LANE:
 			this.updateLaneChange( dt );
 			break;
+
+		case VehicleState.IDLE:
+			// do nothing
+			break;
 	}
 }
 
-Vehicle.prototype.updateStraightMove = function( dt )
+Vehicle.prototype.updateStraightMove = function( dt, length )
 {
-	// TODO implement me!
+
+	// update velocity
+	let newSpeed = this.speed * dt + 0.5 *this.acceleration * dt * dt;
+	this.uCoord += Math.Max(0, newSpeed);
+
+	let safeDistance = length - MINIMAL_GAP;
+	if (this.uCoord >= safeDistance)
+	{
+		this.uCoord = safeDistance;
+		this.speed = this.acceleration = 0;
+		this.vehicleState = VehicleState.IDLE;
+
+		return;
+	}
+
+	this.speed += this.acceleration * dt;
+	this.speed = Math.max( 0, this.speed);
 }
 
 Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+
+	if (turnCompletion == 1)
+	{
+		// turn has been completed
+		this.vehicleState = VehicleState.IDLE;
+		this.speed = this.accleration = 0;
+	}
 }
 
 Vehicle.prototype.updateLaneChange = function( dt )
@@ -182,12 +244,12 @@ function updateVehicles( vehicles, dt )
 	})
 }
 
-Vehicle.prototype.getMinimalGap()
+Vehicle.prototype.getMinimalGap = function()
 {
 	return this.length + MINIMAL_GAP;
 }
 
-Vehicle.prototype.farFrom( distance )
+Vehicle.prototype.farFrom = function( distance )
 {
 	return (this.uCoord - this.length) > distance;
 }

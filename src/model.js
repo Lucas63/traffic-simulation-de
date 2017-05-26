@@ -3,6 +3,12 @@ IDM_MAX_SPEED = 1000;
 
 IDM_MAX_DECELERATION = 16;
 
+var FREE_ROAD_IDM = null;
+var FREE_ROAD_MOBIL = null;
+
+var UPSTREAM_IDM = null;
+var UPSTREAM_MOBIL = null;
+
 function ModelConfig( _desiredSpeed, _timeHeadway, _minimumGap,
 					  _comfortAcceleration, _comfortDeceleration)
 {
