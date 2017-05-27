@@ -16,12 +16,16 @@ function RoadEngine( _map )
 RoadEngine.prototype.update = function( dt )
 {
 
+	/// check vehicles after previous update, it is an analysis of last update
+	/// and done before actual current update
+	///
 	// check vehicles on roads whether they have reached specific zones
 	// on road. After that check all first vehicles at any map object and
 	// decide to start passing through or turn.
-	this.checkTrafficState();
+	this.updateRoads();
 	this.updateLongitudinalModels( dt );
 	this.checkLaneChange( dt );
+
 	this.updateVelocities( dt );
 
 }
@@ -32,44 +36,31 @@ RoadEngine.prototype.updateLongitudinalModels = function( dt )
 }
 
 // check whether vehicles on upstream, downstream or jam
-RoadEngine.prototype.checkTrafficState = function()
+RoadEngine.prototype.updateRoads = function()
 {
-	let map = this.map;
-
-	let road = null;
-	let lanes = null;
-	let lane = null;
-	let vehicle = null;
-
-	for (let i = 0;i < map.roads.length; ++i)
-	{
-		road = map.roads[i];
-		let borderDistance = road.length - MINIMAL_GAP;
-
-		lanes = road.forwardLanes;
-		for (let j = 0; j < lanes.length; ++j)
-		{
-			checkVehiclesOnRoad( lanes[j], borderDistance, road.length );
-			checkArrivedVehicles( lanes[j].vehicle.first() );
-		}
-
-		lanes = road.backwardLanes;
-		for (let j = 0; j < lanes.length; ++j)
-		{
-			checkVehiclesOnRoad( lanes[j], borderDistance, road.length );
-			checkArrivedVehicles( lanes[j] );
-		}
-
-	}
-
-
+	this.map.roads.forEach( checkVehiclesOnRoad );
 }
 
-function checkVehiclesOnRoad( lane, borderDistance, roadLength )
+function checkVehiclesOnRoad( road )
 {
-	for (let k = 0; k < lane.vehicles.length; ++k)
+	let lanes = road.forwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
 	{
-		vehicle = lane.vehicles[k];
+		checkVehiclesOnLane( lanes[i], this.borderDistance, road.length );
+	}
+
+	lanes = road.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+	{
+		checkVehiclesOnLane( lanes[i], this.borderDistance, road.length );
+	}
+}
+
+function checkVehiclesOnLane( lane, borderDistance, roadLength )
+{
+	for (let i = 0; i < lane.vehicles.length; ++i)
+	{
+		vehicle = lane.vehicles[i];
 
 		// to close to road's end, stop it!
 		if (vehicle.uCoord < borderDistance)
@@ -79,18 +70,50 @@ function checkVehiclesOnRoad( lane, borderDistance, roadLength )
 			continue;
 		}
 
-		if ( roadLength - vehicle.uCoord < vehicle.safeDistance )
+		if ( roadLength - vehiclse.uCoord < vehicle.safeDistance )
 		{
 			vehicle.longModel = UPSTREAM_IDM;
 			vehicle.laneChangeModel = UPSTREAM_MOBIL;
+			continue;
 		}
 	}
 }
 
+RoadEngine.prototype.updateJunctions = function( dt )
+{
+	let junctions = this.map.junctions;
+	for (let i = 0;i < junctions.length; ++i)
+	{
+		junctions[i].updateTrafficLights(dt);
+		junctions[i].updateAllVehicles(dt);
+	}
+}
+
+RoadEngine.prototype.updateTurns = function( dt )
+{
+	let turns = this.map.turns;
+	for (let i = 0;i < turns.length; ++i)
+	{
+		turns[i].update( dt );
+	}
+}
+
+RoadEngine.prototype.updateOnramps = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updateOfframps = function( dt )
+{
+
+}
+
 // check vehicles that have moved to the end of current map object, i.e.
 // reached finish or start of road/onramp/offramp/turn/junction
-function checkArrivedVehicles( lane )
+RoadEngine.prototype.checkArrivedVehicles = function(  )
 {
+
+	let lane;
 	let vehicle = lane.vehicles.first();
 
 	if ( vehicle.arrived == false)

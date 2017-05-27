@@ -1,5 +1,5 @@
 
-function Offramp( _source, _destination, _outflow, _turnType, _length,
+function Offramp( _source, _destination, _outflow, _length,
 				 _connectedLaneType, _connectedLaneIndex )
 {
 	this.source = _source;
@@ -13,9 +13,6 @@ function Offramp( _source, _destination, _outflow, _turnType, _length,
 	this.outflowId = this.outflow.getId();
 
 	this.destLanesAmount = this.destination.getLanesAmount();
-
-	// turn at lefr or right
-	this.turnType = turnType;
 
 	this.connectedLaneType = _connectedLaneType;
 	this.connectedLaneIndex = _connectedLaneIndex;
@@ -48,7 +45,7 @@ function Offramp( _source, _destination, _outflow, _turnType, _length,
 		this.turnLanes[i].vehicles = [];
 	}
 
-	this.turnDuration[] = new Array( this.destLanesAmount );
+	this.turnDuration = new Array( this.destLanesAmount );
 
 	for (let i = 0;i < this.destLanesAmount; ++i)
 	{
@@ -203,26 +200,15 @@ Offramp.prototype.canPassThrough( vehicle, roadId, laneType, laneIndex )
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.TURNING;
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
-	vehicle.turnCompletion = vehicle.turnElapsedTime = 0;
-	vehicle.turnFullTime = this.turnDuration[ laneIndex ];
-
-	vehicle.turnDestinationLane = laneIndex;
-
+	vehicle.prepareForTurn(this.turnDuration[laneIndex], laneIndex)
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
 
-Offramp.prototype.startPassThrough = function( vehicle,roadId, laneIndex )
+Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 {
-	// TODO think about is free road state actual one?
-	vehicle.trafficState = trafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.MOVING;
-	vehicle.movementState = MovementState.ON_OFFRAMP;
-
-	vehicle.uCoord = 0;
+	vehicle.prepareForMove(MovementState.ON_OFFRAMP);
 
 	if ( roadId == this.sourceId )
 	{
@@ -237,8 +223,15 @@ Offramp.prototype.startPassThrough = function( vehicle,roadId, laneIndex )
 Offramp.prototype.turnCompeleted = function( laneIndex )
 {
 	let lane = this.turnLanes[laneIndex];
-	let vehicles = lane.vehicles;
-	var vehicle = null;
+	var vehicle = lane.vehicles.first();
+
+	if (vehicle.arrived)
+	{
+		// delete vehicle from offramp
+		// it will be added to destination road
+		this.connectedLane.vehicles.splice(i, 1);
+		return vehicle;
+	}
 
 	for (let i = 0; i < vehicles.length; i++)
 	{
@@ -247,11 +240,7 @@ Offramp.prototype.turnCompeleted = function( laneIndex )
 		// if turn completed
 		if ( vehicle.turnCompletion == 1 )
 		{
-			// delete vehicle from offramp
-			// it will be added to destination road
-			this.connectedLane.vehicles.splice(i, 1);
 
-			return vehicle;
 		}
 	}
 

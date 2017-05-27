@@ -1,9 +1,3 @@
-var TurnType =
-{
-	"left": 0,
-	"right": 1
-}
-
 // _source - road id vehicle moves from
 // _destination - road id vehicle moves to
 // _type - turn's type: "left" or "right"
@@ -23,7 +17,7 @@ function Turn( _destination, _source, _type, _lanesNumber )
 	for (let i = 0; i < _lanesNumber; ++i)
 	{
 		// each lane has array of vehicles on this lane
-		this.lanes[i] = [];
+		this.lanes[i].vehicles = [];
 	}
 
 	// Renderer store here information about Start, Control and End points
@@ -34,15 +28,15 @@ function Turn( _destination, _source, _type, _lanesNumber )
 	{
 		// TODO add real calculation of coordinates
 		// TODO set coordinates of center i-th lane on source road
-		this.renderInfo[i].StartPoint = { "x": 0, "y": 0 };
+		this.renderInfo[i].startPoint = { "x": 0, "y": 0 };
 
 		// Canvas implementation of Bezier curve requires 2 control points,
 		// but use only one point twice for simplicity's sake
 		// TODO set x of source lane's center and y of destination lane's center
-		this.renderInfo[i].ControlPoint = { "x": 0, "y": 0 };
+		this.renderInfo[i].controlPoint = { "x": 0, "y": 0 };
 
 		// TODO set coordinates of center i-th lane on destination road
-		this.renderInfo[i].EndPoint = { "x": 0, "y": 0};
+		this.renderInfo[i].endPoint = { "x": 0, "y": 0};
 	}
 
 	// this formula used to decide direction of this turn
@@ -68,7 +62,7 @@ Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
 	assert( destinationLane["id"] == this.to)
 
 	// get the last vehicle from selected lane
-	let lastVehicle = this.lanes[laneIndex].last();
+	let lastVehicle = this.lanes[laneIndex].vehicles.last();
 
 	// if last vehicle on selected lane made turn less for 50%,
 	// then vehicle on source road cannot start turning
@@ -86,23 +80,27 @@ Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
 
 Turn.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.turnElapsedTime = 0;
-	vehicle.turnCompletion = 0;
-
 	// TODO add turn time
-	vehicle.turnFullTime = -1;
-
-	this.lanes[laneIndex].push( vehicle );
+	vehicle.prepareForTurn( -1 );
+	this.lanes[laneIndex].vehicles.push( vehicle );
 }
 
-function updateTurn( vehicle )
+function updateTurn( vehicles )
 {
-	vehicle.turnElapsedTime += this.delta;
-	vehicle.turnCompletion = vehicle.turnElapsedTime / vehicle.turnFullTime;
+	for (let i = 0;i < vehicles.length;++i)
+	{
+		let vehicle = vehicles[i];
+		if (vehicle.arrived)
+			continue;
 
-	// it possible that vehicle waits on turn to move on destination road
-	// if destination road is congested and no space for new vehicle
-	Math.max( vehicle.turnCompletion, 1 );
+		vehicle.turnElapsedTime += this.delta;
+		vehicle.turnCompletion = vehicle.turnElapsedTime / vehicle.turnFullTime;
+
+		// it possible that vehicle waits on turn to move on destination road
+		// if destination road is congested and no space for new vehicle
+		if (vehicle.turnCompletion >= 1)
+			vehicle.arrived = true;
+	}
 }
 
 Turn.prototype.update = function( dt )
@@ -111,10 +109,8 @@ Turn.prototype.update = function( dt )
 
 	for (let i = 0; i < this.lanes.length; ++i)
 	{
-		let lane = this.lanes[i];
-
 		// update turn for all vehicles on lane
-		lane.forEach( updateTurn );
+		updateTurn(this.lanes[i].vehicles);
 	}
 }
 
@@ -124,11 +120,9 @@ Turn.prototype.turnCompleted( laneIndex )
 	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
 			"lanes amount is " + this.lanes.length);
 
-	if ( this.lanes[laneIndex].length == 0 )
-	{
+	if ( this.lanes[laneIndex].vehicles.empty() )
 		return false;
-	}
 
 	// check whether first first vehicle on lane has finished turn
-	return this.lanes[lanesIndex][0].turnCompletion == 1;
+	return this.lanes[lanesIndex].vehicles.first().arrived;
 }

@@ -1,4 +1,4 @@
-function Onramp( _source, _destination, _inflow, _turnType, _length,
+function Onramp( _source, _destination, _inflow, _length,
 				 _connectedLaneType, _connectedLaneIndex )
 {
 	this.source = _source;
@@ -10,8 +10,6 @@ function Onramp( _source, _destination, _inflow, _turnType, _length,
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();
 	this.inflowId = this.inflow.getId();
-
-	this.turnType = turnType;
 
 	this.connectedLaneType = _connectedLaneType;
 	this.connectedLaneIndex = _connectedLaneIndex;
@@ -46,7 +44,7 @@ function Onramp( _source, _destination, _inflow, _turnType, _length,
 		this.turnLanes[i].vehicles = [];
 	}
 
-	this.turnDuration[] = new Array( sourceLanesAmount );
+	this.turnDuration = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
 	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
@@ -236,14 +234,9 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 // laneIndex - index of lane on source road
 Onramp.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.TURNING;
 	vehicle.movementState = MovementState.ON_ONRAMP;
-
-	vehicle.turnCompletion = vehicle.turnElapsedTime = 0;
-	vehicle.turnFullTime = this.turnDuration[ laneIndex ];
-
-	vehicle.turnDestinationLane = this.connectedLaneIndex;
+	vehicle.prepareForTurn(this.turnDuration[laneIndex],
+						   this.connectedLaneIndex);
 
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
@@ -251,12 +244,7 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex,)
 {
-	vehicle.trafficState = trafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.MOVING;
-	vehicle.movementState = MovementState.ON_ONRAMP;
-
-	vehicle.uCoord = 0;
-
+	vehicle.prepareForMove(MovementState.ON_ONRAMP);
 	if ( laneType == LaneType.FORWARD )
 	{
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );

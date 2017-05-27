@@ -174,6 +174,30 @@ Vehicle.prototype.stop = function( _uCoord )
 	this.vehicleState = VehicleState.IDLE;
 }
 
+Vehicle.prototype.prepareForTurn = function(turnFullTime, destLaneIndex)
+{
+	vehicle.arrived = false;
+
+	this.trafficState = TrafficState.FREE_ROAD;
+	this.vehicleState = VehicleState.TURNING;
+	this.turnElapsedTime = 0;
+	this.turnCompletion = 0;
+
+	this.turnDestinationLane = destLaneIndex;
+	this.turnFullTime = turnFullTime;
+}
+
+Vehicle.prototype.prepareForMove = function(movementState)
+{
+	// TODO think about is free road state actual one?
+	this.trafficState = trafficState.FREE_ROAD;
+	this.vehicleState = VehicleState.MOVING;
+	this.movementState = movementState;
+
+	this.uCoord = 0;
+	this.arrived = false;
+}
+
 // dt - delta of time
 // length - length of map object vehicle moves at
 Vehicle.prototype.update = function( dt, length )
@@ -239,9 +263,10 @@ Vehicle.prototype.updateLaneChange = function( dt )
 
 function updateVehicles( vehicles, dt )
 {
-	vehicles.forEach( function(vehicle) {
-		vehicle.update( dt );
-	})
+	for (let i = 0;i < vehicles.length; ++i)
+	{
+		vehicles[i].update( dt );
+	}
 }
 
 Vehicle.prototype.getMinimalGap = function()

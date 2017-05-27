@@ -392,7 +392,7 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 	return turnLanes[laneIndex].hasEnoughSpace( vehicleRequiredSpace );
 }
 
-Junction.prototype.canPassThrough = function( roadId, laneIndex
+Junction.prototype.canPassThrough = function( roadId, laneIndex,
 											  vehicleRequiredSpace )
 {
 	let sourceSide = this.getSideForRoad( roadId );
@@ -569,12 +569,9 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
 	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.TURNING;
 	vehicle.movementState = MovementState.ON_JUNCTION;
 
-	vehicle.turnCompletion = vehicle.turnElapsedTime = 0;
-	vehicle.turnFullTime = this.turnRightDuration[laneIndex];
-
+	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
 	vehicle.turnDestinationLane = laneIndex;
 
 	sourceRoad.turnRightLanes[laneIndex].vehicles.push(vehicle);
@@ -612,11 +609,9 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
 	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.TURNING;
 	vehicle.movementState = MovementState.ON_JUNCTION;
 
-	vehicle.turnCompletion = vehicle.turnElapsedTime = 0;
-	vehicle.turnFullTime = this.turnRightDuration[laneIndex];
+	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
 
 	vehicle.turnDestinationLane = laneIndex;
 
@@ -640,9 +635,9 @@ Junction.prototype.turnRightCompleted = function( roadId, laneIndex )
 	if (vehicles.empty())
 		return null;
 
-	let lastVehicle = vehicles.first();
-	if (lastVehicle.turnCompletion == 1)
-		return lastVehicle;
+	let firstVehicle = vehicles.first();
+	if ( firstVehicle.arrived )
+		return firstVehicle;
 
 	return null;
 }
@@ -680,11 +675,20 @@ Junction.prototype.turnLeftCompleted = function( roadId, laneIndex )
 	if (vehicles.empty())
 		return null;
 
-	let lastVehicle = vehicles.first();
-	if (lastVehicle.turnCompletion == 1)
-		return lastVehicle;
+	let firstVehicle = vehicles.first();
+	if (firstVehicle.arrived)
+		return firstVehicle;
 
 	return null;
+}
+
+Junction.prototype.updateTrafficLights = function(dt)
+{
+	if (null != this.horizontalTrafficLight)
+		this.horizontalTrafficLight.update(dt);
+
+	if (null != this.verticalTrafficLight)
+		this.verticalTrafficLight.update(dt);
 }
 
 function updateVehiclesForJunctionRoad( _road, dt )
@@ -700,8 +704,8 @@ function updateVehiclesForJunctionRoad( _road, dt )
 
 Junction.prototype.updateAllVehicles = function( dt )
 {
-	updateVehiclesForJunctionRoad(this.topRoad);
-	updateVehiclesForJunctionRoad(this.rightRoad);
-	updateVehiclesForJunctionRoad(this.bottomRoad);
-	updateVehiclesForJunctionRoad(this.leftRoad);
+	updateVehiclesForJunctionRoad(this.topRoad, dt);
+	updateVehiclesForJunctionRoad(this.rightRoad, dt);
+	updateVehiclesForJunctionRoad(this.bottomRoad, dt);
+	updateVehiclesForJunctionRoad(this.leftRoad, dt);
 }
