@@ -4,11 +4,20 @@ IDM_MAX_SPEED = 1000;
 IDM_MAX_DECELERATION = 16;
 
 
-var FREE_ROAD_IDM = null;
-var FREE_ROAD_MOBIL = null;
+var freeRoadIDM = null;
+var freeRoadMOBIL = null;
 
-var UPSTREAM_IDM = null;
-var UPSTREAM_MOBIL = null;
+var upstreamIDM = null;
+var upstreamMOBIL = null;
+
+var downstreamIDM = null;
+var downstreamMOBIL = null;
+
+var jamIDM = null;
+var jamMOBIL = null;
+
+var carIDMConfig = null;
+var truckIDMConfig = null;
 
 function VehicleConfig( _desiredSpeed, _timeHeadway, _minimumGap,
 						_acceleration, _deceleration)
@@ -37,6 +46,15 @@ function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
 
 	// calculate once to avoid reduntant multiplications
 	this.square_root_of_ab = Math.sqrt( this.acceleration * this.deceleration );
+}
+
+function createIDMModels( vehicleConfig, freeRoadConfig, upstreamConfig,
+						  downstreamConfig, jamConfig)
+{
+	freeRoadIDM = new IDM( vehicleConfig, freeRoadConfig );
+	upstreamIDM = new IDM( vehicleConfig, upstreamConfig );
+	downstreamIDM = new IDM( vehicleConfig, downstreamConfig );
+	jamIDM = new IDM( vehicleConfig, jamConfig );
 }
 
 // gap (s in formula) - actual gap between vehicles
@@ -82,7 +100,7 @@ IDM.prototype.calculateAcceleration( vehicle )
 
 	let actualGap = Math.max( gap, this.minimumGap );
 	let deceleration =
-		this.comfortAcceleration *
+		this.acceleration *
 		Math.pow( dynamicDistance / actualGap, 2);
 
 	// return original IDM

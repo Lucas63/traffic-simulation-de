@@ -26,7 +26,8 @@ RoadEngine.prototype.update = function( dt )
 	this.updateLongitudinalModels( dt );
 	this.checkLaneChange( dt );
 
-	this.updateVelocities( dt );
+	this.updateAccelerations();
+	this.updatePositionsAndVelocities();
 
 }
 
@@ -183,7 +184,7 @@ function checkUpstream( vehicle )
 
 }
 
-function checkDownstream( follower, leader )
+function checkDownstream( vehicle )
 {
 
 }
@@ -193,7 +194,12 @@ RoadEngine.prototype.checkLaneChange = function( dt )
 
 }
 
-RoadEngine.prototype.updateVelocities = function( dt )
+RoadEngine.prototype.updateAccelerations = function()
+{
+
+}
+
+RoadEngine.prototype.updatePositionsAndVelocities = function()
 {
 
 }
