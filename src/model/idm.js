@@ -3,69 +3,63 @@ IDM_MAX_SPEED = 1000;
 
 IDM_MAX_DECELERATION = 16;
 
+
 var FREE_ROAD_IDM = null;
 var FREE_ROAD_MOBIL = null;
 
 var UPSTREAM_IDM = null;
 var UPSTREAM_MOBIL = null;
 
-function ModelConfig( _desiredSpeed, _timeHeadway, _minimumGap,
-					  _comfortAcceleration, _comfortDeceleration)
+function VehicleConfig( _desiredSpeed, _timeHeadway, _minimumGap,
+						_acceleration, _deceleration)
 {
 	this.desiredSpeed = _desiredSpeed; // v0
 
 	this.timeHeadway = _timeHeadway; // T
 	this.minimumGap = _minimumGap; // s0
 
-	this.comfortAcceleration = _comfortAcceleration; // a
-	this.comfortDeceleration = _comfortDeceleration; // b
-
-	// calculate once to avoid reduntant multiplications
-	this.sqrt_of_AB = Math.sqrt( _comfortAcceleration * _comfortDeceleration );
+	this.acceleration = _acceleration; // a
+	this.deceleration = _deceleration; // b
 }
 
-function IDM( modelConfig )
+function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
 {
-	this.desiredSpeed = modelConfig.desiredSpeed;
-	this.timeHeadway = modelConfig.timeHeadway;
-	this.minimumGap = modelConfig.minimumGap;
+	this.desiredSpeed = vehicleConfig.desiredSpeed;
+	this.timeHeadway = lambda_T * vehicleConfig.timeHeadway;
+	this.minimumGap = vehicleConfig.minimumGap;
 
-	this.comfortAcceleration = modelConfig.comfortAcceleration;
-	this.comfortDeceleration = modelConfig.comfortDeceleration;
+	this.acceleration = lambda_a * vehicleConfig.acceleration;
+	this.deceleration = lambda_b * vehicleConfig.deceleration;
 
 	this.speedLimit = IDM_SPEED_LIMIT;
 	this.speedMax = IDM_MAX_SPEED;
 	this.bMax = IDM_MAX_DECELERATION;
+
+	// calculate once to avoid reduntant multiplications
+	this.square_root_of_ab = Math.sqrt( this.acceleration * this.deceleration );
 }
 
 // gap (s in formula) - actual gap between vehicles
 // speed - velocity of current vehicle
 // leadSpeed - velocity of the vehicle in front of current one
 // leadAcceleration - acceleration of the leading vehicle
-IDM.prototype.calculateAcceleration( thisVehicle, leadingVehicle )
+IDM.prototype.calculateAcceleration( vehicle )
 {
-	let thisSpeed = thisVehicle.speed;
-	let thisAcceleration = thisVehicle.acceleration;
+	let leader = vehicle.leader;
+
+	let speed = vehicle.speed;
 
 	let gap = 0;
 	let leadSpeed = 0;
 	let leadAcceleration = 0;
 
 	// observed vehicle is the first on the lane
-	if (leadingVehicle == NO_LEADER)
-	{
-		// TODO Add logic for the very first vehicle
-	}
-	else
-	{
-		leadSpeed = leadingVehicle.speed;
-		leadAcceleration = leadingVehicle.acceleration;
-		gap = leadingVehicle.u_coord - leadingVehicle.length -
-			  thisVehicle.u_coord;
-	}
+	leadSpeed = leader.speed;
+	leadAcceleration = leader.acceleration;
+	gap = leader.uCoord - leader.length - vehicle.uCoord;
 
-	// determine valid local v0
-	let valid_v0 = Math.min(this.desiredSpeed, this.speedlimit, this.speedMax);
+	// determine valid local desired speed
+	let valid_v0 = Math.min(this.desiredSpeed, this.speedLimit, this.speedMax);
 	if (valid_v0 < 0.0001)
 	{
 		return 0;
@@ -74,14 +68,14 @@ IDM.prototype.calculateAcceleration( thisVehicle, leadingVehicle )
 	// actual acceleration model
 	// 4 is an acceleration exponent
 	let freeRoadAcceleration = (speed < valid_v0) ?
-	this.a * ( 1 - Math.pow( speed/valid_v0, 4 ) ) :
-	this.a * ( 1 - speed/valid_v0 );
+	this.acceleration * ( 1 - Math.pow( speed/valid_v0, 4 ) ) :
+	this.acceleration * ( 1 - speed/valid_v0 );
 
 	let delta_v = leadSpeed - speed;
 
 	// calculate desired dynamical distance s*
 	let dynamicDistance = speed * this.timeHeadway;
-	dynamicDistance += (0.5 * delta_v) / this.sqrt_of_AB;
+	dynamicDistance += (0.5 * delta_v) / this.square_root_of_ab;
 
 	dynamicDistance = Math.max( 0, dynamicDistance );
 	dynamicDistance += this.minimumGap;

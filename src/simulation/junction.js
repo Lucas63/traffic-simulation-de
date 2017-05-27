@@ -702,8 +702,10 @@ function updateVehiclesForJunctionRoad( _road, dt )
 	_road.turnLeftLanes.forEach(update);
 }
 
-Junction.prototype.updateAllVehicles = function( dt )
+Junction.prototype.update = function( dt )
 {
+	this.updateTrafficLights( dt );
+
 	updateVehiclesForJunctionRoad(this.topRoad, dt);
 	updateVehiclesForJunctionRoad(this.rightRoad, dt);
 	updateVehiclesForJunctionRoad(this.bottomRoad, dt);

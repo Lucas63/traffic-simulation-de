@@ -314,7 +314,7 @@ Onramp.prototype.passCompleted = function( roadId, laneIndex )
 	}
 }
 
-Onramp.prototype.updateAllVehicles = function( dt )
+Onramp.prototype.update = function( dt )
 {
 	for (let i = 0; i < this.forwardLanesAmount; ++i)
 	{

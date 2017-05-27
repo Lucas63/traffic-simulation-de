@@ -289,7 +289,7 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 	return null;
 }
 
-Offramp.prototype.updateAllVehicles = function( dt )
+Offramp.prototype.update = function( dt )
 {
 	for (var i = 0; i < this.forwardLanesAmount; ++i)
 	{

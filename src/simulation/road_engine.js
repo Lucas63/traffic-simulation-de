@@ -46,29 +46,36 @@ function checkVehiclesOnRoad( road )
 	let lanes = road.forwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
 	{
-		checkVehiclesOnLane( lanes[i], this.borderDistance, road.length );
+		checkVehiclesOnLane( lanes[i], road.length );
 	}
 
 	lanes = road.backwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
 	{
-		checkVehiclesOnLane( lanes[i], this.borderDistance, road.length );
+		checkVehiclesOnLane( lanes[i], road.length );
 	}
 }
 
-function checkVehiclesOnLane( lane, borderDistance, roadLength )
+// check vehicles at safe distance and update model or stop them
+function checkVehiclesOnLane( lane, roadLength )
 {
 	for (let i = 0; i < lane.vehicles.length; ++i)
 	{
 		vehicle = lane.vehicles[i];
 
 		// to close to road's end, stop it!
-		if (vehicle.uCoord < borderDistance)
+		if (vehicle.uCoord >= roadLength)
 		{
+			vehicle.uCoord = roadLength;
 			vehicle.arrived = true;
-			vehicle.stop( borderDistance );
+			vehicle.stop( roadLength );
 			continue;
 		}
+
+		// let vehicle complete lane change without changing longitudinal
+		// and lane change models
+		if (vehicle.vehicleState == VehicleState.CHANGE_LANE)
+			continue;
 
 		if ( roadLength - vehiclse.uCoord < vehicle.safeDistance )
 		{
@@ -76,6 +83,9 @@ function checkVehiclesOnLane( lane, borderDistance, roadLength )
 			vehicle.laneChangeModel = UPSTREAM_MOBIL;
 			continue;
 		}
+
+		this.checkUpstream( lane.vehicles[i] );
+		this.checkDownstream( lane.vehicles[i] );
 	}
 }
 
@@ -84,8 +94,7 @@ RoadEngine.prototype.updateJunctions = function( dt )
 	let junctions = this.map.junctions;
 	for (let i = 0;i < junctions.length; ++i)
 	{
-		junctions[i].updateTrafficLights(dt);
-		junctions[i].updateAllVehicles(dt);
+		junctions[i].update(dt);
 	}
 }
 
@@ -100,12 +109,20 @@ RoadEngine.prototype.updateTurns = function( dt )
 
 RoadEngine.prototype.updateOnramps = function( dt )
 {
-
+	let onramps = this.map.onramps;
+	for (let i = 0;i < onramps.length; ++i)
+	{
+		onramps[i].update( dt );
+	}
 }
 
 RoadEngine.prototype.updateOfframps = function( dt )
 {
-
+	let offramps = this.map.offramps;
+	for (let i = 0;i < offramps.length; ++i)
+	{
+		offramps[i].update( dt );
+	}
 }
 
 // check vehicles that have moved to the end of current map object, i.e.
@@ -160,8 +177,9 @@ RoadEngine.prototype.getNextObjectOnRoute = function( vehicle )
 	}
 }
 
-function checkUpstream( follower, leader )
+function checkUpstream( vehicle )
 {
+	let leading = vehicle.leader;
 
 }
 

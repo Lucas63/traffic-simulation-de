@@ -132,10 +132,10 @@ function Vehicle( config )
 	// model to define lane change decisions
 	this.laneChangeModel = null;
 
-	// index of vehicle before this one
+	// vehicle before this one
 	this.leader = config.leader;
 
-	// index of vehicle after this one
+	// vehicle after this one
 	this.follower = config.follower;
 
 	// calculated after vehicle will be added to the lane
@@ -151,7 +151,7 @@ function Vehicle( config )
 	this.TargetLane = null;
 
 	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
-	// coordinate on Bezier curve
+	// coordinate on Bezier curve for rendering
 	this.turnCompletion = 0;
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
@@ -269,6 +269,7 @@ function updateVehicles( vehicles, dt )
 	}
 }
 
+// the minimal distance between bamper of current vehicle and the following one
 Vehicle.prototype.getMinimalGap = function()
 {
 	return this.length + MINIMAL_GAP;
