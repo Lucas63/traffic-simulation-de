@@ -56,5 +56,29 @@ function load_turns() {
 }
 
 
+/*
+ Function that reads turn objects from src/config/turns.js and pushing them to turns array
+ */
+function load_turns() {
+    var array = turn_json.turns;
+    var turns = [];
+
+    for (var i = 0; i < array.length; i++) {
+        var turn_string = array[i];
+
+        var new_turn = new Turn(
+            turn_string.id,
+            turn_string.destination,
+            turn_string.source,
+            turn_string.type,
+            4
+        );
+        turns.push(new_turn);
+    }
+    return turns;
+}
+
+
+
 
 

@@ -2,7 +2,7 @@ var TurnType =
     {
         "left": 0,
         "right": 1
-    }
+    };
 
 // _source - road id vehicle moves from
 // _destination - road id vehicle moves to
@@ -20,7 +20,7 @@ function Turn(_id, _destination, _source, _type, _lanesNumber) {
 
     this.lanes = new Array(_lanesNumber);
 
-    for (let i = 0; i < _lanesNumber; ++i) {
+    for (var i = 0; i < _lanesNumber; ++i) {
         // each lane has array of vehicles on this lane
         this.lanes[i] = [];
     }
@@ -29,7 +29,7 @@ function Turn(_id, _destination, _source, _type, _lanesNumber) {
     // to draw Bezier curve for each lane
     this.renderInfo = new Array(_lanesNumber);
 
-    for (let i = 0; i < _lanesNumber; ++i) {
+    for (var i = 0; i < _lanesNumber; ++i) {
         // TODO add real calculation of coordinates
         // TODO set coordinates of center i-th lane on source road
         this.renderInfo[i].StartPoint = {"x": 0, "y": 0};
@@ -58,14 +58,14 @@ function Turn(_id, _destination, _source, _type, _lanesNumber) {
 }
 
 Turn.prototype.canTurn = function (laneIndex, vehicleLength, destinationLane) {
-    let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
+    var isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
     assert(isValidIndex, "Wrong index " + laneIndex + "; " +
         "lanes amount is " + this.lanes.length);
 
     assert(destinationLane["id"] == this.to)
 
     // get the last vehicle from selected lane
-    let lastVehicle = this.lanes[laneIndex].last();
+    var lastVehicle = this.lanes[laneIndex].last();
 
     // if last vehicle on selected lane made turn less for 50%,
     // then vehicle on source road cannot start turning
@@ -102,17 +102,16 @@ function updateTurn(vehicle) {
 Turn.prototype.update = function (dt) {
     this.delta = dt;
 
-    for (let i = 0; i < this.lanes.length; ++i) {
-        let lane = this.lanes[i];
+    for (var i = 0; i < this.lanes.length; ++i) {
+        var lane = this.lanes[i];
 
         // update turn for all vehicles on lane
         lane.forEach(updateTurn);
     }
-}
+};
 
-Turn.prototype.turnCompleted(laneIndex)
-{
-    let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
+Turn.prototype.turnCompleted = function(laneIndex){
+    var isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
     assert(isValidIndex, "Wrong index " + laneIndex + "; " +
         "lanes amount is " + this.lanes.length);
 

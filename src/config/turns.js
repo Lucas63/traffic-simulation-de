@@ -25,4 +25,4 @@ var turn_json = {
                 "type": "left"
             }
         ]
-}
+};

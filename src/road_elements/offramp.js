@@ -43,14 +43,14 @@ function Offramp( _source, _destination, _outflow, _turnType, _length,
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( this.destLanesAmount);
-	for (let i = 0;i < this.destLanesAmount; ++i)
+	for (var i = 0;i < this.destLanesAmount; ++i)
 	{
 		this.turnLanes[i].vehicles = [];
 	}
 
-	this.turnDuration[] = new Array( this.destLanesAmount );
+	this.turnDuration = new Array( this.destLanesAmount );
 
-	for (let i = 0;i < this.destLanesAmount; ++i)
+	for (var i = 0;i < this.destLanesAmount; ++i)
 	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
 	}
@@ -58,9 +58,9 @@ function Offramp( _source, _destination, _outflow, _turnType, _length,
 
 // check is it possible to turn now and return index of lane on destination
 // road in case of success, otherwise INVALID
-Offramp.prototype.canTurn( vehicleRequiredSpace)
+Offramp.prototype.canTurn = function( vehicleRequiredSpace)
 {
-	let freeLaneIndex = INVALID;
+	var freeLaneIndex = INVALID;
 
 	if ( this.connectedLane.vehicles.empty() &&
 		 this.turnLanes.vehicles.empty())
@@ -69,11 +69,11 @@ Offramp.prototype.canTurn( vehicleRequiredSpace)
 	}
 
 	// check whether last turning vehicle has completed turn for at least 50%
-	let vehicles = null;
-	let lastVehicle = null;
-	let vehiclesAmount = 0;
+	var vehicles = null;
+	var lastVehicle = null;
+	var vehiclesAmount = 0;
 
-	for (let i = 0; i < this.turnLanes.length; ++i)
+	for (var i = 0; i < this.turnLanes.length; ++i)
 	{
 		vehicles = this.turnLanes[i].vehicles;
 		lastVehicle = vehicles.last();
@@ -90,8 +90,8 @@ Offramp.prototype.canTurn( vehicleRequiredSpace)
 	// in reverse order
 
 
-	let destLanes = this.destination.forwardLanes;
-	for (let i = this.destLanesAmount - 1; i >= 0; --i)
+	var destLanes = this.destination.forwardLanes;
+	for (var i = this.destLanesAmount - 1; i >= 0; --i)
 	{
 		if (destLanes[i].hasEnoughSpace( vehicleRequiredSpace ))
 		{
@@ -125,11 +125,11 @@ Offramp.prototype.isConnectedLane = function( roadId, laneType, laneIndex )
 
 Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 {
-	let lanesAmount = this.turnlanes.length;
+	var lanesAmount = this.turnlanes.length;
 	var vehicles = null;
 	var lastVehicle = null;
 
-	for (let i = 0; i < lanesAmount; ++i)
+	for (var i = 0; i < lanesAmount; ++i)
 	{
 		vehicles = this.turnlanes[i].vehicles.
 		if (vehicles.empty())
@@ -147,14 +147,14 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 	if (vehicles.empty())
 		return true;
 
-	let lastVehicle = vehicles.last();
+	var lastVehicle = vehicles.last();
 
 	return lastVehicle.farFrom( vehicle.requiredSpace );
 }
 
 // check whether *vehicle* from road with *roadId* and lane identified
 // by *laneType* and *laneIndex* can pass throug the offramp
-Offramp.prototype.canPassThrough( vehicle, roadId, laneType, laneIndex )
+Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneIndex )
 {
 	assert( roadId == this.source || roadId == this.outflow,
 			"Wrong road id " + roadId);
@@ -164,7 +164,7 @@ Offramp.prototype.canPassThrough( vehicle, roadId, laneType, laneIndex )
 		return this.canPassThroughConnectedLane( vehicle );
 	}
 
-	let selectedLane = null;
+	var selectedLane = null;
 	if ( roadId == this.sourceId )
 	{
 		selectedLane = this.forwardLanes[ laneIndex ];
@@ -180,8 +180,8 @@ Offramp.prototype.canPassThrough( vehicle, roadId, laneType, laneIndex )
 		return true;
 	}
 
-	let lastVehicle = selectedLane.vehicles.last();
-	let state = lastVehicle.vehicleState;
+	var lastVehicle = selectedLane.vehicles.last();
+	var state = lastVehicle.vehicleState;
 
 	switch( state )
 	{
@@ -236,11 +236,11 @@ Offramp.prototype.startPassThrough = function( vehicle,roadId, laneIndex )
 
 Offramp.prototype.turnCompeleted = function( laneIndex )
 {
-	let lane = this.turnLanes[laneIndex];
-	let vehicles = lane.vehicles;
+	var lane = this.turnLanes[laneIndex];
+	var vehicles = lane.vehicles;
 	var vehicle = null;
 
-	for (let i = 0; i < vehicles.length; i++)
+	for (var i = 0; i < vehicles.length; i++)
 	{
 		vehicle = vehicles[i];
 
@@ -262,8 +262,8 @@ Offramp.prototype.turnCompeleted = function( laneIndex )
 // i.e., roadId - id of destination or outflow
 Offramp.prototype.passCompleted = function( roadId, laneIndex )
 {
-	let lanes = null;
-	let vehicle = null;
+	var lanes = null;
+	var vehicle = null;
 
 	if ( roadId == this.sourceId )
 	{
@@ -296,12 +296,12 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 
 Offramp.prototype.updateAllVehicles = function( dt )
 {
-	for (let i = 0; i < this.forwardLanesAmount; ++i)
+	for (var i = 0; i < this.forwardLanesAmount; ++i)
 	{
 		updateVehicles( this.forwardLanes[i].vehicles, dt );
 	}
 
-	for (let i = 0; i < this.backwardLanesAmount; ++i)
+	for (var i = 0; i < this.backwardLanesAmount; ++i)
 	{
 		updateVehicles( this.backwardLanes[i].vehicles, dt );
 	}
