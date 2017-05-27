@@ -1,9 +1,7 @@
-// _source - road id vehicle moves from
-// _destination - road id vehicle moves to
-// _type - turn's type: "left" or "right"
-// _lanesNumber - number of lanes on turn, source and destination roads
-// must have the same lanes quantity!
-function Turn( _destination, _source, _type, _lanesNumber )
+// _source - object of road vehicle moves from
+// \param _destination - object of road vehicle moves to
+// \note source and destination roads must have the same lanes quantity!
+function Turn( _source, _destination )
 {
 	this.source = _source;
 	this.destination = _destination;
@@ -12,9 +10,12 @@ function Turn( _destination, _source, _type, _lanesNumber )
 	// time elapsed from last update
 	this.delta = 0;
 
-	this.lanes = new Array( _lanesNumber );
+	let lanesAmount = _source.getForwardLanesAmount() +
+					  _source.getBackwardLanesAmount();
 
-	for (let i = 0; i < _lanesNumber; ++i)
+	this.lanes = new Array( lanesAmount );
+
+	for (let i = 0; i < lanesAmount; ++i)
 	{
 		// each lane has array of vehicles on this lane
 		this.lanes[i].vehicles = [];
@@ -22,9 +23,9 @@ function Turn( _destination, _source, _type, _lanesNumber )
 
 	// Renderer store here information about Start, Control and End points
 	// to draw Bezier curve for each lane
-	this.renderInfo = new Array( _lanesNumber );
+	this.renderInfo = new Array( lanesAmount );
 
-	for (let i = 0; i < _lanesNumber; ++i)
+	for (let i = 0; i < lanesAmount; ++i)
 	{
 		// TODO add real calculation of coordinates
 		// TODO set coordinates of center i-th lane on source road
