@@ -89,7 +89,7 @@ IDM.prototype.calculateAcceleration( thisVehicle, leadingVehicle )
 	let actualGap = Math.max( gap, this.minimumGap );
 	let deceleration =
 		this.comfortAcceleration *
-		Math.pow( dynamicDistance / actualGap, 2)
+		Math.pow( dynamicDistance / actualGap, 2);
 
 	// return original IDM
 	return Math.max(-this.bMax, freeRoadAcceleration - deceleration);
