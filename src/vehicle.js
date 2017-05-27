@@ -160,7 +160,7 @@ function Vehicle( config )
 	this.turnDestinationLane = 0;
 }
 
-// virtual vehicles with different models used for leading vehicle,
+// virtual vehicles with different road_elements used for leading vehicle,
 // namely the very first vehicle on each map object
 function createVirtualVehicles()
 {
