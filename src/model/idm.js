@@ -1,8 +1,13 @@
-IDM_SPEED_LIMIT = 1000;
-IDM_MAX_SPEED = 1000;
+IDM_MAX_DECELERATION = -16;
 
-IDM_MAX_DECELERATION = 16;
 
+// if calculated acceleration < -upstreamDelta (actually it is deceleration),
+// then vehicle is located within upstream
+const upstreamDelta = 4;
+
+// if calculated acceleration > downstreamDelta,
+// then vehicle is located within upstream
+const downstreamDelta = 3;
 
 var freeRoadIDM = null;
 var freeRoadMOBIL = null;
@@ -40,9 +45,7 @@ function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
 	this.acceleration = lambda_a * vehicleConfig.acceleration;
 	this.deceleration = lambda_b * vehicleConfig.deceleration;
 
-	this.speedLimit = IDM_SPEED_LIMIT;
-	this.speedMax = IDM_MAX_SPEED;
-	this.bMax = IDM_MAX_DECELERATION;
+	this.maximumDeceleration = IDM_MAX_DECELERATION;
 
 	// calculate once to avoid reduntant multiplications
 	this.square_root_of_ab = Math.sqrt( this.acceleration * this.deceleration );
@@ -77,17 +80,13 @@ IDM.prototype.calculateAcceleration( vehicle )
 	gap = leader.uCoord - leader.length - vehicle.uCoord;
 
 	// determine valid local desired speed
-	let valid_v0 = Math.min(this.desiredSpeed, this.speedLimit, this.speedMax);
-	if (valid_v0 < 0.0001)
-	{
-		return 0;
-	}
+	let desiredSpeed = this.desiredSpeed
 
 	// actual acceleration model
 	// 4 is an acceleration exponent
-	let freeRoadAcceleration = (speed < valid_v0) ?
-	this.acceleration * ( 1 - Math.pow( speed/valid_v0, 4 ) ) :
-	this.acceleration * ( 1 - speed/valid_v0 );
+	let freeRoadAcceleration = (speed < desiredSpeed) ?
+	this.acceleration * ( 1 - Math.pow( speed/desiredSpeed, 4 ) ) :
+	this.acceleration * ( 1 - speed/desiredSpeed );
 
 	let delta_v = leadSpeed - speed;
 
@@ -103,8 +102,23 @@ IDM.prototype.calculateAcceleration( vehicle )
 		this.acceleration *
 		Math.pow( dynamicDistance / actualGap, 2);
 
-	// return original IDM
-	return Math.max(-this.bMax, freeRoadAcceleration - deceleration);
+	// prevent deceleration lower than maximum
+	return Math.max(this.maximumDeceleration,
+					freeRoadAcceleration - deceleration);
+}
+
+// compare current (that vehicle has now) and
+// calculated (for next step of simulation) accelerations
+// true if vehicle on upstream zone, otherwise false
+IDM.prototype.onUpstream = function(current, calculated)
+{
+	return calculated - current < -upstreamDelta;
+}
+
+// true if vehicle on downstream zone, otherwise false
+IDM.prototype.onDownstream = function(current, calculated)
+{
+	return calculated - current > downstreamDelta;
 }
 
 
