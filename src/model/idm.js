@@ -70,14 +70,10 @@ IDM.prototype.calculateAcceleration( vehicle )
 
 	let speed = vehicle.speed;
 
-	let gap = 0;
-	let leadSpeed = 0;
-	let leadAcceleration = 0;
-
 	// observed vehicle is the first on the lane
-	leadSpeed = leader.speed;
-	leadAcceleration = leader.acceleration;
-	gap = leader.uCoord - leader.length - vehicle.uCoord;
+	let leadSpeed = leader.speed;
+	let leadAcceleration = leader.acceleration;
+	let gap = leader.uCoord - leader.length - vehicle.uCoord;
 
 	// determine valid local desired speed
 	let desiredSpeed = this.desiredSpeed
@@ -88,7 +84,7 @@ IDM.prototype.calculateAcceleration( vehicle )
 	this.acceleration * ( 1 - Math.pow( speed/desiredSpeed, 4 ) ) :
 	this.acceleration * ( 1 - speed/desiredSpeed );
 
-	let delta_v = leadSpeed - speed;
+	let delta_v = speed - leadSpeed;
 
 	// calculate desired dynamical distance s*
 	let dynamicDistance = speed * this.timeHeadway;

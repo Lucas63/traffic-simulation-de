@@ -15,9 +15,10 @@ function RoadEngine( _map )
 
 RoadEngine.prototype.update = function( dt )
 {
+	this.updateTrafficLights( dt );
 
 	/// check vehicles after previous update, it is an analysis of last update
-	/// and done before actual current update
+	/// and done before actual current update.
 	///
 	// check vehicles on roads whether they have reached specific zones
 	// on road. After that check all first vehicles at any map object and
@@ -33,6 +34,9 @@ RoadEngine.prototype.update = function( dt )
 	// and ready to go on at next object on route
 	this.checkArrivedVehicles();
 
+
+	// now update situation on map
+
 	// change lane if it is preferable for vehicle
 	this.checkLaneChange( dt );
 
@@ -45,6 +49,14 @@ RoadEngine.prototype.update = function( dt )
 	this.updatePositionsAndVelocities();
 }
 
+RoadEngine.prototype.updateTrafficLights = function( dt )
+{
+	let junctions = this.map.junctions;
+	for (let i = 0;i < junctions.length; ++i)
+	{
+		junctions[i].updateTrafficLights(dt);
+	}
+}
 
 // check whether vehicles on upstream, downstream or jam
 RoadEngine.prototype.updateRoads = function()
@@ -147,6 +159,21 @@ RoadEngine.prototype.setLongitudinalModel = function(vehicle)
 	}
 }
 
+RoadEngine.prototype.checkLaneChange = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updateAccelerations = function()
+{
+
+}
+
+RoadEngine.prototype.updatePositionsAndVelocities = function()
+{
+
+}
+
 RoadEngine.prototype.updateJunctions = function( dt )
 {
 	let junctions = this.map.junctions;
@@ -233,20 +260,4 @@ RoadEngine.prototype.getNextObjectOnRoute = function( vehicle )
 		case RouteItemType.JUNCTION:
 			return this.map.junctions[id];
 	}
-}
-
-
-RoadEngine.prototype.checkLaneChange = function( dt )
-{
-
-}
-
-RoadEngine.prototype.updateAccelerations = function()
-{
-
-}
-
-RoadEngine.prototype.updatePositionsAndVelocities = function()
-{
-
 }
