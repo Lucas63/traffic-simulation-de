@@ -9,6 +9,8 @@ const upstreamDelta = 4;
 // then vehicle is located within upstream
 const downstreamDelta = 3;
 
+const congestedTrafficSpeed = 3;
+
 var freeRoadIDM = null;
 var freeRoadMOBIL = null;
 
@@ -106,15 +108,20 @@ IDM.prototype.calculateAcceleration( vehicle )
 // compare current (that vehicle has now) and
 // calculated (for next step of simulation) accelerations
 // true if vehicle on upstream zone, otherwise false
-IDM.prototype.onUpstream = function(current, calculated)
+function onUpstream(current, calculated)
 {
 	return calculated - current < -upstreamDelta;
 }
 
 // true if vehicle on downstream zone, otherwise false
-IDM.prototype.onDownstream = function(current, calculated)
+function onDownstream(current, calculated)
 {
 	return calculated - current > downstreamDelta;
+}
+
+function onJam(vehicle)
+{
+	return vehicle.speed < congestedTrafficSpeed;
 }
 
 

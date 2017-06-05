@@ -18,21 +18,21 @@ RoadEngine.prototype.update = function( dt )
 	this.updateTrafficLights( dt );
 
 	/// check vehicles after previous update, it is an analysis of last update
-	/// and done before actual current update.
+	/// and it is done before actual current update.
 	///
 	// check vehicles on roads whether they have reached specific zones
 	// on road. After that check all first vehicles at any map object and
 	// decide to start passing through or turn.
+	//
 	this.updateRoads();
 
-	// vehicle's traffic state can be changed after previous function,
-	// so check and update models if required
+	this.checkTrafficState();
+
 	this.updateModels();
 
-	// check the first vehicle on each lane or map object for completing move
-	// on current object, namely vehicle reached lane's or turn's end
-	// and ready to go on at next object on route
 	this.checkArrivedVehicles();
+
+	this.preUpdate();
 
 
 	// now update situation on map
@@ -58,8 +58,43 @@ RoadEngine.prototype.updateTrafficLights = function( dt )
 	}
 }
 
-// check whether vehicles on upstream, downstream or jam
-RoadEngine.prototype.updateRoads = function()
+// all internal functions work on roads and vehicles on them,
+// to prevent iteration over the same arrays several times, all computations
+// done for each array only once instead of separate functions
+// Yes, I know that "premature optimization is the root of all evil".
+RoadEngine.prototype.preUpdate = function()
+{
+	let roads = this.map.roads;
+
+	// check whether vehicles on upstream, downstream or jam
+	for (let i = 0;i < roads.length;++i)
+	{
+		// Vehicles on another map objects don't change own models, thus only
+		// vehicles on road are updated
+		checkVehiclesOnRoad( roads[i] );
+
+		// vehicle's traffic state can be changed after previous function,
+		// so check and update models if required
+
+		// this function only updates traffic state
+		checkTrafficState( roads[i] );
+
+		// and this updates models
+		updateModels( roads[i] );
+
+		// check the first vehicle on each lane or map object
+		// for completing move on current object, namely vehicle
+		// reached lane's or turn's end and ready to go on
+		// at next object on route
+
+		// check vehicles that have moved to the end of current map object,
+		// i.e. reached finish or start of road/onramp/offramp/turn/junction
+
+
+	}
+}
+
+RoadEngine.prototype.updateRoads = function(road)
 {
 	this.map.roads.forEach( checkVehiclesOnRoad );
 }
@@ -69,27 +104,27 @@ function checkVehiclesOnRoad( road )
 	let lanes = road.forwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
 	{
-		checkVehiclesOnLane( lanes[i], road.length );
+		checkVehiclesOnLane( lanes[i], road );
 	}
 
 	lanes = road.backwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
 	{
-		checkVehiclesOnLane( lanes[i], road.length );
+		checkVehiclesOnLane( lanes[i], road );
 	}
 }
 
 // check vehicles at safe distance and update model or stop them
-function checkVehiclesOnLane( lane, roadLength )
+function checkVehiclesOnLane( lane, road )
 {
 	for (let i = 0; i < lane.vehicles.length; ++i)
 	{
 		vehicle = lane.vehicles[i];
 
 		// to close to road's end, stop it!
-		if (vehicle.uCoord >= roadLength)
+		if (vehicle.uCoord >= road.borderDistance)
 		{
-			vehicle.uCoord = roadLength;
+			vehicle.uCoord = road.borderDistance;
 			vehicle.arrived = true;
 			vehicle.stop( roadLength );
 			continue;
@@ -100,7 +135,7 @@ function checkVehiclesOnLane( lane, roadLength )
 		if (vehicle.vehicleState == VehicleState.CHANGE_LANE)
 			continue;
 
-		if ( roadLength - vehiclse.uCoord < vehicle.safeDistance )
+		if ( road.length - vehicle.uCoord < vehicle.safeDistance )
 		{
 			vehicle.longModel = UPSTREAM_IDM;
 			vehicle.laneChangeModel = UPSTREAM_MOBIL;
@@ -109,128 +144,252 @@ function checkVehiclesOnLane( lane, roadLength )
 	}
 }
 
+// check upstream/downstream state for vehicle on each road
+function checkTrafficState( road )
+{
+	let lanes = road.forwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkTrafficStateForVehicles(lanes[i].vehicles);
+
+	lanes = road.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkTrafficStateForVehicles(lanes[i].vehicles);
+}
+
+function checkTrafficStateForVehicles(vehicles)
+{
+	let vehicle = null;
+	for (let i = 0; i < vehicles.length; ++i)
+	{
+		vehicle = vehicles[i];
+
+		if (onUpstream(vehicle, vehicle.leader))
+		{
+			vehicle.trafficState = TrafficState.UPSTREAM;
+			continue;
+		}
+
+		if (onDownstream(vehicle, vehicle.leader))
+		{
+			vehicle.trafficState = TrafficState.DOWNSTREAM;
+			continue;
+		}
+
+		if (onJam(vehicle))
+		{
+			vehicle.trafficState = TrafficState.JAM;
+			continue;
+		}
+	}
+}
+
 // update longitudinal and lane change models for vehicles on roads
 // vehicles on junction/onramp/offramp/turn are not affected
-RoadEngine.prototype.updateModels = function()
+function updateModels( road )
 {
-	let roads = this.map.roads;
+	let lanes = road.forwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		setLongitudinalModel(lanes[i].vehicles);
 
-	for (let i = 0; i < roads.length; ++i)
+	lanes = road.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		setLongitudinalModel(lanes[i].vehicles);
+}
+
+function setLongitudinalModel(vehicles)
+{
+	let vehicle = null;
+	for (let i = 0; i < vehicles.length; ++i)
 	{
-		let road = roads[i];
+		vehicle = vehicles[i];
 
-		let lanes = road.forwardLanes;
-		for (let j = 0; j < lanes.length; ++j)
+		switch( vehicle.trafficState )
 		{
-			lanes[j].vehicles.forEach(this.prototype.setLongitudinalModel);
+			case TrafficState.FREE_ROAD:
+				vehicle.longitudinalModel = freeRoadIDM;
+				vehicle.laneChangeModel = freeRoadMOBIL;
+				break;
+
+			case TrafficState.UPSTREAM:
+				vehicle.longitudinalModel = upstreamIDM;
+				vehicle.laneChangeModel = upstreamMOBIL;
+				break;
+
+			case  TrafficState.DOWNSTREAM:
+				vehicle.longitudinalModel = downstreamIDM;
+				vehicle.laneChangeModel = downstreamMOBIL;
+				break;
+
+			case  TrafficState.JAM:
+				vehicle.longitudinalModel = jamIDM;
+				vehicle.laneChangeModel = jamMOBIL;
+				break;
 		}
-
-		let lanes = road.backwardLanes;
-		for (let j = 0; j < lanes.length; ++j)
-		{
-			lanes[j].vehicles.forEach(this.prototype.setLongitudinalModel);
-		}
 	}
 }
 
-RoadEngine.prototype.setLongitudinalModel = function(vehicle)
+function checkArrivedVehiclesOnRoad( road )
 {
-	switch( vehicle.trafficState )
+	let lanes = road.forwardLanes;
+
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle( road, lanes[i], i)
+
+	lanes = road.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle( road, lanes[i], i)
+}
+
+function checkArrivedVehiclesOnTurn( turn )
+{
+	for (let i = 0; i < turn.lanes.length; ++i)
+		checkArrivedVehicle(turn, turn.lanes[i], i)
+}
+
+function checkArrivedVehiclesOnOnramp( onramp )
+{
+	let lanes = onramp.forwardLanes;
+
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(onramp, lanes[i], i);
+
+	lanes = onramp.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(onramp, lanes[i], i);
+
+	lanes = onramp.turnLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(onramp, lanes[i], i);
+}
+
+function checkArrivedVehiclesOnOfframp( offramp )
+{
+	let lanes = offramp.forwardLanes;
+
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(offramp, lanes[i], i);
+
+	lanes = offramp.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(offramp, lanes[i], i);
+
+	lanes = offramp.turnLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		checkArrivedVehicle(offramp, lanes[i], i);
+}
+
+/*
+ * \param currentObject - map object where vehicle stands now
+ * \param lane - Lane object where vehicle stands now
+ * \param laneIndex - index of lane in lanes array
+ */
+function checkArrivedVehiclesOnJunction( junction )
+{
+    let lanes = null;
+}
+
+/*
+ * \brief to check if vehicle can move to new road, appropriate lanes must
+ * be found, i.e., forward or backward. *next* is a road and if next road
+ * connected with *current* at start, then destination lane within forward
+ * lanes, otherwise destination lane is backward one.
+ *
+ * \param current - map object where vehicle stands now
+ * \param next - map object where vehicle wants to move
+ * \param laneIndex - index of lane in lanes array
+ */
+function getDestinationLane( current, next, laneIndex )
+{
+	if (next.startConnection == current)
 	{
-		case TrafficState.FREE_ROAD:
-			vehicle.longitudinalModel = freeRoadIDM;
-			vehicle.laneChangeModel = freeRoadMOBIL;
-			break;
-
-		case  TrafficState.UPSTREAM:
-			vehicle.longitudinalModel = upstreamIDM;
-			vehicle.laneChangeModel = upstreamMOBIL;
-			break;
-
-		case  TrafficState.DOWNSTREAM:
-			vehicle.longitudinalModel = downstreamIDM;
-			vehicle.laneChangeModel = downstreamMOBIL;
-			break;
-
-		case  TrafficState.JAM:
-			vehicle.longitudinalModel = jamIDM;
-			vehicle.laneChangeModel = jamMOBIL;
-			break;
+		return next.forwardLanes[laneIndex];
 	}
-}
-
-RoadEngine.prototype.checkLaneChange = function( dt )
-{
-
-}
-
-RoadEngine.prototype.updateAccelerations = function()
-{
-
-}
-
-RoadEngine.prototype.updatePositionsAndVelocities = function()
-{
-
-}
-
-RoadEngine.prototype.updateJunctions = function( dt )
-{
-	let junctions = this.map.junctions;
-	for (let i = 0;i < junctions.length; ++i)
+	else
 	{
-		junctions[i].update(dt);
+		return next.backwardLanes[laneIndex];
 	}
 }
 
-RoadEngine.prototype.updateTurns = function( dt )
+/*
+ * \param currentObject - map object where vehicle stands now
+ * \param lane - Lane object where vehicle stands now
+ * \param laneIndex - index of lane in lanes array
+ */
+function checkArrivedVehicle( currentObject, lane, laneIndex )
 {
-	let turns = this.map.turns;
-	for (let i = 0;i < turns.length; ++i)
-	{
-		turns[i].update( dt );
-	}
-}
-
-RoadEngine.prototype.updateOnramps = function( dt )
-{
-	let onramps = this.map.onramps;
-	for (let i = 0;i < onramps.length; ++i)
-	{
-		onramps[i].update( dt );
-	}
-}
-
-RoadEngine.prototype.updateOfframps = function( dt )
-{
-	let offramps = this.map.offramps;
-	for (let i = 0;i < offramps.length; ++i)
-	{
-		offramps[i].update( dt );
-	}
-}
-
-// check vehicles that have moved to the end of current map object, i.e.
-// reached finish or start of road/onramp/offramp/turn/junction
-RoadEngine.prototype.checkArrivedVehicles = function(  )
-{
-
-	let lane;
 	let vehicle = lane.vehicles.first();
 
 	if ( vehicle.arrived == false)
 		return;
 
-	let nextObject = this.getNextObjectOnRoute( vehicle );
+	let nextObject = getNextObjectOnRoute( vehicle );
 	if ( nextObject == RoadObject.VOID )
 	{
 		// vehicle finished route and will be destroyed
 		lane.vehicles.splice(0, 1);
 		return;
 	}
+
+	switch ( nextObject )
+	{
+		case RoadObject.ROAD:
+
+		break;
+
+		case RoadObject.TURN:
+			if (nextObject.canTurn( vehicle ))
+			{
+				nextObject.startTurn( vehicle );
+				++vehicle.routeItemIndex;
+
+				// reference to vehicle already saved in Turn object
+				lane.vehicles.splice(0,1);
+			}
+		break;
+
+		case RoadObject.ONRAMP:
+		case RoadObject.OFFRAMP:
+			let movement = getNextMovement( vehicle );
+			switch (movement)
+			{
+				case MovementType["pass"]:
+					if (nextObject.canPassThrough( vehicle, road.getId(),
+													lane.type, ))
+					{
+						nextObject.startPassThrough()
+					}
+				break;
+
+				case MovementType["turnLeft"]:
+				case MovementType["turnRight"]:
+					if (nextObject.canTurn( ))
+					{
+						nextObject.startTurn(laneIndex, vehicle);
+					}
+
+				break;
+			}
+			++vehicle.routeItemIndex;
+			lane.vehicles.splice(0,1);
+
+		break;
+	}
+
 }
 
-RoadEngine.prototype.getNextObjectOnRoute = function( vehicle )
+// get movement to the next map object: pass through, turn left or right
+function getNextMovement( vehicle )
+{
+	let route = this.map.routes[ vehicle.routeId ];
+
+	if ( vehicle.routeItemIndex == route.items.length - 1)
+		return null;
+
+	let item = this.map.routes[ vehicle.routeItemIndex + 1 ];
+	return item.movement;
+}
+
+function getNextObjectOnRoute( vehicle )
 {
 	let route = this.map.routes[ vehicle.routeId ];
 
@@ -239,8 +398,10 @@ RoadEngine.prototype.getNextObjectOnRoute = function( vehicle )
 		return RoadObject.VOID;
 	}
 
-	++vehicle.routeItemIndex;
-	let item = this.map.routes[ vehicle.routeItemIndex ];
+	let item = this.map.routes[ vehicle.routeItemIndex + 1 ];
+
+	// maybe item.id must be subtracted by 1, because id in configuration
+	// json files start from 1
 	let id = item.id;
 
 	switch( item.type )
@@ -260,4 +421,55 @@ RoadEngine.prototype.getNextObjectOnRoute = function( vehicle )
 		case RouteItemType.JUNCTION:
 			return this.map.junctions[id];
 	}
+}
+
+
+/// Here is code for current update
+
+RoadEngine.prototype.checkLaneChange = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updateAccelerations = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updatePositionsAndVelocities = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updateRoads = function( dt )
+{
+
+}
+
+RoadEngine.prototype.updateJunctions = function( dt )
+{
+	let junctions = this.map.junctions;
+	for (let i = 0; i < junctions.length; ++i)
+		junctions[i].update(dt);
+}
+
+RoadEngine.prototype.updateTurns = function( dt )
+{
+	let turns = this.map.turns;
+	for (let i = 0; i < turns.length; ++i)
+		turns[i].update( dt );
+}
+
+RoadEngine.prototype.updateOnramps = function( dt )
+{
+	let onramps = this.map.onramps;
+	for (let i = 0; i < onramps.length; ++i)
+		onramps[i].update( dt );
+}
+
+RoadEngine.prototype.updateOfframps = function( dt )
+{
+	let offramps = this.map.offramps;
+	for (let i = 0; i < offramps.length; ++i)
+		offramps[i].update( dt );
 }

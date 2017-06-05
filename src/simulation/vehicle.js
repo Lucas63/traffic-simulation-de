@@ -104,6 +104,12 @@ function Vehicle( config )
 	// by default, vehicle moves in the straight direction
 	this.vCoord = 0; // v in UV coordinates
 
+	this.turnData = {
+		"startX": 0, "startY": 0,
+		"controlX": 0, "controlY": 0,
+		"endX": 0, "endY": 0
+	};
+
 	// id of route this vehicle keeps to
 	this.routeId = config.routeId;
 	this.routeItemIndex = 0;
@@ -200,7 +206,7 @@ Vehicle.prototype.prepareForMove = function(movementState)
 
 // dt - delta of time
 // length - length of map object vehicle moves at
-Vehicle.prototype.update = function( dt, length )
+Vehicle.prototype.update = function( dt, length, turnDistanceCalcFunc )
 {
 	switch (this.vehicleState)
 	{
@@ -209,7 +215,7 @@ Vehicle.prototype.update = function( dt, length )
 			break;
 
 		case VehicleState.TURNING:
-			this.updateTurn( dt );
+			this.updateTurn( dt, turnDistanceCalcFunc );
 			break;
 
 		case VehicleState.CHANGE_LANE:
@@ -224,7 +230,6 @@ Vehicle.prototype.update = function( dt, length )
 
 Vehicle.prototype.updateStraightMove = function( dt, length )
 {
-
 	// update velocity
 	let newSpeed = this.speed * dt + 0.5 *this.acceleration * dt * dt;
 	this.uCoord += Math.Max(0, newSpeed);
@@ -235,6 +240,7 @@ Vehicle.prototype.updateStraightMove = function( dt, length )
 		this.uCoord = safeDistance;
 		this.speed = this.acceleration = 0;
 		this.vehicleState = VehicleState.IDLE;
+		this.arrived = true;
 
 		return;
 	}
@@ -243,16 +249,19 @@ Vehicle.prototype.updateStraightMove = function( dt, length )
 	this.speed = Math.max( 0, this.speed);
 }
 
-Vehicle.prototype.updateTurn = function( dt )
+Vehicle.prototype.updateTurn = function( dt,  )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
 
+	// it possible that vehicle waits on turn to move on destination road
+	// if destination road is congested and no space for new vehicle
 	if (turnCompletion == 1)
 	{
 		// turn has been completed
 		this.vehicleState = VehicleState.IDLE;
 		this.speed = this.accleration = 0;
+		this.arrived = true;
 	}
 }
 

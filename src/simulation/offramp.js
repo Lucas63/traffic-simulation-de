@@ -1,4 +1,3 @@
-
 function Offramp( _source, _destination, _outflow, _length,
 				 _connectedLaneType, _connectedLaneIndex )
 {
@@ -29,7 +28,7 @@ function Offramp( _source, _destination, _outflow, _length,
 		lane.vehicles = [];
 	});
 
-	if ( _connectedLaneType == LaneType.FORWARD )
+	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
 	}
@@ -144,9 +143,7 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 	if (vehicles.empty())
 		return true;
 
-	var lastVehicle = vehicles.last();
-
-	return lastVehicle.farFrom( vehicle.requiredSpace );
+	return vehicles.last().farFrom( vehicle.requiredSpace );
 }
 
 // check whether *vehicle* from road with *roadId* and lane identified
@@ -161,6 +158,7 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneInde
 		return this.canPassThroughConnectedLane( vehicle );
 	}
 
+	// lane where vehicle moves on
 	var selectedLane = null;
 	if ( roadId == this.sourceId )
 	{
@@ -171,11 +169,10 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneInde
 		selectedLane = this.backwardLanes[ laneIndex ];
 	}
 
+	// no vehicles on lane, of course vehicle can pass through
 	if ( selectedLane.vehicles.empty() )
-	{
-		// no vehicles on lane, of course vehicle can pass through
 		return true;
-	}
+
 
 	var lastVehicle = selectedLane.vehicles.last();
 	var state = lastVehicle.vehicleState;

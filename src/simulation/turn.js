@@ -1,11 +1,12 @@
-// _source - object of road vehicle moves from
+// \param _source - object of road vehicle moves from
 // \param _destination - object of road vehicle moves to
+// \param _pathCalcFunction - function for calculating moved distance on turn
 // \note source and destination roads must have the same lanes quantity!
-function Turn( _source, _destination )
+function Turn( _source, _destination, _pathCalcFunction )
 {
 	this.source = _source;
 	this.destination = _destination;
-	this.type = _type;
+	this.pathCalcFunction = _pathCalcFunction;
 
 	// time elapsed from last update
 	this.delta = 0;
@@ -54,24 +55,30 @@ function Turn( _source, _destination )
 	//               UP_TO_BOTTOM: 2
 }
 
-Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
+Turn.prototype.canTurn = function( laneIndex, vehicle )
 {
 	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
 	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
 			"lanes amount is " + this.lanes.length);
 
-	assert( destinationLane["id"] == this.to)
-
 	// get the last vehicle from selected lane
 	let lastVehicle = this.lanes[laneIndex].vehicles.last();
 
-	// if last vehicle on selected lane made turn less for 50%,
+	// if last vehicle on selected turn lane not far from source road
+	// and there is not enough space for new vehicle,
 	// then vehicle on source road cannot start turning
-	if (lastVehicle.turnCompletion < 0.5)
-	{
-		console.debug("Last vehicle on lane " + laneIndex + " completed turn " +
-					"for " + lastVehicle.turnCompletion * 100 + "%");
+	if (lastVehicle.uCoord < vehicle.getMinimalGap())
 		return false;
+
+	let destinationLane = null;
+
+	if (this.destination.getForwardLanesAmount() > 0)
+	{
+		destinationLane = this.destination.forwardLanes[laneIndex];
+	}
+	else
+	{
+		destinationLane = this.destination.backwardLanes[laneIndex];
 	}
 
 	// check whether lane on destination road has enough space for new vehicle
@@ -79,11 +86,27 @@ Turn.prototype.canTurn = function( laneIndex, vehicleLength, destinationLane )
 	return destinationLane.hasEnoughSpace( vehicleLength + MINIMAL_GAP );
 }
 
+// add vehicle to turn's lane with index *laneIndex*
 Turn.prototype.startTurn = function( laneIndex, vehicle )
 {
 	// TODO add turn time
 	vehicle.prepareForTurn( -1 );
 	this.lanes[laneIndex].vehicles.push( vehicle );
+}
+
+//
+Turn.prototype.setTurnData = function( vehicle, laneIndex )
+{
+	let laneData = this.renderInfo[laneIndex];
+
+	vehicle.turnData["startX"] = laneData.startPoint["x"];
+	vehicle.turnData["startY"] = laneData.startPoint["y"];
+
+	vehicle.turnData["controlX"] = laneData.controlPoint["x"];
+	vehicle.turnData["controlY"] = laneData.controlPoint["y"];
+
+	vehicle.turnData["endX"] = laneData.endPoint["x"];
+	vehicle.turnData["endY"] = laneData.endPoint["y"];
 }
 
 function updateTurn( vehicles )
@@ -94,13 +117,7 @@ function updateTurn( vehicles )
 		if (vehicle.arrived)
 			continue;
 
-		vehicle.turnElapsedTime += this.delta;
-		vehicle.turnCompletion = vehicle.turnElapsedTime / vehicle.turnFullTime;
-
-		// it possible that vehicle waits on turn to move on destination road
-		// if destination road is congested and no space for new vehicle
-		if (vehicle.turnCompletion >= 1)
-			vehicle.arrived = true;
+		vehicle.update( this.delta, 0, this.pathCalcFunction );
 	}
 }
 
@@ -124,6 +141,6 @@ Turn.prototype.turnCompleted( laneIndex )
 	if ( this.lanes[laneIndex].vehicles.empty() )
 		return false;
 
-	// check whether first first vehicle on lane has finished turn
+	// check whether first vehicle on lane has finished turn
 	return this.lanes[lanesIndex].vehicles.first().arrived;
 }

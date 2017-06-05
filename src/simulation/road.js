@@ -71,7 +71,7 @@ var RoadObject =
  * \brief Object with all information for road setup
  *
  * \param _id - unique identifier of the road
- * \param _direction - value from RoadDirection
+ * \param _type - value from RoadDirection
  * \param _roadLength - length in distance units
  * \param _laneWidth - width of the single lane
  *
@@ -83,13 +83,13 @@ var RoadObject =
  * \param _forwardLanes - list with forward lanes
  * \param _backwardLanes - list with backward lanes
  */
-function RoadConfig( _id, _direction, _roadLength, _laneWidth,
+function RoadConfig( _id, _type, _roadLength, _laneWidth,
 					 _startX, _startY, _finishX, _finishY,
 					 _startConnection, _finishConnection,
 					 _forwardLanes, _backwardLanes)
 {
 	this.id = _id;
-	this.direction = _direction;
+	this.type = _type;
 
 	// Lane length is equal to road length
 	this.roadLength = _roadLength;
@@ -114,7 +114,7 @@ function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 function Road( roadConfig )
 {
 	this.id = roadConfig.id;
-	this.direction = roadConfig.direction;
+	this.type = roadConfig.type;
 
 	this.length = roadConfig.laneWidth;
 
@@ -170,11 +170,11 @@ Road.prototype.pushLane = function( lane, laneDirection )
 
 	switch(laneDirection)
 	{
-	case LaneDirection.FORWARD:
+	case LaneType["forward"]:
 		this.forwardLanes.push( lane );
 		break;
 
-	case LaneDirection.BACKWARD:
+	case LaneDirection["backward"]:
 		this.backwardLanes.push( lane );
 		break;
 

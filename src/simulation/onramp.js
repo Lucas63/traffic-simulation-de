@@ -26,7 +26,7 @@ function Onramp( _source, _destination, _inflow, _length,
 		lane.vehicles = [];
 	});
 
-	if ( _connectedLaneType == LaneType.FORWARD )
+	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
 	}
@@ -245,7 +245,7 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex,)
 {
 	vehicle.prepareForMove(MovementState.ON_ONRAMP);
-	if ( laneType == LaneType.FORWARD )
+	if ( laneType == LaneType["forward"] )
 	{
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
@@ -286,7 +286,7 @@ Onramp.prototype.passCompleted = function( roadId, laneIndex )
 	let lanes = null;
 	let vehicle = null;
 
-	if ( laneType == LaneType.FORWARD )
+	if ( laneType == LaneType["forward"] )
 	if ( roadId == this.sourceId )
 	{
 		lanes = this.forwardLanes;

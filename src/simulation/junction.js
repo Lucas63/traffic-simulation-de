@@ -40,6 +40,7 @@ function Junction( _id,_pos, _side,
 	this.verticalTrafficLight = _verticalTrafficLight;
 	this.horizontalTrafficLight = _horizontalTrafficLight;
 
+	this.activeTrafficLight = null;
 
 	// initialize data for "top" road
 	this.topRoad.road = _topRoad;
@@ -142,6 +143,11 @@ function addVehiclesArray( road )
 	road.turnRightLanes.forEach(initArray);
 	road.passLanes.forEach(initArray);
 	road.turnLeftLanes.forEach(initArray);
+}
+
+Junction.prototype.verticalTrafficLightActive = function()
+{
+	return this.activeTrafficLight == this.verticalTrafficLight;
 }
 
 Junction.prototype.getTrafficLight( _roadId )
