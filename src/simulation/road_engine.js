@@ -89,9 +89,13 @@ RoadEngine.prototype.preUpdate = function()
 
 		// check vehicles that have moved to the end of current map object,
 		// i.e. reached finish or start of road/onramp/offramp/turn/junction
-
-
+        checkArrivedVehiclesOnRoad( road );
 	}
+
+    this.map.turns.forEach(checkArrivedVehiclesOnTurn);
+    this.map.onramps.forEach(checkArrivedVehiclesOnOnramp);
+    this.map.offramps.forEach(checkArrivedVehiclesOnOfframp);
+    this.map.junctions.forEach(checkArrivedVehiclesOnJunction)
 }
 
 RoadEngine.prototype.updateRoads = function(road)
@@ -286,6 +290,40 @@ function checkArrivedVehiclesOnOfframp( offramp )
 function checkArrivedVehiclesOnJunction( junction )
 {
     let lanes = null;
+
+    // check vehicles
+    let road = junction.getJunctionRoadForSide( JunctionSides["top"]);
+    checkArrivedVehiclesOnJunctionRoad(road);
+
+    road = junction.getRoadForSide( JunctionSides["right"] );
+    checkArrivedVehiclesOnJunctionRoad(road);
+
+    road = junction.getRoadForSide( JunctionSides["bottom"] );
+    checkArrivedVehiclesOnJunctionRoad(road);
+
+    road = junction.getRoadForSide( JunctionSides["left"] );
+    checkArrivedVehiclesOnJunctionRoad(road);
+}
+
+function checkArrivedVehiclesOnJunctionRoad( road )
+{
+    let lanes = junctionRoad.passLanes;
+    for (let i = 0; i < lanes.length; ++i)
+    {
+        checkArrivedVehicle(junction, lanes[i], i);
+    }
+
+    lanes = junctionRoad.turnRightLanes;
+    for (let i = 0; i < lanes.length; ++i)
+    {
+        checkArrivedVehicle(junction, lanes[i], i);
+    }
+
+    lanes = road.turnLeftLanes;
+    for (let i = 0; i < lanes.length; ++i)
+    {
+        checkArrivedVehicle(junction, lanes[i], i);
+    }
 }
 
 /*
@@ -330,22 +368,27 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 		return;
 	}
 
+    let moved = false;
+
 	switch ( nextObject )
 	{
 		case RoadObject.ROAD:
+            let lanes = nextObject.getLanesConnectedWith( currentObject );
 
-		break;
+            if (lanes[laneIndex].hasEnoughSpace(vehicle.getMinimalGap())
+            {
+                lanes[laneIndex].addVehicle(vehicle);
+                moved = true;
+            }
+    		break;
 
 		case RoadObject.TURN:
 			if (nextObject.canTurn( vehicle ))
 			{
 				nextObject.startTurn( vehicle );
-				++vehicle.routeItemIndex;
-
-				// reference to vehicle already saved in Turn object
-				lane.vehicles.splice(0,1);
+                moved = true;
 			}
-		break;
+    		break;
 
 		case RoadObject.ONRAMP:
 		case RoadObject.OFFRAMP:
@@ -357,6 +400,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 													lane.type, ))
 					{
 						nextObject.startPassThrough()
+                        moved = true;
 					}
 				break;
 
@@ -365,16 +409,54 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 					if (nextObject.canTurn( ))
 					{
 						nextObject.startTurn(laneIndex, vehicle);
+                        moved = true;
 					}
 
 				break;
 			}
-			++vehicle.routeItemIndex;
-			lane.vehicles.splice(0,1);
+    		break;
 
-		break;
+        case RoadObject.JUNCTION:
+            let movement = getNextMovement( vehicle );
+
+            let id = currentObject.getId();
+            let space = vehicle.getMinimalGap();
+
+            switch (movement)
+            {
+                case MovementType["pass"]:
+                    if ( junction.canPassThrough(id, laneIndex, space) )
+                    {
+                        junction.startPassThrough(id, laneIndex, vehicle)
+                        moved = true;
+                    }
+                    break;
+
+                case MovementType["turnRight"]:
+                    if ( junction.canTurnRight(id, laneIndex, space))
+                    {
+                        junction.startTurnRight(id, laneIndex, vehicle);
+                        moved = true;
+                    }
+                    break;
+
+                case MovementType["turnLeft"]:
+                    if ( junction.canTurnLeft(id, laneIndex, space) )
+                    {
+                        junction.startTurnLeft(id, laneIndex, vehicle);
+                        moved = true;
+                    }
+                    break;
+            }
+            break;
 	}
 
+    if (moved)
+    {
+    	++vehicle.routeItemIndex;
+    	// reference to vehicle already saved in appropriate object
+    	lane.vehicles.splice(0,1);
+    }
 }
 
 // get movement to the next map object: pass through, turn left or right
