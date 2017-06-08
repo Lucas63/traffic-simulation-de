@@ -168,6 +168,24 @@ Junction.prototype.getTrafficLight( _roadId )
 	}
 }
 
+Juntion.prototype.getRoadForSide( side )
+{
+	switch(side)
+	{
+	case JunctionSides["top"]:
+		return this.topRoad.road;
+
+	case JunctionSides["right"]:
+		return this.rightRoad.road;
+
+	case JunctionSides["bottom"]:
+		return this.bottomRoad.road;
+
+	case JunctionSides["left"]:
+		return this.leftRoad.road;
+	}
+}
+
 Junction.prototype.getJunctionRoadFromSide( _side )
 {
 	switch(_side)

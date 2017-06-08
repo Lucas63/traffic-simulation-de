@@ -1,4 +1,16 @@
 // Layout of road, orientation used in calculation of car positions
+    lanes = road.forwardLanes;
+    for (let i = 0; i < lanes.length; ++i)
+    {
+        checkArrivedVehicle(junction, lanes[i], i);
+    }
+
+    lanes = road.backwardLanes;
+    for (let i = 0; i < lanes.length; ++i)
+    {
+        checkArrivedVehicle(junction, lanes[i], i);
+    }
+
 // also used by map for rendering
 var RoadDirection =
 {
@@ -158,6 +170,27 @@ Road.prototype.getForwardLanesAmount = function()
 Road.prototype.getBackwardLanesAmount = function()
 {
 	return this.backwardLanes.length;
+}
+
+// \param object - object connected to the road
+// lanes where vehicle is going to move on road depend on which road's side
+// object connected to
+Road.prototype.getLanesConnectedWith( object )
+{
+    switch (object) {
+        case this.startConnection:
+            return this.forwardLanes;
+            break;
+
+        case this.finishConnection:
+            return this.backwardLanes;
+            break;
+
+        default:
+            printDebug(this.arguments.callee, "Unknown object " + object);
+            return null;
+
+    }
 }
 
 // lane - object of Lane class
