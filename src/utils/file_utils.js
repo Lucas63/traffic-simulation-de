@@ -7,17 +7,19 @@
     Function that reads road objects from src/config/roads.js and pushing them to roads array
  */
 function load_roads() {
-    var array = roads_json.roads;
-    var roads = [];
+    let LANE_WIDTH = 2;
 
-    for (var i = 0; i < array.length; i++) {
-        var road_string = array[i];
+    let array = roads_json.roads;
+    let roadConfigs = [];
 
-        var new_road = new RoadConfig(
+    for (let i = 0; i < array.length; i++) {
+        let road_string = array[i];
+
+        let new_road = new RoadConfig(
             road_string.id,
             road_string.direction,
             road_string.length,
-            2,
+            LANE_WIDTH,
             road_string.startX,
             road_string.startY,
             road_string.finishX,
@@ -27,9 +29,9 @@ function load_roads() {
             road_string.forwardLanes,
             road_string.backwardLanes
         );
-        roads.push(new_road);
+        roadConfigs.push(new_road);
     }
-    return roads;
+    return roadConfigs;
 }
 
 
@@ -37,13 +39,37 @@ function load_roads() {
  Function that reads turn objects from src/config/turns.js and pushing them to turns array
  */
 function load_turns() {
-    var array = turn_json.turns;
-    var turns = [];
+    let array = turn_json.turns;
+    let turns = [];
+    let LINES_NUMBER = 4;
 
-    for (var i = 0; i < array.length; i++) {
-        var turn_string = array[i];
+    for (let i = 0; i < array.length; i++) {
+        let turn_string = array[i];
 
-        var new_turn = new Turn(
+        let new_turn = new Turn(
+            turn_string.id,
+            turn_string.destination,
+            turn_string.source,
+            turn_string.type,
+            LINES_NUMBER
+        );
+        turns.push(new_turn);
+    }
+    return turns;
+}
+
+
+/*
+ Function that reads turn objects from src/config/turns.js and pushing them to turns array
+ */
+function load_turns() {
+    let array = turn_json.turns;
+    let turns = [];
+
+    for (let i = 0; i < array.length; i++) {
+        let turn_string = array[i];
+
+        let new_turn = new Turn(
             turn_string.id,
             turn_string.destination,
             turn_string.source,
@@ -56,27 +82,6 @@ function load_turns() {
 }
 
 
-/*
- Function that reads turn objects from src/config/turns.js and pushing them to turns array
- */
-function load_turns() {
-    var array = turn_json.turns;
-    var turns = [];
-
-    for (var i = 0; i < array.length; i++) {
-        var turn_string = array[i];
-
-        var new_turn = new Turn(
-            turn_string.id,
-            turn_string.destination,
-            turn_string.source,
-            turn_string.type,
-            4
-        );
-        turns.push(new_turn);
-    }
-    return turns;
-}
 
 
 

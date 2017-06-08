@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+    <title>Microsimulation of Traffic Flow</title>
+
+    <script src="render/visualization.js"></script>
+    <script src="render/render_utils.js"></script>
+    <script src="utils/logger_utils.js"></script>
+
+    <script type="text/javascript">
+        window.onload = render_map;
+    </script>
+</head>
+
+
+<body>
+
+
+<!-- ############################################## -->
+<!-- outer container                                -->
+<!-- ############################################## -->
+
+<div id="container">
+
+
+    <!-- ############################################## -->
+    <!-- the actual simulation canvas -->
+    <!-- ############################################## -->
+
+    <div id="contents">
+        <canvas id="canvas_map" width="1000" height="600">
+            You are probably using a very ancient web browser (or an Internet Explorer)
+            not supporting html5 canvas. Please switch to another browser for
+            running this simulation.
+        </canvas>
+
+    </div>
+
+
+</div> <!-- end outer container -->
+
+
+<!-- ########################################################## -->
+<!-- specific scripts; position below any simulation elements ! -->
+<!-- ########################################################## -->
+
+
+
+<script src="utils/file_utils.js"></script>
+<script src="utils/parsing_utils.js"></script>
+
+
+<script src="render/visualization.js"></script>
+
+
+<road_elementsdels js -->
+    <script src="simulation/road.js"></script>
+    <script src="simulation/turn.js"></script>
+
+
+    <!-- libraries -->
+    <script src="libraries/jquery.js"></script>
+
+
+    <!-- config files -->
+    <script type="text/javascript" src="config/roads.js"></script>
+    <script type="text/javascript" src="config/junctions.js"></script>
+    <script type="text/javascript" src="config/turns.js"></script>
+
+
+</road_elementsdels>
+
+
+</body>
+</html>

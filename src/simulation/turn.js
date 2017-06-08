@@ -132,7 +132,7 @@ Turn.prototype.update = function( dt )
 	}
 }
 
-Turn.prototype.turnCompleted( laneIndex )
+Turn.prototype.turnCompleted = function( laneIndex )
 {
 	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
 	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
