@@ -545,6 +545,7 @@ RoadEngine.prototype.checkLaneChange = function( dt )
 	}
 }
 
+// this function chechs whether vehicle change lane or not
 // current - lane where vehicles can start lane change from
 // prospective - lane where they can move
 function assesLaneChange( current, prospective, isLeft )
@@ -595,7 +596,8 @@ function assesLaneChange( current, prospective, isLeft )
 }
 
 // this function updates leading and following vehicles for each vehicles
-// it's required for lane change
+// it's required for lane change. information about leading and following
+// vehicles must be actual on each simulation step.
 RoadEngine.prototype.updateNeighbours = function()
 {
 	let roads = this.map.roads;
