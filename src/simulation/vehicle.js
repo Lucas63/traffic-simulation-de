@@ -72,15 +72,12 @@ var TRUCK_INITIAL_SPEED = INVALID;
 var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
-function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed,
-						_leader, _follower )
+function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed )
 {
 	this.type     = _type;
 	this.routeId  = _routeId;
 	this.uCoord   = _uCoord;
 	this.speed    = _initialSpeed;
-	this.leader   = _leader;
-	this.follower = _follower;
 }
 
 function Vehicle( config )
@@ -139,10 +136,10 @@ function Vehicle( config )
 	this.laneChangeModel = null;
 
 	// vehicle before this one
-	this.leader = config.leader;
+	this.leader = null;
 
 	// vehicle after this one
-	this.follower = config.follower;
+	this.follower = null;
 
 	// calculated after vehicle will be added to the lane
 

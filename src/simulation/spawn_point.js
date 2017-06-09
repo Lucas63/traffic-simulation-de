@@ -38,15 +38,13 @@ SpawnPoint.prototype.ready = function()
 	return true;
 }
 
-// leaderIndex provided by leaderIndex
-SpawnPoint.prototype.spawn = function( leaderIndex )
+SpawnPoint.prototype.spawn = function()
 {
 	let truckCreationProbability = Math.random();
 
 	// create empty config
 	var vehicleConfig = new VehicleConfig( VehicleType.CAR, this.routeId,
-										   0, CAR_INITIAL_SPEED,
-										   leaderIndex, VIRTUAL_VEHICLE );
+										   0, CAR_INITIAL_SPEED );
 
 	if (truckCreationProbability <= this.truckFraction )
 	{
