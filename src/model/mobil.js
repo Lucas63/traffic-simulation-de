@@ -27,7 +27,7 @@ function MOBIL( _safeDeceleration, _bSafeMax, _bThreshold, _bBias )
  * \param new_acc - prospective acceleration on the new laneEnd
  * \param follower_acc -
  */
-MOBIL.prototype.doLaneChange = function( velocityRate, curAcceleration,
+MOBIL.prototype.analyzeLaneChange = function( velocityRate, curAcceleration,
 										 newAcceleration,
 										 newFollowerAcceleration )
 {

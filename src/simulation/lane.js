@@ -22,7 +22,12 @@ Lane.prototype.isEmpty = function()
 	return this.vehicles.length == 0;
 }
 
-Lane.prototype.addVehicle = function( vehicle )
+Lane.prototype.addVehicle = function( vehicle, index )
+{
+	this.vehicles.splice( index, 0, vehicle );
+}
+
+Lane.prototype.addVehicleAsLast = function( vehicle )
 {
 	this.vehicles.push( vehicle );
 }

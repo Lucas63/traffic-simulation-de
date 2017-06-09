@@ -131,7 +131,7 @@ function checkSpawnPointsForLanes( lanes )
 			if (lanes[i].hasEnoughSpace( TRUCK_LENGTH ))
 			{
 				let vehicle = point.spawn();
-				lanes[i].addVehicle();
+				lanes[i].addVehicleAsLast(vehicle);
 			}
 		}
 	}
@@ -408,9 +408,9 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 		case RoadObject.ROAD:
 			let lanes = nextObject.getLanesConnectedWith( currentObject );
 
-			if (lanes[laneIndex].hasEnoughSpace(vehicle.getMinimalGap())
+			if (lanes[laneIndex].hasEnoughSpace(vehicle.getMinimalGap()))
 			{
-				lanes[laneIndex].addVehicle(vehicle);
+				lanes[laneIndex].addVehicleAsLast(vehicle);
 				moved = true;
 			}
 			break;
@@ -665,18 +665,138 @@ RoadEngine.prototype.checkLaneChange = function( road )
 	}
 }
 
-function checkLaneChangeOnLanes( lane )
+function checkLaneChangeOnLanes( lanes )
 {
-	let vehicles = lane.vehicles;
+	let vehicles = null;
+	let vehicle = null;
+
+	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
+
+	for (let i = 1; i < lanes.length - 1; ++i)
+	{
+		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
+	}
+
+	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 1],
+									 lanes.last(), null);
+}
+
+// left - lane at left
+// current - lane under processing
+// right - lane at right
+function checkLaneChangeForNeighbourLanes( left, current, right)
+{
+	let resultAtLeft = {
+		currentAcceleration: 0,
+		followerAcceleration: 0
+	};
+
+	let resultAtRight = {
+		currentAcceleration: 0,
+		followerAcceleration: 0
+	};
+
+	let turnLeft = false;
+	let turnRight = false;
+
+	let vehicles = current.vehicles;
 	let vehicle = null;
 
 	for (let i = 0; i < vehicles.length; ++i)
 	{
-		// TODO complete me
+		// if lane at left exists
+		if (null != left)
+		{
+			turnLeft = assesLaneChange(vehicles[i], true, resultAtLeft);
+		}
+
+		// if lane at right exists
+		if (null != right)
+		{
+			turnRight = assesLaneChange(vehicles[i], false, resultAtRight);
+		}
+
+		// if vehicle can change lane at left or right
+		if (turnLeft && turnRight)
+		{
+			if (resultAtLeft.currentAcceleration >
+				resultAtRight.currentAcceleration)
+			{
+				vehicle = vehicles[i];
+
+			// TODO find index where to insert vehicle in case of lane change
+			}
+		}
+
+		if (turnLeft)
+		{
+
+		}
+
+		if (turnRight)
+		{
+
+		}
+
 	}
+
+	let changeAtLeft = assesLaneChange()
+
 }
 
-function check
+
+// current - vehicle decisiding to change laneIndex
+// atLeft - if true, than consider lane change at left, otherwise at right
+// result [output] - contains results of calculations.
+// result.currentAcceleration - prospective acceleration of current vehicle
+// in case of lane change
+// result.followerAcceleration - acceleration of prospective follower in case
+// of lane change
+function assesLaneChange(current, atLeft, result)
+{
+	let adjacentLeader = null;
+	let adjacentFollower = null;
+
+	// get observed leader and follower
+	if (atLeft)
+	{
+		adjacentLeader = current.leaderAtLeft;
+		adjacentFollower = current.followerAtLeft;
+	}
+	else
+	{
+		adjacentLeader = current.leaderAtRight;
+		adjacentLeader = current.followerAtRight;
+	}
+
+	// actual gap between prospective leader and current vehicle
+	let gap = adjacentLeader.getMinimalGap() - current.uCoord;
+
+	// acceleration of current vehicle after prospective lane change
+	let currentAccAfterChange =
+		current.longModel.calculateAcceleration(gap, current.speed,
+												adjacentLeader.speed);
+
+	result.currentAcceleration = currentAccAfterChange;
+
+	// actual gap between current vehicle and prospective follower
+	gap = current.getMinimalGap() - adjacentFollower.uCoord;
+
+	// acceleration of follower after prospective lane change
+	let followerAccAfterChange =
+		adjacentFollower.longModel.
+			calculateAcceleration(gap, adjacentFollower.speed, current.speed);
+
+	result.followerAccAfterChange = followerAccAfterChange;
+
+	let velocitiesRatio = current.speed / current.longModel.desiredSpeed;
+
+	// decide whether it be better to change lane or not
+	return current.laneChangeModel.
+		analyzeLaneChange(velocitiesRatio, current.acceleration,
+						  currentAccAfterChange, followerAccAfterChange);
+}
+
 
 RoadEngine.prototype.updateAccelerations = function( dt )
 {

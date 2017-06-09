@@ -66,16 +66,16 @@ function createIDMModels( vehicleConfig, freeRoadConfig, upstreamConfig,
 // speed - velocity of current vehicle
 // leadSpeed - velocity of the vehicle in front of current one
 // leadAcceleration - acceleration of the leading vehicle
-IDM.prototype.calculateAcceleration( vehicle )
+
+
+// This function calculates acceleration for current vehicle according to
+// speed and acceleration of leading one.
+// \param gap - bumper-to-bumper distance between vehicles
+// \param currentSpeed - speed of current vehicle
+// \param leaderSpeed - leading vehicle speed
+IDM.prototype.calculateAcceleration( gap, currentSpeed, leaderSpeed )
 {
-	let leader = vehicle.leader;
-
-	let speed = vehicle.speed;
-
-	// observed vehicle is the first on the lane
-	let leadSpeed = leader.speed;
-	let leadAcceleration = leader.acceleration;
-	let gap = leader.uCoord - leader.length - vehicle.uCoord;
+	let speed = currentSpeed;
 
 	// determine valid local desired speed
 	let desiredSpeed = this.desiredSpeed
@@ -86,7 +86,7 @@ IDM.prototype.calculateAcceleration( vehicle )
 	this.acceleration * ( 1 - Math.pow( speed/desiredSpeed, 4 ) ) :
 	this.acceleration * ( 1 - speed/desiredSpeed );
 
-	let delta_v = speed - leadSpeed;
+	let delta_v = speed - leaderSpeed;
 
 	// calculate desired dynamical distance s*
 	let dynamicDistance = speed * this.timeHeadway;
