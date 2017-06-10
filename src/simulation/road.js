@@ -130,8 +130,6 @@ function Road( roadConfig )
 
 	this.length = roadConfig.laneWidth;
 
-	this.borderDistance = this.length - MINIMAL_GAP;
-
 	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;
 

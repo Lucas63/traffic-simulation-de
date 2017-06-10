@@ -157,12 +157,11 @@ function checkVehiclesOnLane( lane, road )
 	{
 		vehicle = lane.vehicles[i];
 
-		// to close to road's end, stop it!
-		if (vehicle.uCoord >= road.borderDistance)
+		// vehicle can move after road's border
+		if (vehicle.uCoord >= road.length)
 		{
-			vehicle.uCoord = road.borderDistance;
+			vehicle.uCoord = road.length;
 			vehicle.arrived = true;
-			vehicle.stop( roadLength );
 			continue;
 		}
 
@@ -206,9 +205,7 @@ function checkTrafficStateForVehicles(vehicles)
 		}
 
 		if (onDownstream(vehicle, vehicle.leader))
-		{
 			continue;
-		}
 
 		if (onJam(vehicle))
 		{
@@ -672,9 +669,7 @@ function checkLaneChangeOnLanes( lanes )
 	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
 
 	for (let i = 1; i < lanes.length - 1; ++i)
-	{
 		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
-	}
 
 	// check the last lane
 	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 1],
@@ -708,15 +703,11 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 
 		// if lane at left exists
 		if (null != left)
-		{
 			turnLeft = assesLaneChange(vehicle, true, resultAtLeft);
-		}
 
 		// if lane at right exists
 		if (null != right)
-		{
 			turnRight = assesLaneChange(vehicle, false, resultAtRight);
-		}
 
 		// if vehicle can change lane at left or right
 		if (turnLeft && turnRight)
@@ -832,33 +823,23 @@ RoadEngine.prototype.updateVehicles = function( dt )
 {
 	let roads = this.map.roads;
 	for (let i = 0; i < roads.length; ++i)
-	{
 		updateVehiclesOnRoad( roads[i], dt );
-	}
 
 	let turns = this.map.turns;
 	for (let i = 0; i < turns.length; ++i)
-	{
 		updateVehiclesOnTurn( turns[i], dt );
-	}
 
 	let onramps = this.map.onramps;
 	for (let i = 0; i < onramps.length; ++i)
-	{
 		updateVehiclesOnOnrampOrOfframp( onramps[i], dt );
-	}
 
 	let offramps = this.map.offramps;
 	for (let i = 0; i < offramps.length; ++i)
-	{
 		updateVehiclesOnOnrampOrOfframp( offramps[i], dt );
-	}
 
 	let junctions = this.map.junctions;
 	for (let i = 0; i < junctions.length; ++i)
-	{
 		updateVehiclesOnJunction( junctions[i], dt );
-	}
 }
 
 function updateVehiclesOnRoad( road, dt )
