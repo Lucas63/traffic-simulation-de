@@ -176,6 +176,9 @@ function Vehicle( config )
 
 	// lane where vehicle is moving on during lane change
 	this.sourceLane = null;
+
+	// information used for updating vehicle position
+	this.laneIndex = -1;
 }
 
 
@@ -186,104 +189,29 @@ Vehicle.prototype.stop = function( _uCoord )
 	this.vehicleState = VehicleState.IDLE;
 }
 
-Vehicle.prototype.prepareForTurn = function(turnFullTime, destLaneIndex)
+Vehicle.prototype.prepareForTurn = function(turnFullTime, _destinationLane)
 {
 	vehicle.arrived = false;
+
+	vehicle.uCoord = 0;
 
 	this.trafficState = TrafficState.FREE_ROAD;
 	this.vehicleState = VehicleState.TURNING;
 	this.turnElapsedTime = 0;
 	this.turnCompletion = 0;
 
-	this.destinationLane = destLaneIndex;
+	this.destinationLane = _destinationLane;
 	this.turnFullTime = turnFullTime;
 }
 
-Vehicle.prototype.prepareForMove = function(movementState)
+Vehicle.prototype.prepareForMove = function()
 {
 	// TODO think about is free road state actual one?
 	this.trafficState = trafficState.FREE_ROAD;
 	this.vehicleState = VehicleState.MOVING;
-	this.movementState = movementState;
 
 	this.uCoord = 0;
 	this.arrived = false;
-}
-
-// dt - delta of time
-// length - length of map object vehicle moves at
-Vehicle.prototype.update = function( dt, length )
-{
-	switch (this.vehicleState)
-	{
-		case VehicleState.MOVING:
-			this.updateStraightMove( dt, length );
-			break;
-
-		case VehicleState.TURNING:
-			this.updateTurn( dt );
-			break;
-
-		case VehicleState.CHANGE_LANE:
-			this.updateLaneChange( dt );
-			break;
-
-		case VehicleState.IDLE:
-			// do nothing
-			break;
-	}
-}
-
-Vehicle.prototype.updateStraightMove = function( dt, length )
-{
-	// update velocity
-	let newPosition = this.speed * dt + 0.5 *this.acceleration * dt * dt;
-	this.uCoord += Math.Max(0, newPosition);
-
-	let safeDistance = length - MINIMAL_GAP;
-	if (this.uCoord >= safeDistance)
-	{
-		this.uCoord = safeDistance;
-		this.speed = this.acceleration = 0;
-		this.vehicleState = VehicleState.IDLE;
-		this.arrived = true;
-
-		return;
-	}
-
-	this.speed += this.acceleration * dt;
-	this.speed = Math.max( 0, this.speed);
-}
-
-
-
-Vehicle.prototype.updateTurn = function( dt )
-{
-	this.turnElapsedTime += dt;
-	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
-
-	// it possible that vehicle waits on turn to move on destination road
-	// if destination road is congested and no space for new vehicle
-	if (turnCompletion == 1)
-	{
-		// turn has been completed
-		this.vehicleState = VehicleState.IDLE;
-		this.speed = this.accleration = 0;
-		this.arrived = true;
-	}
-}
-
-Vehicle.prototype.updateLaneChange = function( dt )
-{
-	// TODO implement me!
-}
-
-function updateVehicles( vehicles, dt )
-{
-	for (let i = 0;i < vehicles.length; ++i)
-	{
-		vehicles[i].update( dt );
-	}
 }
 
 // the minimal distance between bamper of current vehicle and the following one

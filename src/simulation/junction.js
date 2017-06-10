@@ -134,15 +134,15 @@ function Junction( _id,_pos, _side,
 	}
 }
 
-function addVehiclesArray( road )
+function addVehiclesArray( junctionRoad )
 {
 	let initArray = function(lane) {
 		lane.vehicles = [];
 	};
 
-	road.turnRightLanes.forEach(initArray);
-	road.passLanes.forEach(initArray);
-	road.turnLeftLanes.forEach(initArray);
+	junctionRoad.turnRightLanes.forEach(initArray);
+	junctionRoad.passLanes.forEach(initArray);
+	junctionRoad.turnLeftLanes.forEach(initArray);
 }
 
 Junction.prototype.verticalTrafficLightActive = function()
@@ -433,9 +433,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 
 	// there is no enough space before last vehicle
 	if( lastVehicle.farFrom(vehicleRequiredSpace) == false)
-	{
 		return false;
-	}
 
 	// check vehicles turning right
 	//////////////////////////////////////////////////////////////////////
@@ -449,10 +447,10 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 			continue;
 
 		lastVehicle = vehicles.last();
+
+		// TODO fix this and compare real coordinates
 		if (lastVehicle.turnCompletion < 0.5)
-		{
 			return false;
-		}
 	}
 	//////////////////////////////////////////////////////////////////////
 
@@ -469,13 +467,11 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 
 		lastVehicle = vehicles.last();
 		if (lastVehicle.turnCompletion < 0.5)
-		{
 			return false;
-		}
 	}
 	//////////////////////////////////////////////////////////////////////
 
-	// check vehicles on opposite road
+	// check vehicles on opposite road that turning left
 	//////////////////////////////////////////////////////////////////////
 	let oppositeSide = this.getOppositeSide( sourceSide );
 	let oppositeRoad = this.getJunctionRoadFromSide( oppositeSide );
@@ -502,7 +498,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 	return passLanes[laneIndex].hasEnoughSpace( vehicleRequiredSpace );
 }
 
-Junction.prototype.canTurlLeft = function( roadId, laneIndex,
+Junction.prototype.canTurnLeft = function( roadId, laneIndex,
 										   vehicleRequiredSpace )
 {
 	let sourceSide = this.getSideForRoad( roadId );
@@ -592,11 +588,17 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	vehicle.trafficState = TrafficState.FREE_ROAD;
+	let rightSide = this.getRightSide( sourceSide );
+	let destinationRoad = this.getJunctionRoadFromSide( rightSide );
+
 	vehicle.movementState = MovementState.ON_JUNCTION;
 
-	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
-	vehicle.destinationLane = laneIndex;
+	vehicle.sourceLane = sourceRoad.turnRightLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
+
+	vehicle.prepareForTurn( this.turnRightDuration[laneIndex],
+							destinationRoad.road);
+
 
 	sourceRoad.turnRightLanes[laneIndex].vehicles.push(vehicle);
 }
@@ -612,11 +614,11 @@ Junction.prototype.startPassThrough = function( roadId, laneIndex, vehicle)
 
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.vehicleState = VehicleState.MOVING;
 	vehicle.movementState = MovementState.ON_JUNCTION;
+	vehicle.sourceLane = sourceRoad.passLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
 
-	vehicle.uCoord = 0;
+	vehicle.prepareForMove();
 
 	sourceRoad.passLanes[laneIndex].vehicles.push( vehicle );
 }
@@ -632,12 +634,14 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	vehicle.trafficState = TrafficState.FREE_ROAD;
+	let leftSide = this.getLeftSide( sourceSide );
+	let destinationLane = this.getJunctionRoadFromSide( )
+
 	vehicle.movementState = MovementState.ON_JUNCTION;
+	vehicle.sourceLane = sourceRoad.turnLeftLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
 
 	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
-
-	vehicle.destinationLane = laneIndex;
 
 	sourceRoad.turnLeftLanes[laneIndex].vehicles.push(vehicle);
 }
@@ -715,13 +719,7 @@ Junction.prototype.updateTrafficLights = function(dt)
 		this.verticalTrafficLight.update(dt);
 }
 
-function updateVehiclesForJunctionRoad( _road, dt )
+Junction.prototype.calculateTurnDistance = function( vehicle, dt )
 {
-	let update = function(lane) {
-		updateVehicles(lane.vehicles, dt)
-	};
-
-	_road.turnRightLanes.forEach(update);
-	_road.passLanes.forEach(update);
-	_road.turnLeftLanes.forEach(update);
+	// TODO implement actual update
 }

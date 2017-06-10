@@ -29,13 +29,9 @@ function Offramp( _source, _destination, _outflow, _length,
 	});
 
 	if ( _connectedLaneType == LaneType["forward"] )
-	{
 		this.connectedLane = this.forwardLanes.last();
-	}
 	else
-	{
 		this.connectedLane = this.backwardLanes.first();
-	}
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( this.destLanesAmount());
@@ -194,22 +190,31 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId,
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
+	vehicle.sourceLane = this.turnLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
+	vehicle.destinationLane = this.destination.forwardLanes[ laneIndex ];
+
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
-	vehicle.prepareForTurn(this.turnDuration[laneIndex], laneIndex)
+	vehicle.prepareForTurn(this.turnDuration[laneIndex],
+						   this.turnLanes[laneIndex])
+
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
 
 Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 {
+	vehicle.laneIndex = laneIndex;
 	vehicle.prepareForMove(MovementState.ON_OFFRAMP);
 
 	if ( roadId == this.sourceId )
 	{
+		vehicle.sourceLane = this.forwardLanes[ laneIndex ];
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 	else
 	{
+		vehicle.sourceLane = this.backwardLanes[ laneIndex ];
 		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 }
@@ -283,15 +288,6 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 	return null;
 }
 
-Offramp.prototype.update = function( dt )
+Offramp.prototype.calculateTurnDistance = function( vehicle )
 {
-	for (var i = 0; i < this.forwardLanesAmount; ++i)
-	{
-		updateVehicles( this.forwardLanes[i].vehicles, dt );
-	}
-
-	for (var i = 0; i < this.backwardLanesAmount; ++i)
-	{
-		updateVehicles( this.backwardLanes[i].vehicles, dt );
-	}
 }

@@ -30,15 +30,13 @@ RoadEngine.prototype.update = function( dt )
 	// now update situation on map
 
 	// change lane if it is preferable for vehicle
-	this.checkLaneChange( dt );
+	this.checkLaneChange();
 
-	// calculate new acceleration for this step and check whether vehicle in
-	// upstream/downstream zone. Update models if required.
-	this.updateAccelerations();
-
-	// update velocity with respect to acceleration and position on map object
-	// with respect to another vehicles
-	this.updatePositionsAndVelocities();
+	// calculate new acceleration, speed and position
+	// for each vehicle on the map
+	// update velocity with respect to acceleration and
+	// position on map object with respect to another vehicles
+	this.updateVehicles( dt );
 }
 
 RoadEngine.prototype.updateTrafficLights = function( dt )
@@ -828,75 +826,122 @@ function doLaneChange( currentLane, newLane, vehicle, atLeft )
 }
 
 
-RoadEngine.prototype.updateAccelerations = function()
+// This function updates acceleration, speed and position of each vehicle
+// on each map object
+RoadEngine.prototype.updateVehicles = function( dt )
 {
-	this.map.roads.forEach(updateAccelerationsOnRoad);
+	let roads = this.map.roads;
+	for (let i = 0; i < roads.length; ++i)
+	{
+		updateVehiclesOnRoad( roads[i], dt );
+	}
+
+	let turns = this.map.turns;
+	for (let i = 0; i < turns.length; ++i)
+	{
+		updateVehiclesOnTurn( turns[i], dt );
+	}
+
+	let onramps = this.map.onramps;
+	for (let i = 0; i < onramps.length; ++i)
+	{
+		updateVehiclesOnOnrampOrOfframp( onramps[i], dt );
+	}
+
+	let offramps = this.map.offramps;
+	for (let i = 0; i < offramps.length; ++i)
+	{
+		updateVehiclesOnOnrampOrOfframp( offramps[i], dt );
+	}
+
+	let junctions = this.map.junctions;
+	for (let i = 0; i < junctions.length; ++i)
+	{
+		updateVehiclesOnJunction( junctions[i], dt );
+	}
 }
 
-function updateAccelerationsOnRoad( road )
+function updateVehiclesOnRoad( road, dt )
 {
 	let lanes = null;
 
 	lanes = road.forwardLanes;
-	lanes.forEach(updateAccelerationsOnLane);
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], road, dt)
 
 	lanes = road.backwardLanes;
-	lanes.forEach(updateAccelerationsOnLane);
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], road, dt)
 }
 
-function updateAccelerationsOnTurn( turn )
+function updateVehiclesOnTurn( turn, dt )
 {
-	turn.lanes.forEach(updateAccelerationsOnLane);
+	let lanes = turn.lanes;
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], turn, dt)
 }
 
 // Update is the same for onramp and offramp
-function updateAccelerationsOnOnrampOrOfframp( mapObject )
+function updateVehiclesOnOnrampOrOfframp( mapObject, dt )
 {
-	let lanes = null;
-
-	lanes = mapObject.turnLanes;
-	lanes.forEach(updateAccelerationsOnLane);
+	let lanes = mapObject.turnLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], mapObject, dt)
 
 	lanes = mapObject.forwardLanes;
-	lanes.forEach(updateAccelerationsOnLane);
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], mapObject, dt)
 
 	lanes = mapObject.backwardLanes;
-	lanes.forEach(updateAccelerationsOnLane);
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], mapObject, dt)
 }
 
-function updateAccelerationsOnJunction( junction )
+function updateVehiclesOnJunction( junction, dt )
 {
-	updateAccelerationsOnJunctionRoad( junction.topRoad );
-	updateAccelerationsOnJunctionRoad( junction.rightRoad );
-	updateAccelerationsOnJunctionRoad( junction.bottomRoad );
-	updateAccelerationsOnJunctionRoad( junction.leftRoad );
+	updateAccelerationsOnJunctionRoad( junciton, junction.topRoad, dt );
+	updateAccelerationsOnJunctionRoad( junction, junction.rightRoad, dt );
+	updateAccelerationsOnJunctionRoad( junction, junction.bottomRoad, dt );
+	updateAccelerationsOnJunctionRoad( junction, junction.leftRoad, dt );
 }
 
-function updateAccelerationsOnLane( lane )
+function updateVehiclesOnJunctionRoad( junction, junctionRoad, dt )
+{
+	let lanes = junctionRoad.turnRightLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], junction, dt)
+
+	lanes = junctionRoad.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], junction, dt)
+
+	lanes = junctionRoad.turnLeftLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		updateVehiclesOnLane(lanes[i], junction, dt)
+}
+
+function updateVehiclesOnLane( lane, mapObject, dt )
 {
 	let vehicles = lane.vehicles;
-	let vehicle = null;
+	let vehicle = vehicles[0];
 
 	vehicle.acceleration =
 		updateAccelerationForVehicle(vehicle, vehicle.leader);
+
+	updateSpeedAndPosition(vehicle, mapObject, dt);
 
 	for (let i = 1; i < vehicles.length; ++i)
 	{
 		vehicle = vehicles[i];
 		vehicle.acceleration =
 			updateAccelerationForVehicle(vehicle, vehicles[i - 1]);
+
+		updateSpeedAndPosition(vehicle, mapObject, dt);
 	}
 }
 
 
-function updateAccelerationsOnJunctionRoad( junctionRoad )
-{
-	updateAccelerationsOnLane( junctionRoad.turnRightLanes );
-	updateAccelerationsOnLane( junctionRoad.passLanes );
-	updateAccelerationsOnLane( junctionRoad.turnLeftLanes );
-}
-
-function updateAccelerationForVehicle(currentVehicle, leaderVehicle)
+function updateAccelerationForVehicle( currentVehicle, leaderVehicle )
 {
 	let gap = 0;
 	let leaderSpeed = 0;
@@ -911,40 +956,77 @@ function updateAccelerationForVehicle(currentVehicle, leaderVehicle)
 		calculateAcceleration(gap, currentSpeed, leaderSpeed);
 }
 
-RoadEngine.prototype.updatePositionsAndVelocities = function( dt )
+function updateSpeedAndPosition( vehicle, mapObject, dt )
 {
+	switch (vehicle.vehicleState)
+	{
+		case VehicleState.MOVING:
+			updateStraightMove( vehicle, mapObject, dt );
+			break;
 
+		case VehicleState.TURNING:
+			updateTurn( vehicle, mapObject, dt );
+			break;
+
+		case VehicleState.CHANGE_LANE:
+			this.updateLaneChange( dt );
+			break;
+
+		case VehicleState.IDLE:
+			// do nothing
+			break;
+
+		default:
+
+	}
 }
 
-RoadEngine.prototype.updatePositionsAndVelocitiesOnRoads = function( dt )
+// dt - delta of time
+// length - length of map object vehicle moves at
+function updateStraightMove( vehicle, mapObject, dt )
 {
+	// update velocity
+	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
+	vehicle.uCoord += Math.Max(0, newPosition);
 
+	let safeDistance = mapObject.length - MINIMAL_GAP;
+	if (vehicle.uCoord >= safeDistance)
+	{
+		vehicle.stop(safeDistance);
+		vehicle.arrived = true;
+
+		return;
+	}
+
+	vehicle.speed += vehicle.acceleration * dt;
+	vehicle.speed = Math.max( 0, vehicle.speed);
 }
 
-RoadEngine.prototype.updatePositionsAndVelocitiesOnJunctions = function( dt )
+
+function updateTurn( vehicle, mapObject, dt )
 {
-	let junctions = this.map.junctions;
-	for (let i = 0; i < junctions.length; ++i)
-		junctions[i].update(dt);
+	// no need to compute position
+	if (vehicle.arrived)
+		return;
+
+	this.turnElapsedTime += dt;
+	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+
+	let newPosition = mapObject.calculateTurnDistance( vehicle );
+
+	// it possible that vehicle waits on turn to move on destination road
+	// if destination road is congested and no space for new vehicle
+	if (turnCompletion == 1)
+	{
+		// turn has been completed
+		vehicle.stop( newPosition );
+		this.arrived = true;
+	}
+
+	this.uCoord = newPosition;
 }
 
-RoadEngine.prototype.updatePositionsAndVelocitiesOnTurns = function( dt )
+function updateLaneChange( vehicle, dt )
 {
-	let turns = this.map.turns;
-	for (let i = 0; i < turns.length; ++i)
-		turns[i].update( dt );
-}
-
-RoadEngine.prototype.updatePositionsAndVelocitiesOnOnramps = function( dt )
-{
-	let onramps = this.map.onramps;
-	for (let i = 0; i < onramps.length; ++i)
-		onramps[i].update( dt );
-}
-
-RoadEngine.prototype.updatePositionsAndVelocitiesOnOfframps = function( dt )
-{
-	let offramps = this.map.offramps;
-	for (let i = 0; i < offramps.length; ++i)
-		offramps[i].update( dt );
+	// TODO <Artem> implement me!
 }
