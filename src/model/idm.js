@@ -53,6 +53,10 @@ function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
 	this.square_root_of_ab = Math.sqrt( this.acceleration * this.deceleration );
 }
 
+/*
+ * Constructor-time function
+ */
+// must be called before simulatin loop
 function createIDMModels( vehicleConfig, freeRoadConfig, upstreamConfig,
 						  downstreamConfig, jamConfig)
 {

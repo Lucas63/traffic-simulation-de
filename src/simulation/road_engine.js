@@ -740,9 +740,6 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 		if (turnRight)
 			doLaneChange( right, vehicle, false );
 	}
-
-	let changeAtLeft = assesLaneChange()
-
 }
 
 
@@ -755,6 +752,10 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 // of lane change
 function assesLaneChange(currentVehicle, atLeft, result)
 {
+	// vehicle must complete previous lane change
+	if (currentVehicle.vehicleState == VehicleState.CHANGE_LANE)
+		return false;
+
 	let adjacentLeader = null;
 	let adjacentFollower = null;
 
@@ -819,6 +820,7 @@ function doLaneChange( currentLane, newLane, vehicle, atLeft )
 		adjacentFollower = vehicle.followerAtRight;
 
 	vehicle.vehicleState = VehicleState.CHANGE_LANE;
+	vehicle.trafficState = TrafficState.FREE_ROAD;
 	vehicle.sourceLane = currentLane;
 
 	let adjacentFollowerIndex = lane.vehicles.indexOf(adjacentFollower);
@@ -826,9 +828,87 @@ function doLaneChange( currentLane, newLane, vehicle, atLeft )
 }
 
 
-RoadEngine.prototype.updateAccelerations = function( dt )
+RoadEngine.prototype.updateAccelerations = function()
 {
+	this.map.roads.forEach(updateAccelerationsOnRoad);
+}
 
+function updateAccelerationsOnRoad( road )
+{
+	let lanes = null;
+
+	lanes = road.forwardLanes;
+	lanes.forEach(updateAccelerationsOnLane);
+
+	lanes = road.backwardLanes;
+	lanes.forEach(updateAccelerationsOnLane);
+}
+
+function updateAccelerationsOnTurn( turn )
+{
+	turn.lanes.forEach(updateAccelerationsOnLane);
+}
+
+// Update is the same for onramp and offramp
+function updateAccelerationsOnOnrampOrOfframp( mapObject )
+{
+	let lanes = null;
+
+	lanes = mapObject.turnLanes;
+	lanes.forEach(updateAccelerationsOnLane);
+
+	lanes = mapObject.forwardLanes;
+	lanes.forEach(updateAccelerationsOnLane);
+
+	lanes = mapObject.backwardLanes;
+	lanes.forEach(updateAccelerationsOnLane);
+}
+
+function updateAccelerationsOnJunction( junction )
+{
+	updateAccelerationsOnJunctionRoad( junction.topRoad );
+	updateAccelerationsOnJunctionRoad( junction.rightRoad );
+	updateAccelerationsOnJunctionRoad( junction.bottomRoad );
+	updateAccelerationsOnJunctionRoad( junction.leftRoad );
+}
+
+function updateAccelerationsOnLane( lane )
+{
+	let vehicles = lane.vehicles;
+	let vehicle = null;
+
+	vehicle.acceleration =
+		updateAccelerationForVehicle(vehicle, vehicle.leader);
+
+	for (let i = 1; i < vehicles.length; ++i)
+	{
+		vehicle = vehicles[i];
+		vehicle.acceleration =
+			updateAccelerationForVehicle(vehicle, vehicles[i - 1]);
+	}
+}
+
+
+function updateAccelerationsOnJunctionRoad( junctionRoad )
+{
+	updateAccelerationsOnLane( junctionRoad.turnRightLanes );
+	updateAccelerationsOnLane( junctionRoad.passLanes );
+	updateAccelerationsOnLane( junctionRoad.turnLeftLanes );
+}
+
+function updateAccelerationForVehicle(currentVehicle, leaderVehicle)
+{
+	let gap = 0;
+	let leaderSpeed = 0;
+
+	let gap = leaderVehicle.uCoord - leaderVehicle.length -
+			  currentVehicle.uCoord;
+
+	let currentSpeed = currentVehicle.speed;
+	let leaderSpeed = leaderVehicle.speed;
+
+	return currentVehicle.longModel.
+		calculateAcceleration(gap, currentSpeed, leaderSpeed);
 }
 
 RoadEngine.prototype.updatePositionsAndVelocities = function( dt )

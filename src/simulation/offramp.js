@@ -38,7 +38,7 @@ function Offramp( _source, _destination, _outflow, _length,
 	}
 
 	// virtual lanes for turning vehicles
-	this.turnLanes = new Array( this.destLanesAmount);
+	this.turnLanes = new Array( this.destLanesAmount());
 	for (var i = 0;i < this.destLanesAmount; ++i)
 	{
 		this.turnLanes[i].vehicles = [];
@@ -148,7 +148,8 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 
 // check whether *vehicle* from road with *roadId* and lane identified
 // by *laneType* and *laneIndex* can pass throug the offramp
-Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneIndex )
+Offramp.prototype.canPassThrough = function( vehicle, roadId,
+											 laneType, laneIndex )
 {
 	assert( roadId == this.source || roadId == this.outflow,
 			"Wrong road id " + roadId);

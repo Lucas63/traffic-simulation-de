@@ -73,6 +73,9 @@ var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
 
+/*
+ * Constructor-time function
+ */
 // virtual vehicles with different road_elements used for leading vehicle,
 // namely the very first vehicle on each map object
 function createVirtualVehicles()
@@ -209,7 +212,7 @@ Vehicle.prototype.prepareForMove = function(movementState)
 
 // dt - delta of time
 // length - length of map object vehicle moves at
-Vehicle.prototype.update = function( dt, length, turnDistanceCalcFunc )
+Vehicle.prototype.update = function( dt, length )
 {
 	switch (this.vehicleState)
 	{
@@ -218,7 +221,7 @@ Vehicle.prototype.update = function( dt, length, turnDistanceCalcFunc )
 			break;
 
 		case VehicleState.TURNING:
-			this.updateTurn( dt, turnDistanceCalcFunc );
+			this.updateTurn( dt );
 			break;
 
 		case VehicleState.CHANGE_LANE:
@@ -234,8 +237,8 @@ Vehicle.prototype.update = function( dt, length, turnDistanceCalcFunc )
 Vehicle.prototype.updateStraightMove = function( dt, length )
 {
 	// update velocity
-	let newSpeed = this.speed * dt + 0.5 *this.acceleration * dt * dt;
-	this.uCoord += Math.Max(0, newSpeed);
+	let newPosition = this.speed * dt + 0.5 *this.acceleration * dt * dt;
+	this.uCoord += Math.Max(0, newPosition);
 
 	let safeDistance = length - MINIMAL_GAP;
 	if (this.uCoord >= safeDistance)
@@ -252,7 +255,9 @@ Vehicle.prototype.updateStraightMove = function( dt, length )
 	this.speed = Math.max( 0, this.speed);
 }
 
-Vehicle.prototype.updateTurn = function( dt, turnDistanceCalcFunc )
+
+
+Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
