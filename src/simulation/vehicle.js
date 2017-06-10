@@ -72,6 +72,15 @@ var TRUCK_INITIAL_SPEED = INVALID;
 var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
+
+// virtual vehicles with different road_elements used for leading vehicle,
+// namely the very first vehicle on each map object
+function createVirtualVehicles()
+{
+	// TODO implement me!
+}
+
+
 function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed )
 {
 	this.type     = _type;
@@ -93,7 +102,7 @@ function Vehicle( config )
 	// this moving
 	this.uCoord = config.uCoord; // u in UV coordinates
 
-	// true if vehicle has reached end of map object it moves on
+	// true if vehicle has reached end of map object it's moving on
 	this.arrived = false;
 
 	// coordinate used for turnes and lane change
@@ -101,6 +110,7 @@ function Vehicle( config )
 	// by default, vehicle moves in the straight direction
 	this.vCoord = 0; // v in UV coordinates
 
+	// Data for Renderer
 	this.turnData = {
 		"startX": 0, "startY": 0,
 		"controlX": 0, "controlY": 0,
@@ -151,24 +161,20 @@ function Vehicle( config )
 	this.leaderAtRight   = null;
 	this.followerAtRight = null;
 
-	this.TargetLane = null;
-
 	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
-	// coordinate on Bezier curve for rendering
+	// coordinate on Bezier curve for rendering during turn
 	this.turnCompletion = 0;
+
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
 
 	// lane on destination road where vehicle appeared after turn
-	this.turnDestinationLane = 0;
+	this.destinationLane = null;
+
+	// lane where vehicle is moving on during lane change
+	this.sourceLane = null;
 }
 
-// virtual vehicles with different road_elements used for leading vehicle,
-// namely the very first vehicle on each map object
-function createVirtualVehicles()
-{
-	// TODO implement me!
-}
 
 Vehicle.prototype.stop = function( _uCoord )
 {
@@ -186,7 +192,7 @@ Vehicle.prototype.prepareForTurn = function(turnFullTime, destLaneIndex)
 	this.turnElapsedTime = 0;
 	this.turnCompletion = 0;
 
-	this.turnDestinationLane = destLaneIndex;
+	this.destinationLane = destLaneIndex;
 	this.turnFullTime = turnFullTime;
 }
 
@@ -246,7 +252,7 @@ Vehicle.prototype.updateStraightMove = function( dt, length )
 	this.speed = Math.max( 0, this.speed);
 }
 
-Vehicle.prototype.updateTurn = function( dt,  )
+Vehicle.prototype.updateTurn = function( dt, turnDistanceCalcFunc )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
@@ -284,4 +290,9 @@ Vehicle.prototype.getMinimalGap = function()
 Vehicle.prototype.farFrom = function( distance )
 {
 	return (this.uCoord - this.length) > distance;
+}
+
+Vehicle.prototype.getSafeDistance = function()
+{
+	return this.uCoord - this.length - MINIMAL_GAP;
 }

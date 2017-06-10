@@ -161,13 +161,9 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneInde
 	// lane where vehicle moves on
 	var selectedLane = null;
 	if ( roadId == this.sourceId )
-	{
 		selectedLane = this.forwardLanes[ laneIndex ];
-	}
 	else
-	{
 		selectedLane = this.backwardLanes[ laneIndex ];
-	}
 
 	// no vehicles on lane, of course vehicle can pass through
 	if ( selectedLane.vehicles.empty() )

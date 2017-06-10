@@ -593,7 +593,7 @@ function updateNeighbours(current, adjacent, atLeft)
 		// thus decrease length and minimal gap between vehicles.
 		// Resulted value is the highest u coordinate when vehicle on adjacent
 		// lane can change lane
-		currentSpace = currentCoord - currentVehicles[i].getMinimalGap();
+		currentSpace = currentVehicles[i].getSafeDistance();
 
 		if (atLeft)
 		{
@@ -617,7 +617,7 @@ function updateNeighbours(current, adjacent, atLeft)
 		for (let j = 0; j < adjacentVehicles.length; ++j)
 		{
 			adjacentCoord = adjacentVehicles[j].uCoord;
-			adjacentSpace = adjacentCoord - adjacentVehicles[j].getMinimalGap();
+			adjacentSpace = adjacentVehicles[j].getSafeDistance();
 
 			// adjacent vehicle far than vehicle on current lane
 			// go on inspect adjacent vehicles until find that no far than
@@ -654,7 +654,7 @@ function updateNeighbours(current, adjacent, atLeft)
 /// Here is code for current update
 ///////////////////////////////////////////////////////////////////////////////
 
-RoadEngine.prototype.checkLaneChange = function( road )
+RoadEngine.prototype.checkLaneChange = function()
 {
 	let roads = this.map.roads;
 
@@ -670,6 +670,7 @@ function checkLaneChangeOnLanes( lanes )
 	let vehicles = null;
 	let vehicle = null;
 
+	// check the very first lane
 	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
 
 	for (let i = 1; i < lanes.length - 1; ++i)
@@ -677,6 +678,7 @@ function checkLaneChangeOnLanes( lanes )
 		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
 	}
 
+	// check the last lane
 	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 1],
 									 lanes.last(), null);
 }
@@ -704,16 +706,18 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 
 	for (let i = 0; i < vehicles.length; ++i)
 	{
+		vehicle = vehicles[i];
+
 		// if lane at left exists
 		if (null != left)
 		{
-			turnLeft = assesLaneChange(vehicles[i], true, resultAtLeft);
+			turnLeft = assesLaneChange(vehicle, true, resultAtLeft);
 		}
 
 		// if lane at right exists
 		if (null != right)
 		{
-			turnRight = assesLaneChange(vehicles[i], false, resultAtRight);
+			turnRight = assesLaneChange(vehicle, false, resultAtRight);
 		}
 
 		// if vehicle can change lane at left or right
@@ -722,22 +726,19 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 			if (resultAtLeft.currentAcceleration >
 				resultAtRight.currentAcceleration)
 			{
-				vehicle = vehicles[i];
-
-			// TODO find index where to insert vehicle in case of lane change
+				doLaneChange( current,left, vehicle, true );
+			}
+			else
+			{
+				doLaneChange( current, right, vehicle, false );
 			}
 		}
 
 		if (turnLeft)
-		{
-
-		}
+			doLaneChange( left, vehicle, true );
 
 		if (turnRight)
-		{
-
-		}
-
+			doLaneChange( right, vehicle, false );
 	}
 
 	let changeAtLeft = assesLaneChange()
@@ -745,14 +746,14 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 }
 
 
-// current - vehicle decisiding to change laneIndex
+// currentVehicle - vehicle considering to change laneIndex
 // atLeft - if true, than consider lane change at left, otherwise at right
 // result [output] - contains results of calculations.
 // result.currentAcceleration - prospective acceleration of current vehicle
 // in case of lane change
 // result.followerAcceleration - acceleration of prospective follower in case
 // of lane change
-function assesLaneChange(current, atLeft, result)
+function assesLaneChange(currentVehicle, atLeft, result)
 {
 	let adjacentLeader = null;
 	let adjacentFollower = null;
@@ -760,41 +761,68 @@ function assesLaneChange(current, atLeft, result)
 	// get observed leader and follower
 	if (atLeft)
 	{
-		adjacentLeader = current.leaderAtLeft;
-		adjacentFollower = current.followerAtLeft;
+		adjacentLeader = currentVehicle.leaderAtLeft;
+		adjacentFollower = currentVehicle.followerAtLeft;
 	}
 	else
 	{
-		adjacentLeader = current.leaderAtRight;
-		adjacentLeader = current.followerAtRight;
+		adjacentLeader = currentVehicle.leaderAtRight;
+		adjacentLeader = currentVehicle.followerAtRight;
 	}
 
 	// actual gap between prospective leader and current vehicle
-	let gap = adjacentLeader.getMinimalGap() - current.uCoord;
+	let gapBeforeLeader =
+		adjacentLeader.getSafeDistance() - currentVehicle.uCoord;
+
+	// there is not enough space before neighbour leader to change lane
+	if (gapBeforeLeader < 0)
+		return false;
+
+	// actual gap between current vehicle and prospective follower
+	gapAfterFollower =
+		currentVehicle.getSafeDistance() - adjacentFollower.uCoord;
+
+	// there is not enough space after neighbour follower to change lane
+	if (gapAfterFollower < 0)
+		return false;
 
 	// acceleration of current vehicle after prospective lane change
-	let currentAccAfterChange =
-		current.longModel.calculateAcceleration(gap, current.speed,
-												adjacentLeader.speed);
+	let currentAccAfterChange = currentVehicle.longModel.
+		calculateAcceleration(gapBeforeLeader, currentVehicle.speed,
+							  adjacentLeader.speed);
 
 	result.currentAcceleration = currentAccAfterChange;
 
-	// actual gap between current vehicle and prospective follower
-	gap = current.getMinimalGap() - adjacentFollower.uCoord;
-
 	// acceleration of follower after prospective lane change
-	let followerAccAfterChange =
-		adjacentFollower.longModel.
-			calculateAcceleration(gap, adjacentFollower.speed, current.speed);
+	let followerAccAfterChange = adjacentFollower.longModel.
+		calculateAcceleration(gapAfterFollower, adjacentFollower.speed,
+							  currentVehicle.speed);
 
 	result.followerAccAfterChange = followerAccAfterChange;
 
-	let velocitiesRatio = current.speed / current.longModel.desiredSpeed;
+	let velocitiesRatio =
+		currentVehicle.speed / currentVehicle.longModel.desiredSpeed;
 
 	// decide whether it be better to change lane or not
-	return current.laneChangeModel.
-		analyzeLaneChange(velocitiesRatio, current.acceleration,
+	return currentVehicle.laneChangeModel.
+		analyzeLaneChange(velocitiesRatio, currentVehicle.acceleration,
 						  currentAccAfterChange, followerAccAfterChange);
+}
+
+function doLaneChange( currentLane, newLane, vehicle, atLeft )
+{
+	let adjacentFollower = null;
+
+	if (atLeft)
+		adjacentFollower = vehicle.followerAtLeft;
+	else
+		adjacentFollower = vehicle.followerAtRight;
+
+	vehicle.vehicleState = VehicleState.CHANGE_LANE;
+	vehicle.sourceLane = currentLane;
+
+	let adjacentFollowerIndex = lane.vehicles.indexOf(adjacentFollower);
+	newLane.vehicles.splice(adjacentFollowerIndex, 0, vehicle);
 }
 
 

@@ -596,7 +596,7 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 	vehicle.movementState = MovementState.ON_JUNCTION;
 
 	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
-	vehicle.turnDestinationLane = laneIndex;
+	vehicle.destinationLane = laneIndex;
 
 	sourceRoad.turnRightLanes[laneIndex].vehicles.push(vehicle);
 }
@@ -637,7 +637,7 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 
 	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
 
-	vehicle.turnDestinationLane = laneIndex;
+	vehicle.destinationLane = laneIndex;
 
 	sourceRoad.turnLeftLanes[laneIndex].vehicles.push(vehicle);
 }
