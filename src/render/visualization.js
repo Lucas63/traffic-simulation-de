@@ -25,7 +25,7 @@ function render_map(){
 
     roadConfigs = load_road_configs();
     roads = load_roads(roadConfigs);
-    console.log(roads);
+
     junctions = load_junctions(roads);
 
     var canvas = document.getElementById('canvas_map');

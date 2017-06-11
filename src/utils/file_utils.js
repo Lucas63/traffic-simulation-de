@@ -12,6 +12,7 @@ function load_road_configs() {
     let array = roads_json.roads;
     let roadConfigs = [];
 
+
     for (let i = 0; i < array.length; i++) {
         let road_string = array[i];
 

@@ -43,6 +43,7 @@ function Junction( _id,_pos, _side,
 	this.activeTrafficLight = null;
 
 	// initialize data for "top" road
+    this.topRoad = {};
 	this.topRoad.road = _topRoad;
 
 	this.topRoad.turnRightLanes = new Array(_leftRoad.getForwardLanesAmount());
@@ -150,7 +151,7 @@ Junction.prototype.verticalTrafficLightActive = function()
 	return this.activeTrafficLight == this.verticalTrafficLight;
 }
 
-Junction.prototype.getTrafficLight( _roadId )
+Junction.prototype.getTrafficLight = function( _roadId )
 {
 	let side = this.getSideForRoad( _roadId );
 	if (null == side )
@@ -168,7 +169,7 @@ Junction.prototype.getTrafficLight( _roadId )
 	}
 }
 
-Juntion.prototype.getRoadForSide( side )
+Junction.prototype.getRoadForSide = function( side )
 {
 	switch(side)
 	{
@@ -186,7 +187,7 @@ Juntion.prototype.getRoadForSide( side )
 	}
 }
 
-Junction.prototype.getJunctionRoadFromSide( _side )
+Junction.prototype.getJunctionRoadFromSide = function( _side )
 {
 	switch(_side)
 	{
@@ -259,7 +260,7 @@ Junction.prototype.getDestinationLanesAtLeft = function( _source, _destination )
 	}
 }
 
-Junction.prototype.getDestinationLanesForPass( _source, _destination )
+Junction.prototype.getDestinationLanesForPass = function( _source, _destination )
 {
 	let sourceRoad = _source.road;
 	let destRoad = _destination.road;
