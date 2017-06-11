@@ -98,7 +98,7 @@ var RoadObject =
 function RoadConfig( _id, _type, _roadLength, _laneWidth,
 					 _startX, _startY, _finishX, _finishY,
 					 _startConnection, _finishConnection,
-					 _forwardLanes, _backwardLanes, _spawnPoints)
+					 _forwardLanes, _backwardLanes)
 {
 	this.id = _id;
 	this.type = _type;

@@ -10,7 +10,7 @@ var VehicleState =
 	MOVING: 0, // drive on straight road or passing through the junction
 	TURNING: 1, // turning on Turn/Onramp/Offramp/Junction
 	IDLE: 2, // vehicle stopped
-	CHANGE_LANE
+	CHANGE_LANE : 3
 }
 
 // Situation on road for the vehicle
@@ -246,7 +246,7 @@ Vehicle.prototype.updateStraightMove = function( dt, length )
 	this.speed = Math.max( 0, this.speed);
 }
 
-Vehicle.prototype.updateTurn = function( dt,  )
+Vehicle.prototype.updateTurn = function( dt )
 {
 	this.turnElapsedTime += dt;
 	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);

@@ -280,7 +280,7 @@ var offrampToRight=[true];
 mainroad.setOfframpInfo(offrampIDs,offrampLastExits,offrampToRight);
 mainroad.duTactical=duTactical;
 
-// set unique mandatory LC models for use whenever mandatory situationarises
+// set unique mandatory LC road_elements for use whenever mandatory situationarises
 
 mainroad.LCModelMandatoryRight=LCModelMandatoryRight;
 mainroad.LCModelMandatoryLeft=LCModelMandatoryLeft;
@@ -357,7 +357,7 @@ function updateU(){
     itime++;
 
     // transfer effects from slider interaction and mandatory regions
-    // to the vehicles and models: 
+    // to the vehicles and road_elements:
 
 
     mainroad.updateTruckFrac(truckFrac, truckFracToleratedMismatch);
