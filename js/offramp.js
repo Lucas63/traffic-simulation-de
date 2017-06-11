@@ -209,7 +209,7 @@ function updateU(){
     itime++;
 
     // transfer effects from slider interaction and mandatory regions
-    // to the vehicles and models: 
+    // to the vehicles and road_elements:
 
 
     mainroad.updateTruckFrac(truckFrac, truckFracToleratedMismatch);

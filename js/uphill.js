@@ -172,7 +172,7 @@ function updateU(){
     itime++;
 
     // transfer effects from slider interaction => updateModels() in *_gui.js 
-    // to the vehicles and their models.
+    // to the vehicles and their road_elements.
     // All cars and trucks (in a certain region) share the same model) 
 
     if(false){

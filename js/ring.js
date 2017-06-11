@@ -148,7 +148,7 @@ function updateRing(){
     //console.log("does Math.tanh exist?");
     //console.log("Math.tanh(5)=",Math.tanh(5));
 
-    // transfer effects from slider interaction to the vehicles and models: 
+    // transfer effects from slider interaction to the vehicles and road_elements:
     // modelparam sliders (updateModelsOfAllVehicles), density, truckFrac sliders
 
     mainroad.updateTruckFrac(truckFrac, truckFracToleratedMismatch);

@@ -1,7 +1,7 @@
 /**
  * Created by lucas63 on 27.05.17.
  */
-var junction_json = {
+var junctions_json = {
 	"defaultGreenDuration": 20,
 	"defaultYellowDuration": 3,
 	"defaultRedDuration": 30,

@@ -10,7 +10,7 @@ var VehicleState =
 	MOVING: 0, // drive on straight road or passing through the junction
 	TURNING: 1, // turning on Turn/Onramp/Offramp/Junction
 	IDLE: 2, // vehicle stopped
-	CHANGE_LANE
+	CHANGE_LANE : 3
 }
 
 // Situation on road for the vehicle

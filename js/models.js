@@ -1,5 +1,5 @@
 //#################################
-// longitudinal models
+// longitudinal road_elements
 //#################################
 
 
@@ -192,7 +192,7 @@ ACC.prototype.calcAcc=function(s,v,vl,al){ // this works as well
 
 
 //#################################
-// lane-changing models
+// lane-changing road_elements
 //#################################
 
 /**

@@ -245,7 +245,7 @@ function updateU(){
     itime++;
 
     // transfer effects from slider interaction 
-    // and changed mandatory states to the vehicles and models 
+    // and changed mandatory states to the vehicles and road_elements
 
     //console.log("\nbefore mainroad.writeVehicles:"); mainroad.writeVehicles();
     mainroad.updateTruckFrac(truckFrac, truckFracToleratedMismatch);

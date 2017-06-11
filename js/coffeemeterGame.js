@@ -57,7 +57,7 @@ var MOBIL_mandat_bThr=0;
 var MOBIL_mandat_biasRight=20;
 
 
-// models
+// road_elements
 
 var longModelCar=new ACC(IDM_v0,IDM_T,IDM_s0,IDM_a,IDM_b);
 var longModelTruck=new ACC(IDMtruck_v0,IDMtruck_T,IDM_s0,IDMtruck_a,IDM_b);
@@ -476,7 +476,7 @@ function update(){
     uObs=20*time; //!!!
 
     // transfer effects from slider interaction 
-    // and changed mandatory states to the vehicles and models 
+    // and changed mandatory states to the vehicles and road_elements
 
     mainroad.updateModelsOfAllVehicles(longModelCar,longModelTruck,
 				       LCModelCar,LCModelTruck); //!! test if needed
