@@ -2,27 +2,33 @@ var LaneType =
 {
 	"forward": 0,
 	"backward": 1
-}
+};
 
-function Lane( _length, _type, _spawnPoint )
+function Lane( _length, _type, _spawnPoint,startX,startY,finishX,finishY )
 {
 	this.length = _length;
 	this.type = _type;
 
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;
+
+	this.startX = startX;
+	this.startY = startY;
+
+	this.finishX = finishX;
+	this.finishY = finishY;
 }
 
 // true if lane has no vehicles
 Lane.prototype.isEmpty = function()
 {
 	return this.vehicles.length == 0;
-}
+};
 
 Lane.prototype.addVehicle = function( vehicle, index )
 {
 	this.vehicles.splice( index, 0, vehicle );
-}
+};
 
 Lane.prototype.addVehicleAsLast = function( vehicle )
 {

@@ -27,8 +27,8 @@ function load_road_configs() {
             road_string.finishY,
             road_string.startConnection,
             road_string.finishConnection,
-            road_string.forwardLanes,
-            road_string.backwardLanes
+            get_lanes(road_string.forwardLanes,road_string.forwardLanesSpawnPoints,LaneType.forward),
+            get_lanes(road_string.backwardLanes,road_string.backwardLanesSpawnPoints,LaneType.backward),
         );
         roadConfigs.push(new_road);
     }
@@ -40,7 +40,6 @@ function load_roads(rdCnfgs){
     for(let i = 0; i < rdCnfgs.length; i++){
         roads.push(new Road(rdCnfgs[i]));
     }
-    console.log(roads);
     return roads;
 }
 
@@ -126,7 +125,6 @@ function get_connected_to_junction_roads(id_junction,rdConfigs){
                     roads[1] = rdConfigs[i];
                     break;
             }
-            console.log("ddd");
         }
         else if (rdConfigs[i].finishConnection.type == "junction" && rdConfigs[i].finishConnection.id == id_junction){
             console.log("finishconnection");
@@ -168,4 +166,9 @@ function get_center_coordinates(roads,id){
     }
 
     return [X/4,Y/4];
+}
+
+function get_lanes(lines_number,spawn_points,lines_type){
+    lanes = [];
+    for
 }

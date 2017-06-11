@@ -34,9 +34,9 @@ function draw_dotted_line(canvasContext, startX,startY,endX,endY,lineType) {
     canvasContext.stroke();
 }
 
-function draw_road(ctx, rdCnfg) {
+function draw_road(ctx, road) {
 
-    let is_vertical = is_vertical_road(rdCnfg.type);
+    let is_vertical = is_vertical_road(road.type);
 
     let startX = 0;
     let startY = 0;
@@ -44,16 +44,16 @@ function draw_road(ctx, rdCnfg) {
     let height = 0;
 
     if (is_vertical) {
-        startX = rdCnfg.startX - rdCnfg.forwardLanes * lane_width;
-        startY = rdCnfg.startY;
-        width =  2* rdCnfg.forwardLanes * lane_width;
-        height = rdCnfg.finishY - rdCnfg.startY;
+        startX = road.startX - road.forwardLanes * lane_width;
+        startY = road.startY;
+        width =  2* road.forwardLanes * lane_width;
+        height = road.finishY - road.startY;
 
     } else {
-        startX = rdCnfg.startX;
-        startY = rdCnfg.startY - rdCnfg.forwardLanes * lane_width;
-        width = rdCnfg.finishX - rdCnfg.startX;
-        height =  2* rdCnfg.forwardLanes * lane_width;
+        startX = road.startX;
+        startY = road.startY - road.forwardLanes * lane_width;
+        width = road.finishX - road.startX;
+        height =  2* road.forwardLanes * lane_width;
     }
 
     startX *= multiplier;
@@ -62,8 +62,8 @@ function draw_road(ctx, rdCnfg) {
     height *= multiplier;
 
     ctx.fillRect(startX, startY, width, height);
-    draw_road_lines(ctx,rdCnfg,is_vertical);
-    print_road_object(rdCnfg.type,is_vertical,startX,startY,width,height);
+    draw_road_lines(ctx,road,is_vertical);
+    print_road_object(road.type,is_vertical,startX,startY,width,height);
 }
 
 function draw_road_lines(ctx,rdCnfg,is_vertical){
@@ -125,5 +125,4 @@ function find_road_type(lines_number,line){
         default:
             return "dotted";
     }
-
 }
