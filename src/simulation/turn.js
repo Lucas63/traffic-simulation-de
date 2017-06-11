@@ -17,10 +17,12 @@ function Turn( _source, _destination, _pathCalcFunction )
 	this.lanes = new Array( lanesAmount );
 
 	for (let i = 0; i < lanesAmount; ++i)
-	{
 		// each lane has array of vehicles on this lane
 		this.lanes[i].vehicles = [];
-	}
+
+	// roads connected to turn has only forward lanes, but it is tradeoff
+	setTurnData(this.lanes, _source, _source.forwardLanes,
+				_destination.forwardLanes);
 
 	// Renderer store here information about Start, Control and End points
 	// to draw Bezier curve for each lane
@@ -61,48 +63,6 @@ function Turn( _source, _destination, _pathCalcFunction )
 	//               UP_TO_BOTTOM: 2
 }
 
-
-function setTurnData( turnLanes, mapObject, sourceLanes, sourceLanesType,
-					  destinationLanes, destinationLanesType )
-{
-
-	let startPoint = new Point(0, 0);
-	let controlPoint = new Point(0, 0);
-	let endPoint = new Point(0, 0);
-
-	for (let i = 0; i < turnLanes.length; ++i)
-	{
-		if (sourceLanesType == LaneType["forward"])
-		{
-
-		}
-		else
-		{
-
-		}
-
-	}
-
-	let laneData = this.renderInfo[laneIndex];
-
-	vehicle.turnData["startX"] = laneData.startPoint["x"];
-	vehicle.turnData["startY"] = laneData.startPoint["y"];
-
-	vehicle.turnData["controlX"] = laneData.controlPoint["x"];
-	vehicle.turnData["controlY"] = laneData.controlPoint["y"];
-
-	vehicle.turnData["endX"] = laneData.endPoint["x"];
-	vehicle.turnData["endY"] = laneData.endPoint["y"];
-}
-
-function getTurnStartPoint( mapObject, road )
-{
-	if (road.startConnection == mapObject)
-	{
-
-	}
-}
-
 Turn.prototype.canTurn = function( laneIndex, vehicle )
 {
 	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
@@ -133,28 +93,12 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 // add vehicle to turn's lane with index *laneIndex*
 Turn.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.sourceLane = this.lanes[laneIndex];
-
 	// TODO now turn connected only to forward lanes, but real check must be
 	// done whether used backward or forward lanes
 	vehicle.prepareForTurn(this.turnDuration[laneIndex],
-						   this.destination.forwardLanes[laneIndex]);
+						   this.turnLanes[laneIndex]);
 
 	this.lanes[laneIndex].vehicles.push( vehicle );
-}
-
-//
-
-function updateTurn( vehicles )
-{
-	for (let i = 0;i < vehicles.length;++i)
-	{
-		let vehicle = vehicles[i];
-		if (vehicle.arrived)
-			continue;
-
-		vehicle.update( this.delta, 0, this.pathCalcFunction );
-	}
 }
 
 Turn.prototype.turnCompleted = function( laneIndex )
@@ -170,7 +114,7 @@ Turn.prototype.turnCompleted = function( laneIndex )
 	return this.lanes[lanesIndex].vehicles.first().arrived;
 }
 
-Turn.prototype.calculateTurnDistance = function( vehicle, dt )
+Turn.prototype.calculateTurnDistance = function( vehicle )
 {
-	// TODO implement actual update
+	return calculateTurnDistance(vehicle, this.pathCalcFunction);
 }

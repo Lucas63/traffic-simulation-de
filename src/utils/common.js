@@ -58,25 +58,26 @@ const COEF4 = 0.225403;
 // x1,y1 - coordinates of start point
 // x2,y2 - cooridinates of control point
 // x3, y3 - coordinates of end point
-function getBezierCurveLength(t, x1, y1, x2, y2, x3, y3)
+function getBezierCurveLength(t, startPoint, controlPoint, endPoint)
 {
 	// This formula taken from "Approximate Arc Length Parametrization"
 	// MARCELO WALTER and ALAIN FOURNIER. Formula 7
 	let b = t / 2;
 
-	let s = 0; // length of the curve
+	let s = b; // length of the curve
 
-	s = b * (COEF1 * getNormOfCurve(COEF3 * b, x1, y1, x2, y2, x3, y3) +
-			 COEF2 * getNormOfCurve(b, x1, y1, x2, y2, x3, y3) +
-			 COEF1 * getNormOfCurve(COEF4 * b, x1, y1, x2, y2, x3, y3));
+	s *=
+		COEF1 * getNormOfCurve(COEF3 * b, startPoint, controlPoint, endPoint) +
+		COEF2 * getNormOfCurve(b, startPoint, controlPoint, endPoint) +
+		COEF1 * getNormOfCurve(COEF4 * b, startPoint, controlPoint, endPoint);
 
 	return s;
 }
 
-function getNormOfCurve(t, x1, y1, x2, y2, x3, y3)
+function getNormOfCurve(t, startPoint, controlPoint, endPoint)
 {
-	let x = getBezierCurveCoord(t, x1, x2, x3);
-	let y = getBezierCurveCoord(t, y1, y2, y3);
+	let x = getBezierCurveCoord(t, startPoint.x, controlPoint.x, endPoint.x);
+	let y = getBezierCurveCoord(t, startPoint.y, controlPoint.y, endPoint.y);
 
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 }
@@ -86,4 +87,99 @@ function getBezierCurveCoord(t, coord1, coord2, coord3)
 	return Math.pow(1 - t, 2) * coord1 +
 		   2 * (1 - t) * coord2 +
 		   Math.pow(t, 2) * coord3;
+}
+
+// calculate points for turn on each of *turnLanes* required
+// to draw Bezier curve
+function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
+{
+	// if source road has vertical orientation, then destination one
+	// has horizontal orientation
+	let vertical = is_vertical_road(sourceRoad);
+
+	for (let i = 0; i < turnLanes.length; ++i)
+	{
+		turnLanes[i].startPoint =
+			new Point(sourceLanes[i].finishX, sourceLanes[i].finishY);
+
+		if (vertical)
+		{
+			turnLanes[i].controlPoint =
+				new Point(sourceLanes[i].finishX, destinationLanes[i].startY);
+		}
+		else
+		{
+			turnLanes[i].controlPoint =
+				new Point(destinationLanes[i].startX,
+						  sourceLanes[i].finishY);
+		}
+
+		turnLanes[i].endPoint =
+			new Point(destinationLanes[i].startX, destinationLanes[i].startY);
+	}
+}
+
+function setOnrampTurnData( turnLanes, sourceRoad, sourceLanes, destinationLane)
+{
+	// if source road has vertical orientation, then destination one
+	// has horizontal orientation
+	let vertical = is_vertical_road(sourceRoad);
+
+	for (let i = 0; i < turnLanes.length; ++i)
+	{
+		turnLanes[i].startPoint =
+			new Point(sourceLanes[i].finishX, sourceLanes[i].finishY);
+
+		if (vertical)
+		{
+			turnLanes[i].controlPoint =
+				new Point(sourceLanes[i].finishX, destinationLane.startY);
+		}
+		else
+		{
+			turnLanes[i].controlPoint =
+				new Point(destinationLane.startX, sourceLanes[i].finishY);
+		}
+
+		turnLanes[i].endPoint =
+			new Point(destinationLane.startX, destinationLane.startY);
+	}
+}
+
+function setOfframpTurnData( turnLanes, sourceRoad,
+							 sourceLane, destinationLanes)
+{
+	// if source road has vertical orientation, then destination one
+	// has horizontal orientation
+	let vertical = is_vertical_road(sourceRoad);
+
+	for (let i = 0; i < turnLanes.length; ++i)
+	{
+		turnLanes[i].startPoint =
+			new Point(sourceLane.finishX, sourceLane.finishY);
+
+		if (vertical)
+		{
+			turnLanes[i].controlPoint =
+				new Point(sourceLane.finishX, destinationLanes[i].startY);
+		}
+		else
+		{
+			turnLanes[i].controlPoint =
+				new Point(destinationLanes[i].startX, sourceLane.finishY);
+		}
+
+		turnLanes[i].endPoint =
+			new Point(destinationLanes[i].startX, destinationLanes[i].startY);
+	}
+}
+
+function calculateTurnDistance(vehicle, pathCalcFunction )
+{
+	let turnLane = vehicle.turnLane;
+
+	return pathCalcFunction( vehicle.turnCompletion,
+							 turnLane.startPoint,
+							 turnLane.controlPoint,
+							 turnLane.endPoint);
 }

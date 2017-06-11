@@ -28,24 +28,31 @@ function Offramp( _source, _destination, _outflow, _length,
 		lane.vehicles = [];
 	});
 
+	let turnSourceLane = null;
+
 	if ( _connectedLaneType == LaneType["forward"] )
+	{
 		this.connectedLane = this.forwardLanes.last();
+		turnSourceLane = _source.forwardLanes.last();
+	}
 	else
+	{
 		this.connectedLane = this.backwardLanes.first();
+		turnSourceLane = _source.backwardLanes.first();
+	}
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( this.destLanesAmount());
 	for (var i = 0;i < this.destLanesAmount; ++i)
-	{
 		this.turnLanes[i].vehicles = [];
-	}
+
+	setOffampTurnData(this.turnLanes, _source, turnSourceLane,
+					  _destination.forwardLanes);
 
 	this.turnDuration = new Array( this.destLanesAmount );
 
 	for (var i = 0;i < this.destLanesAmount; ++i)
-	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
-	}
 }
 
 // check is it possible to turn now and return index of lane on destination
@@ -190,9 +197,7 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId,
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.sourceLane = this.turnLanes[laneIndex];
-	vehicle.laneIndex = laneIndex;
-	vehicle.destinationLane = this.destination.forwardLanes[ laneIndex ];
+	vehicle.turnLane = this.turnLanes[laneIndex];
 
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
@@ -204,7 +209,6 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 
 Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 {
-	vehicle.laneIndex = laneIndex;
 	vehicle.prepareForMove(MovementState.ON_OFFRAMP);
 
 	if ( roadId == this.sourceId )
@@ -221,22 +225,8 @@ Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 
 Offramp.prototype.turnCompeleted = function( laneIndex )
 {
-<<<<<<< HEAD:src/offramp.js
 	let lane = this.turnLanes[laneIndex];
-	var vehicle = lane.vehicles.first();
-
-	if (vehicle.arrived)
-	{
-		// delete vehicle from offramp
-		// it will be added to destination road
-		this.connectedLane.vehicles.splice(i, 1);
-		return vehicle;
-	}
-=======
-	var lane = this.turnLanes[laneIndex];
-	var vehicles = lane.vehicles;
 	var vehicle = null;
->>>>>>> 6b5e9f6a267380bea4332c8c8a936b2f7b93b47a:src/road_elements/offramp.js
 
 	for (var i = 0; i < vehicles.length; i++)
 	{
@@ -273,7 +263,7 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 		return null;
 	}
 
-	vehicle = lanes[ laneIndex ].vehicles.first();
+	vehicle = lanes[laneIndex].vehicles.first();
 
 	if ( vehicle.uCoord == this.length )
 	{
@@ -290,4 +280,5 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 
 Offramp.prototype.calculateTurnDistance = function( vehicle )
 {
+	return calculateTurnDistance(vehicle, this.pathCalcFunction);
 }

@@ -173,14 +173,11 @@ function Vehicle( config )
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
 
-	// lane on destination road where vehicle appeared after turn
-	this.destinationLane = null;
+	// lane where vehicle is turninng now
+	this.turnLane = null;
 
 	// lane where vehicle is moving on during lane change
 	this.sourceLane = null;
-
-	// information used for updating vehicle position
-	this.laneIndex = -1;
 }
 
 
@@ -191,7 +188,7 @@ Vehicle.prototype.stop = function( _uCoord )
 	this.vehicleState = VehicleState.IDLE;
 }
 
-Vehicle.prototype.prepareForTurn = function(turnFullTime, _destinationLane)
+Vehicle.prototype.prepareForTurn = function(turnFullTime, _turnLane)
 {
 	vehicle.arrived = false;
 
@@ -202,7 +199,7 @@ Vehicle.prototype.prepareForTurn = function(turnFullTime, _destinationLane)
 	this.turnElapsedTime = 0;
 	this.turnCompletion = 0;
 
-	this.destinationLane = _destinationLane;
+	this.turnLane = _turnLane;
 	this.turnFullTime = turnFullTime;
 }
 

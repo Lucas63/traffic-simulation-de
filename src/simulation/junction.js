@@ -55,7 +55,14 @@ function Junction( _id, _pos, _side,
 
 	addVehiclesArray(this.topRoad);
 
+	setTurnData(this.topRoad.turnRightLanes, _topRoad,
+				_topRoad.backwardLanes, _leftRoad.backwardLanes);
+
+	setTurnData(this.topRoad.turnLeftLanes, _topRoad,
+				_topRoad.backwardLanes, _rightRoad.forwardLanes);
+
 	// initialize data for "right" road
+	this.rightRoad = {};
 	this.rightRoad.road = _rightRoad;
 
 	this.rightRoad.turnRightLanes = new Array(_topRoad.getForwardLanesAmount());
@@ -65,7 +72,14 @@ function Junction( _id, _pos, _side,
 
 	addVehiclesArray(this.rightRoad);
 
+	setTurnData(this.rightRoad.turnRightLanes, _rightRoad,
+				_rightRoad.backwardLanes, _topRoad.forwardLanes);
+
+	setTurnData(this.rightRoad.turnLeftLanes, _rightRoad,
+				_rightRoad.backwardLanes, _bottomRoad.backwardLanes);
+
 	// initialize data for "bottom" road
+	this.bottomRoad = {};
 	this.bottomRoad.road = _bottomRoad;
 
 	this.bottomRoad.turnRightLanes =
@@ -78,8 +92,14 @@ function Junction( _id, _pos, _side,
 
 	addVehiclesArray(this.bottomRoad);
 
+	setTurnData(this.bottomRoad.turnRightLanes, _bottomRoad,
+				_bottomRoad.forwardLanes, _rightRoad.forwardLanes);
+
+	setTurnData(this.bottomRoad.turnLeftLanes, _bottomRoad,
+				_bottomRoad.forwardLanes, _leftRoad.backwardLanes);
 
 	// initialize data for "bottom" road
+	this.leftRoad = {};
 	this.leftRoad.road = _leftRoad;
 
 	this.leftRoad.turnRightLanes =
@@ -89,6 +109,12 @@ function Junction( _id, _pos, _side,
 	this.leftRoad.turnLeftLanes = new Array(_topRoad.getForwardLanesAmount());
 
 	addVehiclesArray(this.leftRoad);
+
+	setTurnData(this.leftRoad.turnRightLanes, _leftRoad,
+				_leftRoad.forwardLanes, _bottomRoad.backwardLanes);
+
+	setTurnData(this.leftRoad.turnLeftLanes, _leftRoad,
+				_leftRoad.forwardLanes, _topRoad.forwardLanes);
 
 	// select lanes on destination road for each turn
 	////////////////////////////////////////////////////////////////////////
@@ -595,7 +621,6 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 	vehicle.movementState = MovementState.ON_JUNCTION;
 
 	vehicle.sourceLane = sourceRoad.turnRightLanes[laneIndex];
-	vehicle.laneIndex = laneIndex;
 
 	vehicle.prepareForTurn( this.turnRightDuration[laneIndex],
 							destinationRoad.road);
@@ -617,7 +642,6 @@ Junction.prototype.startPassThrough = function( roadId, laneIndex, vehicle)
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
 	vehicle.sourceLane = sourceRoad.passLanes[laneIndex];
-	vehicle.laneIndex = laneIndex;
 
 	vehicle.prepareForMove();
 
@@ -640,7 +664,6 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
 	vehicle.sourceLane = sourceRoad.turnLeftLanes[laneIndex];
-	vehicle.laneIndex = laneIndex;
 
 	vehicle.prepareForTurn(this.turnRightDuration[laneIndex]);
 

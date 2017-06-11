@@ -25,13 +25,17 @@ function Onramp( _source, _destination, _inflow, _length,
 		lane.vehicles = [];
 	});
 
+	let turnDestinationLane = null;
+
 	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
+		turnDestinationLane = _destination.forwardLanes.last();
 	}
 	else
 	{
 		this.connectedLane = this.backwardLanes.first();
+		turnDestinationLane = _destination.backwardLanes.first();
 	}
 
 	let sourceLanesAmount = this.source.getLanesAmount();
@@ -39,9 +43,10 @@ function Onramp( _source, _destination, _inflow, _length,
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
-	{
 		this.turnLanes[i].vehicles = [];
-	}
+
+	setOnrampTurnData(this.turnLanes, _source, _source.forwardLanes,
+					  turnDestinationLane)
 
 	this.turnDuration = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
@@ -235,7 +240,6 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 {
 	vehicle.movementState = MovementState.ON_ONRAMP;
 	vehicle.sourceLane = this.turnLanes[laneIndex];
-	vehicle.laneIndex = laneIndex;
 
 	vehicle.prepareForTurn(this.turnDuration[laneIndex],
 						   this.connectedLane);
@@ -246,7 +250,6 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex,)
 {
-	vehicle.laneIndex = laneIndex;
 	vehicle.prepareForMove(MovementState.ON_ONRAMP);
 
 	if ( laneType == LaneType["forward"] )
@@ -294,18 +297,13 @@ Onramp.prototype.passCompleted = function( roadId, laneIndex )
 
 	if ( laneType == LaneType["forward"] )
 	if ( roadId == this.sourceId )
-	{
 		lanes = this.forwardLanes;
-	}
 	else
-	{
 		lanes = this.backwardLanes;
-	}
 
-	if ( lanes[ laneIndex ].vehicles.empty )
-	{
+
+	if ( lanes[laneIndex].vehicles.empty )
 		return null;
-	}
 
 	vehicle = lanes[ laneIndex ].vehicles.first();
 
@@ -322,4 +320,5 @@ Onramp.prototype.passCompleted = function( roadId, laneIndex )
 
 Onramp.prototype.calculateTurnDistance = function( vehicle )
 {
+	return calculateTurnDistance(vehicle, this.pathCalcFunction);
 }

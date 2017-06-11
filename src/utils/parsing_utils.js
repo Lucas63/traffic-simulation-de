@@ -4,12 +4,15 @@
 
 /*
 
-Function that deciding is road vertical or not 
+Function that deciding is road vertical or not
 
  */
-function is_vertical_road(road_direction){
-    if(road_direction == "UP_TO_BOTTOM" || road_direction == "BOTTOM_TO_UP"){
-        return true;
-    }
-    return false;
+function is_vertical_road(road){
+	if (road.type == RoadDirection["UP_TO_BOTTOM"] ||
+		road.type == RoadDirection["BOTTOM_TO_UP"])
+	{
+		return true;
+	}
+	
+	return false;
 }
