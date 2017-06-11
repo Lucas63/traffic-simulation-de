@@ -383,6 +383,10 @@ function getDestinationLane( current, next, laneIndex )
  */
 function checkArrivedVehicle( currentObject, lane, laneIndex )
 {
+
+	if (lane.vehicles.empty())
+		return;
+
 	let vehicle = lane.vehicles.first();
 
 	if ( vehicle.arrived == false)

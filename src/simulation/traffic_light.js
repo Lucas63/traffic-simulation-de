@@ -49,48 +49,43 @@ TrafficLight.prototype.update( dt )
 
 	switch (this.state)
 	{
-	case TrafficLightState.GREEN:
-		if (elapsed > this.greenLightPeriod)
-		{
-			this.light = TrafficLightColor.YELLOW;
-			this.elapsedTime = elapsed - this.greenLightPeriod;
-			this.state = TrafficLightState.YELLOW_AFTER_GREEN;
-		}
-		break;
+		case TrafficLightState.GREEN:
+			if (elapsed > this.greenLightPeriod)
+			{
+				this.color = TrafficLightColor.YELLOW;
+				this.elapsedTime = elapsed - this.greenLightPeriod;
+				this.state = TrafficLightState.YELLOW_AFTER_GREEN;
+			}
+			break;
 
-	case TrafficLightState.YELLOW_AFTER_GREEN:
-		if (elapsed > this.yellowLightPeriod)
-		{
-			this.light = TrafficLightColor.RED;
-			this.elapsedTime = elapsed - this.yellowLightPeriod;
-			this.state = TrafficLightState.RED;
-		}
-		break;
+		case TrafficLightState.YELLOW_AFTER_GREEN:
+			if (elapsed > this.yellowLightPeriod)
+			{
+				this.color = TrafficLightColor.RED;
+				this.elapsedTime = elapsed - this.yellowLightPeriod;
+				this.state = TrafficLightState.RED;
+			}
+			break;
 
-	case TrafficLightColor.RED:
-		if (elapsed > this.redLightPeriod)
-		{
-			this.light = TrafficLightColor.YELLOW;
-			this.elapsedTime = elapsed - this.redLightPeriod;
-			this.state = TrafficLightState.YELLOW_AFTER_RED;
-		}
-		break;
+		case TrafficLightState.RED:
+			if (elapsed > this.redLightPeriod)
+			{
+				this.color = TrafficLightColor.YELLOW;
+				this.elapsedTime = elapsed - this.redLightPeriod;
+				this.state = TrafficLightState.YELLOW_AFTER_RED;
+			}
+			break;
 
-	case TrafficLightColor.YELLOW_AFTER_RED:
-		if (elapsed > this.yellowLightPeriod)
-		{
-			this.light = TrafficLightColor.GREEN;
-			this.elapsedTime = elapsed - this.yellowLightPeriod;
-			this.state = TrafficLightState.GREEN;
-		}
-		break;
+		case TrafficLightState.YELLOW_AFTER_RED:
+			if (elapsed > this.yellowLightPeriod)
+			{
+				this.color = TrafficLightColor.GREEN;
+				this.elapsedTime = elapsed - this.yellowLightPeriod;
+				this.state = TrafficLightState.GREEN;
+			}
+			break;
 
-	default:
-		printError(arguments.callee.name, "Unknown traffic light color!!!");
+		default:
+			printError(arguments.callee.name, "Unknown traffic light state!!!");
 	}
-}
-
-TrafficLight.prototype.getLight = function()
-{
-	return this.light;
 }
