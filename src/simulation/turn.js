@@ -61,6 +61,25 @@ function Turn( _source, _destination, _pathCalcFunction )
 	//               UP_TO_BOTTOM: 2
 }
 
+function setTurnData( lanes, sourceRoad, destinationRoad )
+{
+	for (let i = 0; i < lanes.length; ++i)
+	{
+
+	}
+
+	let laneData = this.renderInfo[laneIndex];
+
+	vehicle.turnData["startX"] = laneData.startPoint["x"];
+	vehicle.turnData["startY"] = laneData.startPoint["y"];
+
+	vehicle.turnData["controlX"] = laneData.controlPoint["x"];
+	vehicle.turnData["controlY"] = laneData.controlPoint["y"];
+
+	vehicle.turnData["endX"] = laneData.endPoint["x"];
+	vehicle.turnData["endY"] = laneData.endPoint["y"];
+}
+
 Turn.prototype.canTurn = function( laneIndex, vehicle )
 {
 	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
@@ -79,13 +98,9 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 	let destinationLane = null;
 
 	if (this.destination.getForwardLanesAmount() > 0)
-	{
 		destinationLane = this.destination.forwardLanes[laneIndex];
-	}
 	else
-	{
 		destinationLane = this.destination.backwardLanes[laneIndex];
-	}
 
 	// check whether lane on destination road has enough space for new vehicle
 	// if does, everything is OK, otherwise reject turn request
@@ -106,19 +121,6 @@ Turn.prototype.startTurn = function( laneIndex, vehicle )
 }
 
 //
-Turn.prototype.setTurnData = function( vehicle, laneIndex )
-{
-	let laneData = this.renderInfo[laneIndex];
-
-	vehicle.turnData["startX"] = laneData.startPoint["x"];
-	vehicle.turnData["startY"] = laneData.startPoint["y"];
-
-	vehicle.turnData["controlX"] = laneData.controlPoint["x"];
-	vehicle.turnData["controlY"] = laneData.controlPoint["y"];
-
-	vehicle.turnData["endX"] = laneData.endPoint["x"];
-	vehicle.turnData["endY"] = laneData.endPoint["y"];
-}
 
 function updateTurn( vehicles )
 {

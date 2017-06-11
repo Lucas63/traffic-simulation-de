@@ -29,7 +29,7 @@ var JunctionSides =
 // _verticalTrafficLight - traffic light controlling traffic
 // on roads "top" and "bottom"
 // _horizontalTrafficLight - the same for road "right" and "left"
-function Junction( _id,_pos, _side,
+function Junction( _id, _pos, _side,
 				   _topRoad, _rightRoad, _bottomRoad, _leftRoad,
 				   _verticalTrafficLight, _horizontalTrafficLight)
 {
