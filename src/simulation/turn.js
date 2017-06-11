@@ -61,11 +61,20 @@ function Turn( _source, _destination, _pathCalcFunction )
 	//               UP_TO_BOTTOM: 2
 }
 
-function setTurnData( lanes, sourceRoad, destinationRoad )
-{
-	for (let i = 0; i < lanes.length; ++i)
-	{
 
+function setTurnData( turnLanes, mapObject, sourceLanes, sourceLanesType,
+					  destinationLanes, destinationLanesType )
+{
+
+	let startPoint = new Point(0, 0);
+	let controlPoint = new Point(0, 0);
+
+	for (let i = 0; i < turnLanes.length; ++i)
+	{
+		if (sourceLanesType == LaneType["forward"])
+		{
+
+		}
 	}
 
 	let laneData = this.renderInfo[laneIndex];
@@ -78,6 +87,14 @@ function setTurnData( lanes, sourceRoad, destinationRoad )
 
 	vehicle.turnData["endX"] = laneData.endPoint["x"];
 	vehicle.turnData["endY"] = laneData.endPoint["y"];
+}
+
+function getTurnStartPoint( mapObject, road )
+{
+	if (road.startConnection == mapObject)
+	{
+
+	}
 }
 
 Turn.prototype.canTurn = function( laneIndex, vehicle )

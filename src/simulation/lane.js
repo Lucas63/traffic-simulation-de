@@ -1,13 +1,22 @@
+const LANE_WIDTH = 5;
+
 var LaneType =
 {
 	"forward": 0,
 	"backward": 1
 }
 
-function Lane( _length, _type, _spawnPoint )
+function Lane( _length, _type, _startCenterX, _startCenterY,
+			   _finishCenterX, _finishCenterY, _spawnPoint )
 {
 	this.length = _length;
 	this.type = _type;
+
+	this.startX = _startCenterX;
+	this.startY = _startCenterY;
+
+	this.finishX = _finishCenterX;
+	this.finishY = _finishCenterY;
 
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;

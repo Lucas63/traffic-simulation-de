@@ -54,10 +54,10 @@ var virtualJamVehicle = null;
 const INVALID = -1;
 
 var CAR_LENGTH = INVALID;
-var CAR_WIDTH  = INVALID;
+var CAR_WIDTH  = 2;
 
 var TRUCK_LENGTH = INVALID;
-var TRUCK_WIDTH  = INVALID;
+var TRUCK_WIDTH  = 3;
 
 var CAR_DESIRED_SPEED   = INVALID;
 var TRUCK_DESIRED_SPEED = INVALID;
@@ -69,6 +69,8 @@ var TRUCK_INITIAL_SPEED = INVALID;
 // before new map object ahead: junction/turn/etc.
 // When vehicle has reached own safe distance on road, its traffic state become
 // upstream.
+
+// car has bigger safe distance, because usually has higher speed, than truck
 var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 

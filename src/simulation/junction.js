@@ -43,7 +43,7 @@ function Junction( _id, _pos, _side,
 	this.activeTrafficLight = null;
 
 	// initialize data for "top" road
-    this.topRoad = {};
+	this.topRoad = {};
 	this.topRoad.road = _topRoad;
 
 	this.topRoad.turnRightLanes = new Array(_leftRoad.getForwardLanesAmount());
