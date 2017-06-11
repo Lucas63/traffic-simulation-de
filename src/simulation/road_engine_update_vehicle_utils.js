@@ -14,7 +14,7 @@ function updateVehiclesOnLane( lane, mapObject, dt )
 		vehicle.acceleration =
 			updateAccelerationForVehicle(vehicle, vehicles[i - 1]);
 
-		updateSpeedAndPosition(vehicle, mapObject, dt);
+		updateSpeedAndPosition(vehicle, lane, mapObject, dt);
 	}
 }
 
@@ -33,7 +33,7 @@ function updateAccelerationForVehicle( currentVehicle, leaderVehicle )
 		calculateAcceleration(gap, currentSpeed, leaderSpeed);
 }
 
-function updateSpeedAndPosition( vehicle, mapObject, dt )
+function updateSpeedAndPosition( vehicle, lane, mapObject, dt )
 {
 	switch (vehicle.vehicleState)
 	{
@@ -42,11 +42,11 @@ function updateSpeedAndPosition( vehicle, mapObject, dt )
 			break;
 
 		case VehicleState.TURNING:
-			updateTurn( vehicle, mapObject, dt );
+			updateTurn( vehicle, lane, mapObject, dt );
 			break;
 
 		case VehicleState.CHANGE_LANE:
-			this.updateLaneChange( dt );
+			this.updateLaneChange( vehicle, dt );
 			break;
 
 		case VehicleState.IDLE:
@@ -69,7 +69,7 @@ function updateStraightMove( vehicle, mapObject, dt )
 	let safeDistance = mapObject.length - MINIMAL_GAP;
 	if (vehicle.uCoord >= safeDistance)
 	{
-		vehicle.stop(safeDistance);
+		vehicle.uCoord = safeDistance;
 		vehicle.arrived = true;
 
 		return;
@@ -80,27 +80,49 @@ function updateStraightMove( vehicle, mapObject, dt )
 }
 
 
-function updateTurn( vehicle, mapObject, dt )
+function updateTurn( vehicle, lane, mapObject, dt )
 {
 	// no need to compute position
 	if (vehicle.arrived)
 		return;
 
-	this.turnElapsedTime += dt;
-	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
+	let vehicleIndex = lane.vehicles.indexOf(vehicle);
+	let leader = null;
+
+	if (vehicleIndex == 0)
+		leader = vehicle.leader;
+	else
+		leader = lane.vehicles[vehicleIndex - 1];
+
+
+	vehicle.turnElapsedTime += dt;
+	vehicle.turnCompletion =
+		Math.max(vehicle.turnElapsedTime / vehicle.turnFullTime, 1);
 
 	let newPosition = mapObject.calculateTurnDistance( vehicle );
 
-	// it possible that vehicle waits on turn to move on destination road
-	// if destination road is congested and no space for new vehicle
-	if (turnCompletion == 1)
+	// vehicle cannot move further due to leading vehicle
+	// rollback elapsed time and re-calculate turn completion
+	// it's done to prevent situation when vehicle doesn't consider position
+	// of vehicle in front
+	if (vehicleCanMoveOnTurn(newPosition, leader) == false)
 	{
-		// turn has been completed
-		vehicle.stop( newPosition );
-		this.arrived = true;
+		vehicle.turnElapsedTime -= dt;
+		vehicle.turnCompletion = vehicle.turnElapsedTime / vehicle.turnFullTime;
+
+		return;
 	}
 
-	this.uCoord = newPosition;
+	// turn has been completed
+	if (turnCompletion == 1)
+		vehicle.arrived = true;
+
+	vehicle.uCoord = newPosition;
+}
+
+function vehicleCanMoveOnTurn(newPosition, leader)
+{
+	return leader.uCoord - leader.length - MINIMAL_GAP > newPosition;
 }
 
 function updateLaneChange( vehicle, dt )

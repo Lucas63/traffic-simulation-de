@@ -101,19 +101,6 @@ Turn.prototype.startTurn = function( laneIndex, vehicle )
 	this.lanes[laneIndex].vehicles.push( vehicle );
 }
 
-Turn.prototype.turnCompleted = function( laneIndex )
-{
-	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
-	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
-			"lanes amount is " + this.lanes.length);
-
-	if ( this.lanes[laneIndex].vehicles.empty() )
-		return false;
-
-	// check whether first vehicle on lane has finished turn
-	return this.lanes[lanesIndex].vehicles.first().arrived;
-}
-
 Turn.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);

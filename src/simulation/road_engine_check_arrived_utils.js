@@ -75,21 +75,15 @@ function checkArrivedVehiclesOnJunctionRoad( road )
 {
 	let lanes = junctionRoad.passLanes;
 	for (let i = 0; i < lanes.length; ++i)
-	{
 		checkArrivedVehicle(junction, lanes[i], i);
-	}
 
 	lanes = junctionRoad.turnRightLanes;
 	for (let i = 0; i < lanes.length; ++i)
-	{
 		checkArrivedVehicle(junction, lanes[i], i);
-	}
 
 	lanes = road.turnLeftLanes;
 	for (let i = 0; i < lanes.length; ++i)
-	{
 		checkArrivedVehicle(junction, lanes[i], i);
-	}
 }
 
 /*
@@ -99,7 +93,6 @@ function checkArrivedVehiclesOnJunctionRoad( road )
  */
 function checkArrivedVehicle( currentObject, lane, laneIndex )
 {
-
 	if (lane.vehicles.empty())
 		return;
 

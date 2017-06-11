@@ -223,61 +223,6 @@ Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 	}
 }
 
-Offramp.prototype.turnCompeleted = function( laneIndex )
-{
-	let lane = this.turnLanes[laneIndex];
-	var vehicle = null;
-
-	for (var i = 0; i < vehicles.length; i++)
-	{
-		vehicle = vehicles[i];
-
-		// if turn completed
-		if ( vehicle.turnCompletion == 1 )
-		{
-
-		}
-	}
-
-	return null;
-}
-
-// check vehicles completed pass to the road *roadId*
-// i.e., roadId - id of destination or outflow
-Offramp.prototype.passCompleted = function( roadId, laneIndex )
-{
-	var lanes = null;
-	var vehicle = null;
-
-	if ( roadId == this.sourceId )
-	{
-		lanes = this.forwardLanes;
-	}
-	else
-	{
-		lanes = this.backwardLanes;
-	}
-
-	if ( lanes[ laneIndex ].vehicles.empty )
-	{
-		return null;
-	}
-
-	vehicle = lanes[laneIndex].vehicles.first();
-
-	if ( vehicle.uCoord == this.length )
-	{
-		// remove vehicle from offramp
-		lanes[ laneIndex ].vehicles.splice( 0, 1);
-
-		// return object holding reference to vehicle for further adding to
-		// road, otherwise after removal from array object will be lost
-		return vehicle;
-	}
-
-	return null;
-}
-
 Offramp.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);

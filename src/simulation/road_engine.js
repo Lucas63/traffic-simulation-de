@@ -76,10 +76,10 @@ RoadEngine.prototype.preUpdate = function()
 
 	for (let i = 0; i < roads.length; ++i)
 	{
-		// update separately, because after updating road with index i, new vehicles
-		// can be added to this road by checkArrivedVehiclesOnRoad(), i.e. vehicle
-		// move to the i-th road from another road when neighbours already updated
-		// on i-th road
+		// update separately, because after updating road with index i,
+		// new vehicles can be added to this road by
+		// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
+		// from another road when neighbours already updated on i-th road
 
 		// update following and leading vehicles on each lane
 		updateNeighbours( roads[i] );

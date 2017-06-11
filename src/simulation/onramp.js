@@ -264,60 +264,6 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 	}
 }
 
-Onramp.prototype.turnCompeleted = function( laneIndex )
-{
-	let lane = this.turnLanes[laneIndex];
-	let vehicles = lane.vehicles;
-	var vehicle = null;
-
-	for (let i = 0; i < vehicles.length; i++)
-	{
-		vehicle = vehicles[i];
-
-		// if turn completed
-		if ( vehicle.turnCompletion == 1 )
-		{
-			// delete vehicle from offramp
-			// it will be added to destination road
-			this.connectedLane.vehicles.splice(i, 1);
-
-			return vehicle;
-		}
-	}
-
-	return null;
-}
-
-// check vehicles completed pass to the road *roadId*
-// i.e., roadId - id of destination or inflow
-Onramp.prototype.passCompleted = function( roadId, laneIndex )
-{
-	let lanes = null;
-	let vehicle = null;
-
-	if ( laneType == LaneType["forward"] )
-	if ( roadId == this.sourceId )
-		lanes = this.forwardLanes;
-	else
-		lanes = this.backwardLanes;
-
-
-	if ( lanes[laneIndex].vehicles.empty )
-		return null;
-
-	vehicle = lanes[ laneIndex ].vehicles.first();
-
-	if ( vehicle.uCoord == this.length )
-	{
-		// remove vehicle from onramp
-		lanes[ laneIndex ].vehicles.splice( 0, 1);
-
-		// return object holding reference to vehicle for next adding to
-		// some road, otherwise after removal from array object will be lost
-		return vehicle;
-	}
-}
-
 Onramp.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);
