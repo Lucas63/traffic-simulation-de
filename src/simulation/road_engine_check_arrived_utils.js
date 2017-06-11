@@ -132,22 +132,53 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 			break;
 
 		case RoadObject.ONRAMP:
-		case RoadObject.OFFRAMP:
 			let movement = getNextMovement( vehicle );
 			switch (movement)
 			{
 				case MovementType["pass"]:
-					if (nextObject.canPassThrough( vehicle, road.getId(),
-													lane.type, laneIndex))
+					if (nextObject.canPassThrough( vehicle,
+												   currentObject.getId(),
+												   lane.type, laneIndex))
 					{
-						nextObject.startPassThrough()
+						nextObject.startPassThrough(vehicle,
+													currentObject.getId(),
+													lane.type, laneIndex);
 						moved = true;
 					}
 				break;
 
 				case MovementType["turnLeft"]:
 				case MovementType["turnRight"]:
-					if (nextObject.canTurn( ))
+					if (nextObject.canTurn(laneIndex, vehicle.getMinimalGap()))
+					{
+						nextObject.startTurn(laneIndex, vehicle);
+						moved = true;
+					}
+
+				break;
+			}
+
+			break;
+
+		case RoadObject.OFFRAMP:
+			let movement = getNextMovement( vehicle );
+			switch (movement)
+			{
+				case MovementType["pass"]:
+					if (nextObject.canPassThrough( vehicle,
+												   currentObject.getId(),
+												   lane.type, laneIndex))
+					{
+						nextObject.startPassThrough(vehicle,
+													currentObject.getId(),
+													lane.type, laneIndex);
+						moved = true;
+					}
+				break;
+
+				case MovementType["turnLeft"]:
+				case MovementType["turnRight"]:
+					if (nextObject.canTurn( vehicle.getMinimalGap() ))
 					{
 						nextObject.startTurn(laneIndex, vehicle);
 						moved = true;
@@ -168,7 +199,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 				case MovementType["pass"]:
 					if ( junction.canPassThrough(id, laneIndex, space) )
 					{
-						junction.startPassThrough(id, laneIndex, vehicle)
+						junction.startPassThrough(id, laneIndex, vehicle);
 						moved = true;
 					}
 					break;

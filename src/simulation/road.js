@@ -107,6 +107,16 @@ function RoadConfig( _id, _type, _roadLength, _laneWidth,
 	this.backwardLanes = _backwardLanes;
 }
 
+// reprents map object connected to the road
+// \param [RoadObject] type - type of map object
+// \param id - id of connected object
+function RoadConnection (type, id)
+{
+	this.type = type;
+	this.id = id;
+	this.object = null;
+}
+
 /*
  * \brief This function setup road and make all initialization
  */
@@ -201,48 +211,4 @@ Road.prototype.pushLane = function( lane, laneDirection )
 	}
 
 	return true;
-};
-
-// Update leading and following vehicles for all vehicles on the lane *laneIndex*
-Road.prototype.updateNeighbours = function( lane, laneIndex, lanesArray )
-{
-	console.log("updateNeighbours() for " + laneIndex + " lane");
-};
-
-
-Road.prototype.updateNeighboursForAdjacentLane =
-	function( lane, laneIndex, lanesArray)
-{
-	console.log("updateNeighboursForAdjacentLane for " + laneIndex + " lane ");
-};
-
-Road.prototype.updateVehicles = function( vehicle, vehicleIndex, vehiclesArray)
-{
-	vehicle.longitudinalModel.calculateAcceleration();
-};
-
-// update positions of all cars on all lanes
-Road.prototype.updateLanes = function()
-{
-	lane = null;
-
-	this.forwardLanes.forEach( updateNeighbours );
-	this.forwardLanes.forEach( updateNeighboursForAdjacentLane );
-	this.forwardLanes.forEach( updateVehicles );
-
-	this.backwardLanes.forEach( updateNeighbours );
-	this.backwardLanes.forEach( updateNeighboursForAdjacentLane );
-	this.backwardLanes.forEach( updateVehicles );
-};
-
-// Traverse over each car and decide whether it moves to the right lane
-Road.prototype.checkChangeToRightLane = function()
-{
-	console.log("checkRightLane()")
-};
-
-// Traverse over each car and decide whether it moves to the left lane
-Road.prototype.checkChangeToLeftLane = function()
-{
-	console.log("checkLeftLane()")
 };
