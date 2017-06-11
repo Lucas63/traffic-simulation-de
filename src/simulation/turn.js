@@ -68,6 +68,7 @@ function setTurnData( turnLanes, mapObject, sourceLanes, sourceLanesType,
 
 	let startPoint = new Point(0, 0);
 	let controlPoint = new Point(0, 0);
+	let endPoint = new Point(0, 0);
 
 	for (let i = 0; i < turnLanes.length; ++i)
 	{
@@ -75,6 +76,11 @@ function setTurnData( turnLanes, mapObject, sourceLanes, sourceLanesType,
 		{
 
 		}
+		else
+		{
+
+		}
+
 	}
 
 	let laneData = this.renderInfo[laneIndex];

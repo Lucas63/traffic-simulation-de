@@ -3,7 +3,7 @@ var VehicleType =
 {
 	CAR : 0,
 	TRUCK : 1
-}
+};
 
 var VehicleState =
 {
@@ -11,7 +11,7 @@ var VehicleState =
 	TURNING: 1, // turning on Turn/Onramp/Offramp/Junction
 	IDLE: 2, // vehicle stopped
 	CHANGE_LANE : 3
-}
+};
 
 // Situation on road for the vehicle
 // Given from "The Intelligent Driver Model: Analysis and
@@ -24,7 +24,7 @@ var TrafficState =
 	DOWNSTREAM : 3, // vehicle is leaving congested area (hooray!)
 	BOTTLENECK : 4 // vehicle before physical obstacle or on-ramp,
 				   // it means driver has stop and wait when he/she can go on
-}
+};
 
 // State of moving, used for simulation and rendering
 var MovementState =

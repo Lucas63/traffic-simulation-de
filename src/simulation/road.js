@@ -24,7 +24,7 @@ var RoadObject =
 	// junction connects 3 or 4 roads to appropriate side
 	// see junction.js for more details
 	JUNCTION : { value: 4, name: "junction"}
-}
+};
 
 /*
  * Each road is a straight one defined by *start* and *finish* points.
@@ -140,22 +140,22 @@ function Road( roadConfig )
 Road.prototype.getId = function()
 {
 	return this.id;
-}
+};
 
 Road.prototype.getLanesAmount = function()
 {
 	return this.forwardLanes.length + this.backwardLanes.length;
-}
+};
 
 Road.prototype.getForwardLanesAmount = function()
 {
 	return this.forwardLanes.length;
-}
+};
 
 Road.prototype.getBackwardLanesAmount = function()
 {
 	return this.backwardLanes.length;
-}
+};
 
 // \param object - object connected to the road
 // lanes where vehicle is going to move on road depend on which road's side
@@ -175,7 +175,7 @@ Road.prototype.getLanesConnectedWith = function( object )
 			printDebug(this.arguments.callee, "Unknown object " + object);
 			return null;
 	}
-}
+};
 
 // lane - object of Lane class
 // laneDirection - forward or backward
@@ -201,25 +201,25 @@ Road.prototype.pushLane = function( lane, laneDirection )
 	}
 
 	return true;
-}
+};
 
 // Update leading and following vehicles for all vehicles on the lane *laneIndex*
 Road.prototype.updateNeighbours = function( lane, laneIndex, lanesArray )
 {
 	console.log("updateNeighbours() for " + laneIndex + " lane");
-}
+};
 
 
 Road.prototype.updateNeighboursForAdjacentLane =
 	function( lane, laneIndex, lanesArray)
 {
 	console.log("updateNeighboursForAdjacentLane for " + laneIndex + " lane ");
-}
+};
 
 Road.prototype.updateVehicles = function( vehicle, vehicleIndex, vehiclesArray)
 {
 	vehicle.longitudinalModel.calculateAcceleration();
-}
+};
 
 // update positions of all cars on all lanes
 Road.prototype.updateLanes = function()
@@ -233,16 +233,16 @@ Road.prototype.updateLanes = function()
 	this.backwardLanes.forEach( updateNeighbours );
 	this.backwardLanes.forEach( updateNeighboursForAdjacentLane );
 	this.backwardLanes.forEach( updateVehicles );
-}
+};
 
 // Traverse over each car and decide whether it moves to the right lane
 Road.prototype.checkChangeToRightLane = function()
 {
 	console.log("checkRightLane()")
-}
+};
 
 // Traverse over each car and decide whether it moves to the left lane
 Road.prototype.checkChangeToLeftLane = function()
 {
 	console.log("checkLeftLane()")
-}
+};
