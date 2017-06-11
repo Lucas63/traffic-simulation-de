@@ -5,8 +5,7 @@
 
 
 /*
- * \param _roads - roads data from map configuration file
- * \param _roadObjects - road objects data from map configuration file
+ * \param _map - *Map* object containing already created map objects
  */
 function RoadEngine( _map )
 {
@@ -37,7 +36,7 @@ RoadEngine.prototype.update = function( dt )
 	// update velocity with respect to acceleration and
 	// position on map object with respect to another vehicles
 	this.updateVehicles( dt );
-}
+};
 
 RoadEngine.prototype.updateTrafficLights = function( dt )
 {
@@ -46,7 +45,7 @@ RoadEngine.prototype.updateTrafficLights = function( dt )
 	{
 		junctions[i].updateTrafficLights(dt);
 	}
-}
+};
 
 // all internal functions work on roads and vehicles on them,
 // to prevent iteration over the same arrays several times, all computations
@@ -101,9 +100,7 @@ RoadEngine.prototype.preUpdate = function()
 	this.map.onramps.forEach(checkArrivedVehiclesOnOnramp);
 	this.map.offramps.forEach(checkArrivedVehiclesOnOfframp);
 	this.map.junctions.forEach(checkArrivedVehiclesOnJunction)
-}
-
-
+};
 
 /*
  * \brief to check if vehicle can move to new road, appropriate lanes must
@@ -127,7 +124,6 @@ function getDestinationLane( current, next, laneIndex )
 	}
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Here is code for current update
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,164 +137,7 @@ RoadEngine.prototype.checkLaneChange = function()
 		checkLaneChangeOnLanes( roads[i].forwardLanes );
 		checkLaneChangeOnLanes( roads[i].backwardLanes );
 	}
-}
-
-function checkLaneChangeOnLanes( lanes )
-{
-	let vehicles = null;
-	let vehicle = null;
-
-	// check the very first lane
-	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
-
-	for (let i = 1; i < lanes.length - 1; ++i)
-		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
-
-	// check the last lane
-	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 1],
-									 lanes.last(), null);
-}
-
-// left - lane at left
-// current - lane under processing
-// right - lane at right
-function checkLaneChangeForNeighbourLanes( left, current, right)
-{
-	let resultAtLeft = {
-		currentAcceleration: 0,
-		followerAcceleration: 0
-	};
-
-	let resultAtRight = {
-		currentAcceleration: 0,
-		followerAcceleration: 0
-	};
-
-	let turnLeft = false;
-	let turnRight = false;
-
-	let vehicles = current.vehicles;
-	let vehicle = null;
-
-	for (let i = 0; i < vehicles.length; ++i)
-	{
-		vehicle = vehicles[i];
-
-		// if lane at left exists
-		if (null != left)
-			turnLeft = assesLaneChange(vehicle, true, resultAtLeft);
-
-		// if lane at right exists
-		if (null != right)
-			turnRight = assesLaneChange(vehicle, false, resultAtRight);
-
-		// if vehicle can change lane at left or right
-		if (turnLeft && turnRight)
-		{
-			if (resultAtLeft.currentAcceleration >
-				resultAtRight.currentAcceleration)
-			{
-				doLaneChange( current,left, vehicle, true );
-			}
-			else
-			{
-				doLaneChange( current, right, vehicle, false );
-			}
-		}
-
-		if (turnLeft)
-			doLaneChange( left, vehicle, true );
-
-		if (turnRight)
-			doLaneChange( right, vehicle, false );
-	}
-}
-
-
-// currentVehicle - vehicle considering to change laneIndex
-// atLeft - if true, than consider lane change at left, otherwise at right
-// result [output] - contains results of calculations.
-// result.currentAcceleration - prospective acceleration of current vehicle
-// in case of lane change
-// result.followerAcceleration - acceleration of prospective follower in case
-// of lane change
-function assesLaneChange(currentVehicle, atLeft, result)
-{
-	// vehicle must complete previous lane change
-	if (currentVehicle.vehicleState == VehicleState.CHANGE_LANE)
-		return false;
-
-	let adjacentLeader = null;
-	let adjacentFollower = null;
-
-	// get observed leader and follower
-	if (atLeft)
-	{
-		adjacentLeader = currentVehicle.leaderAtLeft;
-		adjacentFollower = currentVehicle.followerAtLeft;
-	}
-	else
-	{
-		adjacentLeader = currentVehicle.leaderAtRight;
-		adjacentLeader = currentVehicle.followerAtRight;
-	}
-
-	// actual gap between prospective leader and current vehicle
-	let gapBeforeLeader =
-		adjacentLeader.getSafeDistance() - currentVehicle.uCoord;
-
-	// there is not enough space before neighbour leader to change lane
-	if (gapBeforeLeader < 0)
-		return false;
-
-	// actual gap between current vehicle and prospective follower
-	gapAfterFollower =
-		currentVehicle.getSafeDistance() - adjacentFollower.uCoord;
-
-	// there is not enough space after neighbour follower to change lane
-	if (gapAfterFollower < 0)
-		return false;
-
-	// acceleration of current vehicle after prospective lane change
-	let currentAccAfterChange = currentVehicle.longModel.
-		calculateAcceleration(gapBeforeLeader, currentVehicle.speed,
-							  adjacentLeader.speed);
-
-	result.currentAcceleration = currentAccAfterChange;
-
-	// acceleration of follower after prospective lane change
-	let followerAccAfterChange = adjacentFollower.longModel.
-		calculateAcceleration(gapAfterFollower, adjacentFollower.speed,
-							  currentVehicle.speed);
-
-	result.followerAccAfterChange = followerAccAfterChange;
-
-	let velocitiesRatio =
-		currentVehicle.speed / currentVehicle.longModel.desiredSpeed;
-
-	// decide whether it be better to change lane or not
-	return currentVehicle.laneChangeModel.
-		analyzeLaneChange(velocitiesRatio, currentVehicle.acceleration,
-						  currentAccAfterChange, followerAccAfterChange);
-}
-
-function doLaneChange( currentLane, newLane, vehicle, atLeft )
-{
-	let adjacentFollower = null;
-
-	if (atLeft)
-		adjacentFollower = vehicle.followerAtLeft;
-	else
-		adjacentFollower = vehicle.followerAtRight;
-
-	vehicle.vehicleState = VehicleState.CHANGE_LANE;
-	vehicle.trafficState = TrafficState.FREE_ROAD;
-	vehicle.sourceLane = currentLane;
-
-	let adjacentFollowerIndex = lane.vehicles.indexOf(adjacentFollower);
-	newLane.vehicles.splice(adjacentFollowerIndex, 0, vehicle);
-}
-
+};
 
 // This function updates acceleration, speed and position of each vehicle
 // on each map object
@@ -323,7 +162,7 @@ RoadEngine.prototype.updateVehicles = function( dt )
 	let junctions = this.map.junctions;
 	for (let i = 0; i < junctions.length; ++i)
 		updateVehiclesOnJunction( junctions[i], dt );
-}
+};
 
 function updateVehiclesOnRoad( road, dt )
 {
@@ -382,115 +221,4 @@ function updateVehiclesOnJunctionRoad( junction, junctionRoad, dt )
 	lanes = junctionRoad.turnLeftLanes;
 	for (let i = 0; i < lanes.length; ++i)
 		updateVehiclesOnLane(lanes[i], junction, dt)
-}
-
-function updateVehiclesOnLane( lane, mapObject, dt )
-{
-	let vehicles = lane.vehicles;
-	let vehicle = vehicles[0];
-
-	vehicle.acceleration =
-		updateAccelerationForVehicle(vehicle, vehicle.leader);
-
-	updateSpeedAndPosition(vehicle, mapObject, dt);
-
-	for (let i = 1; i < vehicles.length; ++i)
-	{
-		vehicle = vehicles[i];
-		vehicle.acceleration =
-			updateAccelerationForVehicle(vehicle, vehicles[i - 1]);
-
-		updateSpeedAndPosition(vehicle, mapObject, dt);
-	}
-}
-
-
-function updateAccelerationForVehicle( currentVehicle, leaderVehicle )
-{
-	let gap = 0;
-	let leaderSpeed = 0;
-
-	let gap = leaderVehicle.uCoord - leaderVehicle.length -
-			  currentVehicle.uCoord;
-
-	let currentSpeed = currentVehicle.speed;
-	let leaderSpeed = leaderVehicle.speed;
-
-	return currentVehicle.longModel.
-		calculateAcceleration(gap, currentSpeed, leaderSpeed);
-}
-
-function updateSpeedAndPosition( vehicle, mapObject, dt )
-{
-	switch (vehicle.vehicleState)
-	{
-		case VehicleState.MOVING:
-			updateStraightMove( vehicle, mapObject, dt );
-			break;
-
-		case VehicleState.TURNING:
-			updateTurn( vehicle, mapObject, dt );
-			break;
-
-		case VehicleState.CHANGE_LANE:
-			this.updateLaneChange( dt );
-			break;
-
-		case VehicleState.IDLE:
-			// do nothing
-			break;
-
-		default:
-
-	}
-}
-
-// dt - delta of time
-// length - length of map object vehicle moves at
-function updateStraightMove( vehicle, mapObject, dt )
-{
-	// update velocity
-	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
-	vehicle.uCoord += Math.Max(0, newPosition);
-
-	let safeDistance = mapObject.length - MINIMAL_GAP;
-	if (vehicle.uCoord >= safeDistance)
-	{
-		vehicle.stop(safeDistance);
-		vehicle.arrived = true;
-
-		return;
-	}
-
-	vehicle.speed += vehicle.acceleration * dt;
-	vehicle.speed = Math.max( 0, vehicle.speed);
-}
-
-
-function updateTurn( vehicle, mapObject, dt )
-{
-	// no need to compute position
-	if (vehicle.arrived)
-		return;
-
-	this.turnElapsedTime += dt;
-	this.turnCompletion = Math.max(this.turnElapsedTime / this.turnFullTime, 1);
-
-	let newPosition = mapObject.calculateTurnDistance( vehicle );
-
-	// it possible that vehicle waits on turn to move on destination road
-	// if destination road is congested and no space for new vehicle
-	if (turnCompletion == 1)
-	{
-		// turn has been completed
-		vehicle.stop( newPosition );
-		this.arrived = true;
-	}
-
-	this.uCoord = newPosition;
-}
-
-function updateLaneChange( vehicle, dt )
-{
-	// TODO <Artem> implement me!
 }
