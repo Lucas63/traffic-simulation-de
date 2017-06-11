@@ -4,13 +4,10 @@ var LaneType =
 	"backward": 1
 }
 
-
-function Lane( _length, _spawnPoint )
+function Lane( _length, _type, _spawnPoint )
 {
 	this.length = _length;
-
-	this.onramps = [];
-	this.offramps = [];
+	this.type = _type;
 
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;
@@ -22,7 +19,12 @@ Lane.prototype.isEmpty = function()
 	return this.vehicles.length == 0;
 }
 
-Lane.prototype.addVehicle = function( vehicle )
+Lane.prototype.addVehicle = function( vehicle, index )
+{
+	this.vehicles.splice( index, 0, vehicle );
+}
+
+Lane.prototype.addVehicleAsLast = function( vehicle )
 {
 	this.vehicles.push( vehicle );
 }
@@ -53,14 +55,4 @@ Lane.prototype.hasEnoughSpace = function( requiredSpace )
 	// u_coord is a coordinate of vehicle's bumper
 	// check whether there is enough space between vehicle and road's finish
 	return (lastVehicle.u_coord - lastVehicle.length) >= requiredSpace;
-}
-
-Lane.prototype.updateNeighbours = function()
-{
-	console.log("Lane.updateNeighbours()");
-}
-
-Lane.prototype.updateNeighboursForAdjacentLane = function( anotherLane )
-{
-	console.log("Lane.updateNeighboursForAdjacentLane()");
 }

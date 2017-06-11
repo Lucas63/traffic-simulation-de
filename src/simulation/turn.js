@@ -24,21 +24,27 @@ function Turn( _source, _destination, _pathCalcFunction )
 
 	// Renderer store here information about Start, Control and End points
 	// to draw Bezier curve for each lane
-	this.renderInfo = new Array( lanesAmount );
+	this.turnCoordinates = new Array( lanesAmount );
 
 	for (let i = 0; i < lanesAmount; ++i)
 	{
 		// TODO add real calculation of coordinates
 		// TODO set coordinates of center i-th lane on source road
-		this.renderInfo[i].startPoint = { "x": 0, "y": 0 };
+		this.turnCoordinates[i].startPoint = { "x": 0, "y": 0 };
 
 		// Canvas implementation of Bezier curve requires 2 control points,
 		// but use only one point twice for simplicity's sake
 		// TODO set x of source lane's center and y of destination lane's center
-		this.renderInfo[i].controlPoint = { "x": 0, "y": 0 };
+		this.turnCoordinates[i].controlPoint = { "x": 0, "y": 0 };
 
 		// TODO set coordinates of center i-th lane on destination road
-		this.renderInfo[i].endPoint = { "x": 0, "y": 0};
+		this.turnCoordinates[i].endPoint = { "x": 0, "y": 0};
+	}
+
+	this.turnDuration = new Array( lanesAmount );
+	for (let i = 0; i < lanesAmount; ++i)
+	{
+		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
 	}
 
 	// this formula used to decide direction of this turn
@@ -89,8 +95,13 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 // add vehicle to turn's lane with index *laneIndex*
 Turn.prototype.startTurn = function( laneIndex, vehicle )
 {
-	// TODO add turn time
-	vehicle.prepareForTurn( -1 );
+	vehicle.sourceLane = this.lanes[laneIndex];
+
+	// TODO now turn connected only to forward lanes, but real check must be
+	// done whether used backward or forward lanes
+	vehicle.prepareForTurn(this.turnDuration[laneIndex],
+						   this.destination.forwardLanes[laneIndex]);
+
 	this.lanes[laneIndex].vehicles.push( vehicle );
 }
 
@@ -121,17 +132,6 @@ function updateTurn( vehicles )
 	}
 }
 
-Turn.prototype.update = function( dt )
-{
-	this.delta = dt;
-
-	for (let i = 0; i < this.lanes.length; ++i)
-	{
-		// update turn for all vehicles on lane
-		updateTurn(this.lanes[i].vehicles);
-	}
-}
-
 Turn.prototype.turnCompleted = function( laneIndex )
 {
 	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
@@ -143,4 +143,9 @@ Turn.prototype.turnCompleted = function( laneIndex )
 
 	// check whether first vehicle on lane has finished turn
 	return this.lanes[lanesIndex].vehicles.first().arrived;
+}
+
+Turn.prototype.calculateTurnDistance = function( vehicle, dt )
+{
+	// TODO implement actual update
 }

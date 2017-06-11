@@ -6,7 +6,6 @@ function Onramp( _source, _destination, _inflow, _length,
 	this.inflow = _inflow;
 
 	this.length = _length;
-
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();
 	this.inflowId = this.inflow.getId();
@@ -235,8 +234,11 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 Onramp.prototype.startTurn = function( laneIndex, vehicle )
 {
 	vehicle.movementState = MovementState.ON_ONRAMP;
+	vehicle.sourceLane = this.turnLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
+
 	vehicle.prepareForTurn(this.turnDuration[laneIndex],
-						   this.connectedLaneIndex);
+						   this.connectedLane);
 
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
@@ -244,13 +246,17 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex,)
 {
+	vehicle.laneIndex = laneIndex;
 	vehicle.prepareForMove(MovementState.ON_ONRAMP);
+
 	if ( laneType == LaneType["forward"] )
 	{
+		vehicle.sourceLane = this.forwardLanes[lanesIndex];
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 	else
 	{
+		vehicle.sourceLane = this.backwardLanes[lanesIndex];
 		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 }
@@ -314,15 +320,6 @@ Onramp.prototype.passCompleted = function( roadId, laneIndex )
 	}
 }
 
-Onramp.prototype.update = function( dt )
+Onramp.prototype.calculateTurnDistance = function( vehicle )
 {
-	for (let i = 0; i < this.forwardLanesAmount; ++i)
-	{
-		updateVehicles( this.forwardLanes[i].vehicles, dt );
-	}
-
-	for (let i = 0; i < this.backwardLanesAmount; ++i)
-	{
-		updateVehicles( this.backwardLanes[i].vehicles, dt );
-	}
 }

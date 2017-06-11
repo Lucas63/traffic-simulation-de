@@ -1,0 +1,8 @@
+1. Updating adjacent vehicles (Oleksii) - Done
+2. Updating spawn points (Oleksii) - Done
+3. Route configurations (Artem) - Backlog
+4. Updating velocities and positions of vehicles (Oleksii) - Backlog
+5. Debugging and refactoring existing code (Artem) - In progress
+6. Updating vehicle orientation on turn and lane change (Artem) - Backlog
+7. Updating vehicles accelerations (Oleksii) - In progress
+7.1 Make virtual vehicle for turn state. (Oleksii) - Backlog

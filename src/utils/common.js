@@ -66,26 +66,23 @@ function getBezierCurveLength(t, x1, y1, x2, y2, x3, y3)
 	let s = 0; // length of the curve
 
 	s = b * (COEF1 * getNormOfCurve(COEF3 * b, x1, y1, x2, y2, x3, y3) +
-			COEF2 * getNormOfCurve(b, x1, y1, x2, y2, x3, y3) +
-			COEF1 * getNormOfCurve(COEF4 * b, x1, y1, x2, y2, x3, y3));
+			 COEF2 * getNormOfCurve(b, x1, y1, x2, y2, x3, y3) +
+			 COEF1 * getNormOfCurve(COEF4 * b, x1, y1, x2, y2, x3, y3));
 
 	return s;
 }
 
-function getBezierCurveX(t, x1, x2, x3)
-{
-	return Math.pow(1 - t, 2) * x1 + 2 * (1 - t) * x2 + Math.pow(t, 2) * x3;
-}
-
-function getBezierCurveY(t, y1, y2, y3)
-{
-	return Math.pow(1 - t, 2) * y1 + 2 * (1 - t) * y2 + Math.pow(t, 2) * y3;
-}
-
 function getNormOfCurve(t, x1, y1, x2, y2, x3, y3)
 {
-	let x = getBezierCurveX(t, x1, x2, x3);
-	let y = getBezierCurveY(t, y1, y2, y3);
+	let x = getBezierCurveCoord(t, x1, x2, x3);
+	let y = getBezierCurveCoord(t, y1, y2, y3);
 
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+}
+
+function getBezierCurveCoord(t, coord1, coord2, coord3)
+{
+	return Math.pow(1 - t, 2) * coord1 +
+		   2 * (1 - t) * coord2 +
+		   Math.pow(t, 2) * coord3;
 }

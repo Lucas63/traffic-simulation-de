@@ -29,16 +29,12 @@ function Offramp( _source, _destination, _outflow, _length,
 	});
 
 	if ( _connectedLaneType == LaneType["forward"] )
-	{
 		this.connectedLane = this.forwardLanes.last();
-	}
 	else
-	{
 		this.connectedLane = this.backwardLanes.first();
-	}
 
 	// virtual lanes for turning vehicles
-	this.turnLanes = new Array( this.destLanesAmount);
+	this.turnLanes = new Array( this.destLanesAmount());
 	for (var i = 0;i < this.destLanesAmount; ++i)
 	{
 		this.turnLanes[i].vehicles = [];
@@ -148,7 +144,8 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 
 // check whether *vehicle* from road with *roadId* and lane identified
 // by *laneType* and *laneIndex* can pass throug the offramp
-Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneIndex )
+Offramp.prototype.canPassThrough = function( vehicle, roadId,
+											 laneType, laneIndex )
 {
 	assert( roadId == this.source || roadId == this.outflow,
 			"Wrong road id " + roadId);
@@ -161,13 +158,9 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneInde
 	// lane where vehicle moves on
 	var selectedLane = null;
 	if ( roadId == this.sourceId )
-	{
 		selectedLane = this.forwardLanes[ laneIndex ];
-	}
 	else
-	{
 		selectedLane = this.backwardLanes[ laneIndex ];
-	}
 
 	// no vehicles on lane, of course vehicle can pass through
 	if ( selectedLane.vehicles.empty() )
@@ -197,22 +190,31 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId, laneType, laneInde
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
+	vehicle.sourceLane = this.turnLanes[laneIndex];
+	vehicle.laneIndex = laneIndex;
+	vehicle.destinationLane = this.destination.forwardLanes[ laneIndex ];
+
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
-	vehicle.prepareForTurn(this.turnDuration[laneIndex], laneIndex)
+	vehicle.prepareForTurn(this.turnDuration[laneIndex],
+						   this.turnLanes[laneIndex])
+
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
 }
 
 Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 {
+	vehicle.laneIndex = laneIndex;
 	vehicle.prepareForMove(MovementState.ON_OFFRAMP);
 
 	if ( roadId == this.sourceId )
 	{
+		vehicle.sourceLane = this.forwardLanes[ laneIndex ];
 		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 	else
 	{
+		vehicle.sourceLane = this.backwardLanes[ laneIndex ];
 		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
 }
@@ -286,15 +288,6 @@ Offramp.prototype.passCompleted = function( roadId, laneIndex )
 	return null;
 }
 
-Offramp.prototype.update = function( dt )
+Offramp.prototype.calculateTurnDistance = function( vehicle )
 {
-	for (var i = 0; i < this.forwardLanesAmount; ++i)
-	{
-		updateVehicles( this.forwardLanes[i].vehicles, dt );
-	}
-
-	for (var i = 0; i < this.backwardLanesAmount; ++i)
-	{
-		updateVehicles( this.backwardLanes[i].vehicles, dt );
-	}
 }

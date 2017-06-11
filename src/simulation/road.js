@@ -1,15 +1,15 @@
 // Layout of road, orientation used in calculation of car positions
-    lanes = road.forwardLanes;
-    for (let i = 0; i < lanes.length; ++i)
-    {
-        checkArrivedVehicle(junction, lanes[i], i);
-    }
+	lanes = road.forwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+	{
+		checkArrivedVehicle(junction, lanes[i], i);
+	}
 
-    lanes = road.backwardLanes;
-    for (let i = 0; i < lanes.length; ++i)
-    {
-        checkArrivedVehicle(junction, lanes[i], i);
-    }
+	lanes = road.backwardLanes;
+	for (let i = 0; i < lanes.length; ++i)
+	{
+		checkArrivedVehicle(junction, lanes[i], i);
+	}
 
 // also used by map for rendering
 var RoadDirection =
@@ -130,8 +130,6 @@ function Road( roadConfig )
 
 	this.length = roadConfig.laneWidth;
 
-	this.borderDistance = this.length - MINIMAL_GAP;
-
 	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;
 
@@ -175,22 +173,21 @@ Road.prototype.getBackwardLanesAmount = function()
 // \param object - object connected to the road
 // lanes where vehicle is going to move on road depend on which road's side
 // object connected to
-Road.prototype.getLanesConnectedWith( object )
+Road.prototype.getLanesConnectedWith = function( object )
 {
-    switch (object) {
-        case this.startConnection:
-            return this.forwardLanes;
-            break;
+	switch (object) {
+		case this.startConnection:
+			return this.forwardLanes;
+			break;
 
-        case this.finishConnection:
-            return this.backwardLanes;
-            break;
+		case this.finishConnection:
+			return this.backwardLanes;
+			break;
 
-        default:
-            printDebug(this.arguments.callee, "Unknown object " + object);
-            return null;
-
-    }
+		default:
+			printDebug(this.arguments.callee, "Unknown object " + object);
+			return null;
+	}
 }
 
 // lane - object of Lane class
