@@ -62,6 +62,9 @@ function updateSpeedAndPosition( vehicle, lane, mapObject, dt )
 // length - length of map object vehicle moves at
 function updateStraightMove( vehicle, mapObject, dt )
 {
+	if (vehicle.arrived)
+		return;
+
 	// update velocity
 	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
 	vehicle.uCoord += Math.Max(0, newPosition);

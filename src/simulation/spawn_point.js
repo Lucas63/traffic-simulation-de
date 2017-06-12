@@ -12,7 +12,7 @@ function SpawnPoint( _minPeriod, _maxPeriod, _truckFraction, _routeId )
 SpawnPoint.prototype.update = function( dt )
 {
 	this.elapsedTime += dt;
-}
+};
 
 // is this spawn point ready to create vehicle
 SpawnPoint.prototype.ready = function()
@@ -36,7 +36,7 @@ SpawnPoint.prototype.ready = function()
 	}
 
 	return true;
-}
+};
 
 SpawnPoint.prototype.spawn = function()
 {
@@ -53,4 +53,4 @@ SpawnPoint.prototype.spawn = function()
 	}
 
 	return new Vehicle( vehicleConfig );
-}
+};

@@ -5,7 +5,7 @@ function Onramp( _source, _destination, _inflow, _length,
 	this.destination = _destination;
 	this.inflow = _inflow;
 
-    this.type = RoadObject.ONRAMP;
+	this.type = RoadObject.ONRAMP;
 
 	this.length = _length;
 	this.sourceId = this.source.getId();
@@ -16,10 +16,10 @@ function Onramp( _source, _destination, _inflow, _length,
 	this.connectedLaneIndex = _connectedLaneIndex;
 
 	this.forwardLanes = new Array( this.destination.getForwardLanesAmount() );
-    setupPassLanes(this.forwardLanes, _length);
+	setupPassLanes(this.forwardLanes, _length);
 
 	this.backwardLanes = new Array( this.destination.getBackwardLanesAmount() );
-    setupPassLanes(this.backwardLanes, _length);
+	setupPassLanes(this.backwardLanes, _length);
 
 	let turnDestinationLane = null;
 
@@ -38,7 +38,7 @@ function Onramp( _source, _destination, _inflow, _length,
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( sourceLanesAmount );
-    addVehiclesArray(this.turnLanes);
+	addVehiclesArray(this.turnLanes);
 
 	setOnrampTurnData(this.turnLanes, _source, _source.forwardLanes,
 					  turnDestinationLane)
@@ -70,7 +70,7 @@ Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
 	}
 
 	return true;
-}
+};
 
 Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 {
@@ -131,7 +131,7 @@ Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 	}
 
 	return true;
-}
+};
 
 Onramp.prototype.isConnectedLane = function( laneType, laneIndex )
 {
@@ -142,7 +142,7 @@ Onramp.prototype.isConnectedLane = function( laneType, laneIndex )
 		return false;
 
 	return true;
-}
+};
 
 Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 {
@@ -176,7 +176,7 @@ Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 	let lastVehicle = vehicles.last();
 
 	return lastVehicle.farFrom( vehicle.requiredSpace );
-}
+};
 
 Onramp.prototype.canPassThrough = function( vehicle, roadId,
 											laneType, laneIndex)
@@ -228,7 +228,7 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 			printError( arguments.callee.name, "Wrong vehicle state " + state);
 			return false;
 	}
-}
+};
 
 // laneIndex - index of lane on source road
 Onramp.prototype.startTurn = function( laneIndex, vehicle )
@@ -240,7 +240,7 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 						   this.connectedLane);
 
 	this.turnLanes[laneIndex].vehicles.push( vehicle );
-}
+};
 
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex,)
@@ -257,9 +257,9 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 		vehicle.sourceLane = this.backwardLanes[lanesIndex];
 		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
 	}
-}
+};
 
 Onramp.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);
-}
+};

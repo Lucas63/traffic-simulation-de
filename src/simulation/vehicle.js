@@ -186,7 +186,7 @@ Vehicle.prototype.stop = function( _uCoord )
 	this.uCoord = _uCoord;
 	this.speed = this.acceleration = 0;
 	this.vehicleState = VehicleState.IDLE;
-}
+};
 
 Vehicle.prototype.prepareForTurn = function(turnFullTime, _turnLane)
 {
@@ -201,7 +201,7 @@ Vehicle.prototype.prepareForTurn = function(turnFullTime, _turnLane)
 
 	this.turnLane = _turnLane;
 	this.turnFullTime = turnFullTime;
-}
+};
 
 Vehicle.prototype.prepareForMove = function()
 {
@@ -211,20 +211,20 @@ Vehicle.prototype.prepareForMove = function()
 
 	this.uCoord = 0;
 	this.arrived = false;
-}
+};
 
 // the minimal distance between bamper of current vehicle and the following one
 Vehicle.prototype.getMinimalGap = function()
 {
 	return this.length + MINIMAL_GAP;
-}
+};
 
 Vehicle.prototype.farFrom = function( distance )
 {
 	return (this.uCoord - this.length) > distance;
-}
+};
 
 Vehicle.prototype.getSafeDistance = function()
 {
 	return this.uCoord - this.length - MINIMAL_GAP;
-}
+};

@@ -1,4 +1,3 @@
-
 function checkLaneChangeOnLanes( lanes )
 {
 	let vehicles = null;

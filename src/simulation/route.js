@@ -29,4 +29,4 @@ function Route( _items )
 Route.prototype.completed = function()
 {
 	return (this.items.length - 1) == this.itemIndex;
-}
+};

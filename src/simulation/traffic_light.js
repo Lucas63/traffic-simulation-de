@@ -88,4 +88,4 @@ TrafficLight.prototype.update( dt )
 		default:
 			printError(arguments.callee.name, "Unknown traffic light state!!!");
 	}
-}
+};

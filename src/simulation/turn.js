@@ -8,7 +8,7 @@ function Turn( _source, _destination, _pathCalcFunction )
 	this.destination = _destination;
 	this.pathCalcFunction = _pathCalcFunction;
 
-    this.type = RoadObject.TURN;
+	this.type = RoadObject.TURN;
 
 	// time elapsed from last update
 	this.delta = 0;
@@ -90,7 +90,7 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 	// check whether lane on destination road has enough space for new vehicle
 	// if does, everything is OK, otherwise reject turn request
 	return destinationLane.hasEnoughSpace( vehicleLength + MINIMAL_GAP );
-}
+};
 
 // add vehicle to turn's lane with index *laneIndex*
 Turn.prototype.startTurn = function( laneIndex, vehicle )
@@ -101,9 +101,9 @@ Turn.prototype.startTurn = function( laneIndex, vehicle )
 						   this.turnLanes[laneIndex]);
 
 	this.lanes[laneIndex].vehicles.push( vehicle );
-}
+};
 
 Turn.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);
-}
+};

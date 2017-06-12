@@ -41,12 +41,12 @@ Lane.prototype.addVehicle = function( vehicle, index )
 Lane.prototype.addVehicleAsLast = function( vehicle )
 {
 	this.vehicles.push( vehicle );
-}
+};
 
 Lane.prototype.removeVehicle = function( index )
 {
 	this.vehicles.splice( index, 1 );
-}
+};
 
 // check if lane has enough space to place new vehicle
 // requiredSpace is the least distance between the last vehicle on the lane
@@ -69,4 +69,4 @@ Lane.prototype.hasEnoughSpace = function( requiredSpace )
 	// u_coord is a coordinate of vehicle's bumper
 	// check whether there is enough space between vehicle and road's finish
 	return (lastVehicle.u_coord - lastVehicle.length) >= requiredSpace;
-}
+};

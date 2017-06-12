@@ -1,7 +1,6 @@
 function checkArrivedVehiclesOnRoad( road )
 {
 	let lanes = road.forwardLanes;
-
 	for (let i = 0; i < lanes.length; ++i)
 		checkArrivedVehicle( road, lanes[i], i)
 
@@ -19,7 +18,6 @@ function checkArrivedVehiclesOnTurn( turn )
 function checkArrivedVehiclesOnOnramp( onramp )
 {
 	let lanes = onramp.forwardLanes;
-
 	for (let i = 0; i < lanes.length; ++i)
 		checkArrivedVehicle(onramp, lanes[i], i);
 
@@ -35,7 +33,6 @@ function checkArrivedVehiclesOnOnramp( onramp )
 function checkArrivedVehiclesOnOfframp( offramp )
 {
 	let lanes = offramp.forwardLanes;
-
 	for (let i = 0; i < lanes.length; ++i)
 		checkArrivedVehicle(offramp, lanes[i], i);
 
@@ -55,9 +52,6 @@ function checkArrivedVehiclesOnOfframp( offramp )
  */
 function checkArrivedVehiclesOnJunction( junction )
 {
-	let lanes = null;
-
-	// check vehicles
 	let road = junction.getJunctionRoadForSide( JunctionSides["top"]);
 	checkArrivedVehiclesOnJunctionRoad(road);
 
@@ -114,50 +108,50 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 	switch ( nextObject.type )
 	{
 		case RoadObject.ROAD:
-            if (canMoveToRoad(currentObject, nextObject, laneIndex, vehicle))
-            {
-                moveToRoad(currentObject, nextObject, laneIndex, vehicle);
-                moved = true;
-            }
-            break;
+			if (canMoveToRoad(currentObject, nextObject, laneIndex, vehicle))
+			{
+				moveToRoad(currentObject, nextObject, laneIndex, vehicle);
+				moved = true;
+			}
+			break;
 
 		case RoadObject.TURN:
-            if (canMoveToTurn( nextObject, laneIndex, vehicle))
-            {
-                moveToTurn(nextObject, laneIndex, vehicle);
-                moved = true;
-            }
+			if (canMoveToTurn( nextObject, laneIndex, vehicle))
+			{
+				moveToTurn(nextObject, laneIndex, vehicle);
+				moved = true;
+			}
 			break;
 
 		case RoadObject.ONRAMP:
-            let roadId = currentObject.getId();
+			let roadId = currentObject.getId();
 
-            if (canMoveToOnramp(nextObject, roadId, lane, laneIndex, vehicle))
-            {
-                moveToOnramp(nextObject, roadId, lane, laneIndex, vehicle);
-                moved = true;
-            }
+			if (canMoveToOnramp(nextObject, roadId, lane, laneIndex, vehicle))
+			{
+				moveToOnramp(nextObject, roadId, lane, laneIndex, vehicle);
+				moved = true;
+			}
 			break;
 
 		case RoadObject.OFFRAMP:
-            let roadId = currentObject.getId();
+			let roadId = currentObject.getId();
 
-            if (canMoveToOfframp(nextObject, roadId, lane, laneIndex, vehicle))
-            {
-                moveToOfframp(nextObject, roadId, lane, laneIndex, vehicle);
-                moved = true;
-            }
+			if (canMoveToOfframp(nextObject, roadId, lane, laneIndex, vehicle))
+			{
+				moveToOfframp(nextObject, roadId, lane, laneIndex, vehicle);
+				moved = true;
+			}
 			break;
 
 		case RoadObject.JUNCTION:
 			let movement = getNextMovement( vehicle );
 			let id = currentObject.getId();
 
-            if (canMoveToJunction(movement, nextObject, id, laneIndex, vehicle))
-            {
-                moveToJunction(movement, nextObject, id, laneIndex, vehicle);
-                moved = true;
-            }
+			if (canMoveToJunction(movement, nextObject, id, laneIndex, vehicle))
+			{
+				moveToJunction(movement, nextObject, id, laneIndex, vehicle);
+				moved = true;
+			}
 			break;
 	}
 
@@ -220,34 +214,34 @@ function canMoveToRoad( currentObject, road, laneIndex, vehicle )
 	let lanes = road.getLanesConnectedWith( currentObject );
 
 	if ( lanes[laneIndex].hasEnoughSpace( vehicle.getMinimalGap() ) )
-        return true;
+		return true;
 
-    return false;
+	return false;
 }
 
 function canMoveToTurn( turn, laneIndex, vehicle )
 {
-    return turn.canTurn( laneIndex, vehicle );
+	return turn.canTurn( laneIndex, vehicle );
 }
 
-function canMoveToOnramp( onramp, roadId, lane, laneIndex, vehicle );
+function canMoveToOnramp( onramp, roadId, lane, laneIndex, vehicle )
 {
 	let movement = getNextMovement( vehicle );
 	switch (movement)
 	{
 		case MovementType["pass"]:
 			if (onramp.canPassThrough( vehicle, roadId, lane.type, laneIndex))
-                return true;
+				return true;
 		break;
 
 		case MovementType["turnLeft"]:
 		case MovementType["turnRight"]:
 			if (onramp.canTurn(laneIndex, vehicle.getMinimalGap()))
-                return true;
+				return true;
 		break;
 	}
 
-    return false;
+	return false;
 }
 
 function canMoveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
@@ -257,19 +251,19 @@ function canMoveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
 	{
 		case MovementType["pass"]:
 			if (offramp.canPassThrough( vehicle, roadId, lane.type, laneIndex))
-                return true;
+				return true;
 
 		break;
 
 		case MovementType["turnLeft"]:
 		case MovementType["turnRight"]:
 			if (offramp.canTurn( vehicle.getMinimalGap() ))
-                return true;
+				return true;
 
 		break;
 	}
 
-    return false;
+	return false;
 }
 
 function canMoveToJunction( movement, junction, roadId, laneIndex, vehicle)
@@ -280,19 +274,19 @@ function canMoveToJunction( movement, junction, roadId, laneIndex, vehicle)
 	{
 		case MovementType["pass"]:
 			if ( junction.canPassThrough(roadId, laneIndex, space) )
-                return true;
+				return true;
 
 			break;
 
 		case MovementType["turnRight"]:
 			if ( junction.canTurnRight(roadId, laneIndex, space) )
-                return true;
+				return true;
 
 			break;
 
 		case MovementType["turnLeft"]:
 			if ( junction.canTurnLeft(roadId, laneIndex, space) )
-                return true;
+				return true;
 
 			break;
 	}
