@@ -114,15 +114,10 @@ RoadEngine.prototype.preUpdate = function()
  */
 function getDestinationLane( current, next, laneIndex )
 {
-	if (next.startConnection == current)
+	if (next.startConnection.object == current)
 		return next.forwardLanes[laneIndex];
 	else
 		return next.backwardLanes[laneIndex];
-}
-
-function getObjectConnectedToRoad(road, roadConnection)
-{
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////

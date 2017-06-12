@@ -275,7 +275,7 @@ Junction.prototype.getDestinationLanesAtRight = function(_source, _destination)
 	let destRoad = _destination.road;
 
 	// if *finish* end of road connected to this junction
-	if (destRoad.finishConnection == RoadObject.JUNCTION)
+	if (destRoad.finishConnection.type == RoadObject.JUNCTION)
 		_source.turnRightDestLanes = destRoad.backwardLanes;
 	else
 		_source.turnRightDestLanes = destRoad.forwardLanes;
@@ -285,7 +285,7 @@ Junction.prototype.getDestinationLanesAtLeft = function( _source, _destination )
 {
 	let destRoad = _destination.road;
 
-	if (destRoad.finishConnection == RoadObject.JUNCTION)
+	if (destRoad.finishConnection.type == RoadObject.JUNCTION)
 		_source.turnLeftDestLanes = destRoad.backwardLanes;
 	else
 		_source.turnLeftDestLanes = destRoad.forwardLanes;
@@ -297,7 +297,7 @@ Junction.prototype.getDestinationLanesForPass =
 	let sourceRoad = _source.road;
 	let destRoad = _destination.road;
 
-	if ( destRoad.startConnection == RoadObject.JUNCTION)
+	if ( destRoad.startConnection.type == RoadObject.JUNCTION)
 		_source.passDestLanes = destRoad.forwardLanes;
 	else
 		_source.passDestLanes = destRoad.backwardLanes;

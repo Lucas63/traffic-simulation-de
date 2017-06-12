@@ -105,13 +105,16 @@ function that finding roads related with specified junction(by its ID)
 
 return : @roads = { top_road, right_road, bottom_road, left_road};
  */
-function get_connected_to_junction_roads(id_junction,rdConfigs){
+function get_connected_to_junction_roads(id_junction, rdConfigs){
     let roads = [null,null,null,null];
     for(let i = 0; i < rdConfigs.length; i++){
 
-        if(rdConfigs[i].startConnection.type == "junction" && rdConfigs[i].startConnection.id == id_junction){
+        if (rdConfigs[i].startConnection.type == "junction" &&
+            rdConfigs[i].startConnection.id == id_junction)
+        {
             console.log("startconnection");
-            switch(rdConfigs[i].type){
+            switch(rdConfigs[i].type)
+            {
                 case "UP_TO_BOTTOM":
                     roads[2] = rdConfigs[i];
                     break;
@@ -126,10 +129,13 @@ function get_connected_to_junction_roads(id_junction,rdConfigs){
                     break;
             }
         }
-        else if (rdConfigs[i].finishConnection.type == "junction" && rdConfigs[i].finishConnection.id == id_junction){
+        else if (rdConfigs[i].finishConnection.type == "junction" &&
+                 rdConfigs[i].finishConnection.id == id_junction)
+        {
             console.log("finishconnection");
 
-            switch(rdConfigs[i].type){
+            switch(rdConfigs[i].type)
+            {
                 case "UP_TO_BOTTOM":
                     roads[0] = rdConfigs[i];
                     break;
@@ -150,16 +156,20 @@ function get_connected_to_junction_roads(id_junction,rdConfigs){
 }
 
 
-function get_center_coordinates(roads,id){
+function get_center_coordinates(roads, id){
     let X = 0;
     let Y = 0;
 
-    for(let i = 0; i < roads; i++){
-        if(roads[i].startConnection.type == "junction" && roads[i].startConnection.id == id){
+    for(let i = 0; i < roads; i++)
+    {
+        if (roads[i].startConnection.type == "junction" &&
+            roads[i].startConnection.id == id)
+        {
             X += roads[i].startX;
             Y += roads[i].startY;
         }
-        else{
+        else
+        {
             X += roads[i].finishX;
             Y += roads[i].finishY;
         }
@@ -168,7 +178,8 @@ function get_center_coordinates(roads,id){
     return [X/4,Y/4];
 }
 
-function get_lanes(lines_number,spawn_points,lines_type){
+// TODO Artem impelement me!
+function get_lanes(lines_number,spawn_points,lines_type)
+{
     lanes = [];
-    for
 }

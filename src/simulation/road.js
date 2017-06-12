@@ -176,11 +176,11 @@ Road.prototype.getBackwardLanesAmount = function()
 Road.prototype.getLanesConnectedWith = function( object )
 {
 	switch (object) {
-		case this.startConnection:
+		case this.startConnection.object:
 			return this.forwardLanes;
 			break;
 
-		case this.finishConnection:
+		case this.finishConnection.object:
 			return this.backwardLanes;
 			break;
 
