@@ -63,7 +63,7 @@ function draw_road(ctx, road) {
 
 	ctx.fillRect(startX, startY, width, height);
 	draw_road_lines(ctx,road,is_vertical);
-	print_road_object(road.type,is_vertical,startX,startY,width,height);
+	print_road_object(road.direction,is_vertical,startX,startY,width,height);
 }
 
 function draw_road_lines(ctx,rdCnfg,is_vertical){

@@ -10,20 +10,22 @@ var RoadDirection =
 var RoadObject =
 {
 	// denotes edge of map, used if road starts from or ends with map's edge
-	VOID : { value: 0, name: "void"},
+	VOID: 0,
 
 	// two roads connected with turn
-	TURN : { value: 1, name: "turn"},
+	TURN: 1,
 
 	// onramp connected to the road
-	ONRAMP : { value: 2, name: "onramp"},
+	ONRAMP: 2,
 
 	// offramp connected to the road
-	OFFRAMP : { value: 3, name: "offramp"},
+	OFFRAMP: 3,
 
 	// junction connects 3 or 4 roads to appropriate side
 	// see junction.js for more details
-	JUNCTION : { value: 4, name: "junction"}
+	JUNCTION: 4,
+
+    ROAD: 6
 };
 
 /*
@@ -70,7 +72,7 @@ var RoadObject =
  * \brief Object with all information for road setup
  *
  * \param _id - unique identifier of the road
- * \param _type - value from RoadDirection
+ * \param _direction - value from RoadDirection
  * \param _roadLength - length in distance units
  * \param _laneWidth - width of the single lane
  *
@@ -82,13 +84,13 @@ var RoadObject =
  * \param _forwardLanes - list with forward lanes
  * \param _backwardLanes - list with backward lanes
  */
-function RoadConfig( _id, _type, _roadLength, _laneWidth,
+function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 					 _startX, _startY, _finishX, _finishY,
 					 _startConnection, _finishConnection,
 					 _forwardLanes, _backwardLanes)
 {
 	this.id = _id;
-	this.type = _type;
+	this.direction = _direction;
 
 	// Lane length is equal to road length
 	this.roadLength = _roadLength;
@@ -126,7 +128,9 @@ function RoadConnection (type, id)
 function Road( roadConfig )
 {
 	this.id = roadConfig.id;
-	this.type = roadConfig.type;
+	this.direction = roadConfig.direction;
+
+    this.type = RoadObject.ROAD;
 
 	this.length = roadConfig.laneWidth;
 

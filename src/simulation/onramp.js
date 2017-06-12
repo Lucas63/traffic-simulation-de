@@ -5,6 +5,8 @@ function Onramp( _source, _destination, _inflow, _length,
 	this.destination = _destination;
 	this.inflow = _inflow;
 
+    this.type = RoadObject.ONRAMP;
+
 	this.length = _length;
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();

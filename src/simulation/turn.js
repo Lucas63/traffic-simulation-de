@@ -8,6 +8,8 @@ function Turn( _source, _destination, _pathCalcFunction )
 	this.destination = _destination;
 	this.pathCalcFunction = _pathCalcFunction;
 
+    this.type = RoadObject.TURN;
+
 	// time elapsed from last update
 	this.delta = 0;
 

@@ -5,6 +5,8 @@ function Offramp( _source, _destination, _outflow, _length,
 	this.destination = _destination;
 	this.outflow = _outflow;
 
+    this.type = RoadObject.OFFRAMP;
+
 	this.length = _length;
 
 	this.sourceId = this.source.getId();

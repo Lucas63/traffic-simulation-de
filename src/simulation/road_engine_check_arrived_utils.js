@@ -111,115 +111,53 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 
 	let moved = false;
 
-	switch ( nextObject )
+	switch ( nextObject.type )
 	{
 		case RoadObject.ROAD:
-			let lanes = nextObject.getLanesConnectedWith( currentObject );
-
-			if (lanes[laneIndex].hasEnoughSpace(vehicle.getMinimalGap()))
-			{
-				lanes[laneIndex].addVehicleAsLast(vehicle);
-				moved = true;
-			}
-			break;
+            if (canMoveToRoad(currentObject, nextObject, laneIndex, vehicle))
+            {
+                moveToRoad(currentObject, nextObject, laneIndex, vehicle);
+                moved = true;
+            }
+            break;
 
 		case RoadObject.TURN:
-			if (nextObject.canTurn( vehicle ))
-			{
-				nextObject.startTurn( vehicle );
-				moved = true;
-			}
+            if (canMoveToTurn( nextObject, laneIndex, vehicle))
+            {
+                moveToTurn(nextObject, laneIndex, vehicle);
+                moved = true;
+            }
 			break;
 
 		case RoadObject.ONRAMP:
-			let movement = getNextMovement( vehicle );
-			switch (movement)
-			{
-				case MovementType["pass"]:
-					if (nextObject.canPassThrough( vehicle,
-												   currentObject.getId(),
-												   lane.type, laneIndex))
-					{
-						nextObject.startPassThrough(vehicle,
-													currentObject.getId(),
-													lane.type, laneIndex);
-						moved = true;
-					}
-				break;
+            let roadId = currentObject.getId();
 
-				case MovementType["turnLeft"]:
-				case MovementType["turnRight"]:
-					if (nextObject.canTurn(laneIndex, vehicle.getMinimalGap()))
-					{
-						nextObject.startTurn(laneIndex, vehicle);
-						moved = true;
-					}
-
-				break;
-			}
-
+            if (canMoveToOnramp(nextObject, roadId, lane, laneIndex, vehicle))
+            {
+                moveToOnramp(nextObject, roadId, lane, laneIndex, vehicle);
+                moved = true;
+            }
 			break;
 
 		case RoadObject.OFFRAMP:
-			let movement = getNextMovement( vehicle );
-			switch (movement)
-			{
-				case MovementType["pass"]:
-					if (nextObject.canPassThrough( vehicle,
-												   currentObject.getId(),
-												   lane.type, laneIndex))
-					{
-						nextObject.startPassThrough(vehicle,
-													currentObject.getId(),
-													lane.type, laneIndex);
-						moved = true;
-					}
-				break;
+            let roadId = currentObject.getId();
 
-				case MovementType["turnLeft"]:
-				case MovementType["turnRight"]:
-					if (nextObject.canTurn( vehicle.getMinimalGap() ))
-					{
-						nextObject.startTurn(laneIndex, vehicle);
-						moved = true;
-					}
-
-				break;
-			}
+            if (canMoveToOfframp(nextObject, roadId, lane, laneIndex, vehicle))
+            {
+                moveToOfframp(nextObject, roadId, lane, laneIndex, vehicle);
+                moved = true;
+            }
 			break;
 
 		case RoadObject.JUNCTION:
 			let movement = getNextMovement( vehicle );
-
 			let id = currentObject.getId();
-			let space = vehicle.getMinimalGap();
 
-			switch (movement)
-			{
-				case MovementType["pass"]:
-					if ( junction.canPassThrough(id, laneIndex, space) )
-					{
-						junction.startPassThrough(id, laneIndex, vehicle);
-						moved = true;
-					}
-					break;
-
-				case MovementType["turnRight"]:
-					if ( junction.canTurnRight(id, laneIndex, space))
-					{
-						junction.startTurnRight(id, laneIndex, vehicle);
-						moved = true;
-					}
-					break;
-
-				case MovementType["turnLeft"]:
-					if ( junction.canTurnLeft(id, laneIndex, space) )
-					{
-						junction.startTurnLeft(id, laneIndex, vehicle);
-						moved = true;
-					}
-					break;
-			}
+            if (canMoveToJunction(movement, nextObject, id, laneIndex, vehicle))
+            {
+                moveToJunction(movement, nextObject, id, laneIndex, vehicle);
+                moved = true;
+            }
 			break;
 	}
 
@@ -274,5 +212,152 @@ function getNextObjectOnRoute( vehicle )
 
 		case RouteItemType.JUNCTION:
 			return this.map.junctions[id];
+	}
+}
+
+function canMoveToRoad( currentObject, road, laneIndex, vehicle )
+{
+	let lanes = road.getLanesConnectedWith( currentObject );
+
+	if ( lanes[laneIndex].hasEnoughSpace( vehicle.getMinimalGap() ) )
+        return true;
+
+    return false;
+}
+
+function canMoveToTurn( turn, laneIndex, vehicle )
+{
+    return turn.canTurn( laneIndex, vehicle );
+}
+
+function canMoveToOnramp( onramp, roadId, lane, laneIndex, vehicle );
+{
+	let movement = getNextMovement( vehicle );
+	switch (movement)
+	{
+		case MovementType["pass"]:
+			if (onramp.canPassThrough( vehicle, roadId, lane.type, laneIndex))
+                return true;
+		break;
+
+		case MovementType["turnLeft"]:
+		case MovementType["turnRight"]:
+			if (onramp.canTurn(laneIndex, vehicle.getMinimalGap()))
+                return true;
+		break;
+	}
+
+    return false;
+}
+
+function canMoveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
+{
+	let movement = getNextMovement( vehicle );
+	switch (movement)
+	{
+		case MovementType["pass"]:
+			if (offramp.canPassThrough( vehicle, roadId, lane.type, laneIndex))
+                return true;
+
+		break;
+
+		case MovementType["turnLeft"]:
+		case MovementType["turnRight"]:
+			if (offramp.canTurn( vehicle.getMinimalGap() ))
+                return true;
+
+		break;
+	}
+
+    return false;
+}
+
+function canMoveToJunction( movement, junction, roadId, laneIndex, vehicle)
+{
+	let space = vehicle.getMinimalGap();
+
+	switch (movement)
+	{
+		case MovementType["pass"]:
+			if ( junction.canPassThrough(roadId, laneIndex, space) )
+                return true;
+
+			break;
+
+		case MovementType["turnRight"]:
+			if ( junction.canTurnRight(roadId, laneIndex, space) )
+                return true;
+
+			break;
+
+		case MovementType["turnLeft"]:
+			if ( junction.canTurnLeft(roadId, laneIndex, space) )
+                return true;
+
+			break;
+	}
+}
+
+function moveToRoad( currentObject, road, laneIndex, vehicle )
+{
+	let lanes = road.getLanesConnectedWith( currentObject );
+	lanes[laneIndex].addVehicleAsLast(vehicle);
+}
+
+function moveToTurn( turn, laneIndex, vehicle )
+{
+	turn.startTurn( laneIndex, vehicle );
+}
+
+function moveToOnramp( onramp, roadId, lane, laneIndex, vehicle )
+{
+	let movement = getNextMovement( vehicle );
+	switch (movement)
+	{
+		case MovementType["pass"]:
+			onramp.startPassThrough(vehicle, roadId, lane.type, laneIndex);
+		break;
+
+		case MovementType["turnLeft"]:
+		case MovementType["turnRight"]:
+			onramp.startTurn(laneIndex, vehicle);
+		break;
+	}
+}
+
+function moveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
+{
+	let movement = getNextMovement( vehicle );
+	switch (movement)
+	{
+		case MovementType["pass"]:
+				offramp.startPassThrough(vehicle, roadId, lane.type, laneIndex);
+		break;
+
+		case MovementType["turnLeft"]:
+		case MovementType["turnRight"]:
+				offramp.startTurn(laneIndex, vehicle);
+		break;
+	}
+	break;
+}
+
+function moveToJunction( movement, junction, roadId, laneIndex, vehicle )
+{
+	let space = vehicle.getMinimalGap();
+
+	switch (movement)
+	{
+		case MovementType["pass"]:
+			junction.startPassThrough(roadId, laneIndex, vehicle);
+			break;
+
+		case MovementType["turnRight"]:
+			junction.startTurnRight(roadId, laneIndex, vehicle);
+			break;
+
+		case MovementType["turnLeft"]:
+			junction.startTurnLeft(roadId, laneIndex, vehicle);
+			break;
 	}
 }

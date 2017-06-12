@@ -37,6 +37,8 @@ function Junction( _id, _pos, _side,
 	this.centralPosition = _pos;
 	this.side = _side;
 
+    this.type = RoadObject.JUNCTION ;
+
 	this.verticalTrafficLight = _verticalTrafficLight;
 	this.horizontalTrafficLight = _horizontalTrafficLight;
 
