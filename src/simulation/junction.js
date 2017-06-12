@@ -40,18 +40,22 @@ function Junction( _id, _pos, _side,
 	this.verticalTrafficLight = _verticalTrafficLight;
 	this.horizontalTrafficLight = _horizontalTrafficLight;
 
+    ///////////////////////////////////////////////////////////////////////////
 	// initialize data for "top" road
+    ///////////////////////////////////////////////////////////////////////////
 	this.topRoad = {};
 	this.topRoad.road = _topRoad;
 
-	this.topRoad.turnRightLanes = new Array(_leftRoad.getForwardLanesAmount());
+	this.topRoad.turnRightLanes = new Array(_leftRoad.getBackwardLanesAmount());
 	// TODO find out lanes on destination road and take their amount
 	// this code works only because all roads has the same number of
 	// forward and backward lanes
-	this.topRoad.passLanes = new Array(_bottomRoad.getForwardLanesAmount());
+	this.topRoad.passLanes = new Array(_bottomRoad.getBackwardLanesAmount());
 	this.topRoad.turnLeftLanes = new Array(_rightRoad.getForwardLanesAmount());
 
-	addVehiclesArray(this.topRoad);
+	addVehiclesArray(this.topRoad.turnRightLanes);
+    setupPassLanes(this.topRoad.passLanes);
+	addVehiclesArray(this.topRoad.turnLeftLanes);
 
 	setTurnData(this.topRoad.turnRightLanes, _topRoad,
 				_topRoad.backwardLanes, _leftRoad.backwardLanes);
@@ -59,16 +63,20 @@ function Junction( _id, _pos, _side,
 	setTurnData(this.topRoad.turnLeftLanes, _topRoad,
 				_topRoad.backwardLanes, _rightRoad.forwardLanes);
 
+    ///////////////////////////////////////////////////////////////////////////
 	// initialize data for "right" road
+    ///////////////////////////////////////////////////////////////////////////
 	this.rightRoad = {};
 	this.rightRoad.road = _rightRoad;
 
 	this.rightRoad.turnRightLanes = new Array(_topRoad.getForwardLanesAmount());
-	this.rightRoad.passLanes = new Array(_leftRoad.getForwardLanesAmount());
+	this.rightRoad.passLanes = new Array(_leftRoad.getBackwardLanesAmount());
 	this.rightRoad.turnLeftLanes =
-			new Array(_bottomRoad.getForwardLanesAmount());
+			new Array(_bottomRoad.getBackwardLanesAmount());
 
-	addVehiclesArray(this.rightRoad);
+	addVehiclesArray(this.rightRoad.turnRightLanes);
+    setupPassLanes(this.rightRoad.passLanes);
+	addVehiclesArray(this.rightRoad.turnLeftLanes);
 
 	setTurnData(this.rightRoad.turnRightLanes, _rightRoad,
 				_rightRoad.backwardLanes, _topRoad.forwardLanes);
@@ -76,7 +84,9 @@ function Junction( _id, _pos, _side,
 	setTurnData(this.rightRoad.turnLeftLanes, _rightRoad,
 				_rightRoad.backwardLanes, _bottomRoad.backwardLanes);
 
+    ///////////////////////////////////////////////////////////////////////////
 	// initialize data for "bottom" road
+    ///////////////////////////////////////////////////////////////////////////
 	this.bottomRoad = {};
 	this.bottomRoad.road = _bottomRoad;
 
@@ -86,9 +96,11 @@ function Junction( _id, _pos, _side,
 	this.passLanes = new Array(_topRoad.getForwardLanesAmount());
 
 	this.bottomRoad.turnLeftLanes =
-			new Array(_leftRoad.getForwardLanesAmount());
+			new Array(_leftRoad.getBackwardLanesAmount());
 
-	addVehiclesArray(this.bottomRoad);
+	addVehiclesArray(this.bottomRoad.turnRightLanes);
+    setupPassLanes(this.bottomRoad.passLanes);
+	addVehiclesArray(this.bottomRoad.turnLeftLanes);
 
 	setTurnData(this.bottomRoad.turnRightLanes, _bottomRoad,
 				_bottomRoad.forwardLanes, _rightRoad.forwardLanes);
@@ -96,17 +108,21 @@ function Junction( _id, _pos, _side,
 	setTurnData(this.bottomRoad.turnLeftLanes, _bottomRoad,
 				_bottomRoad.forwardLanes, _leftRoad.backwardLanes);
 
+    ///////////////////////////////////////////////////////////////////////////
 	// initialize data for "bottom" road
+    ///////////////////////////////////////////////////////////////////////////
 	this.leftRoad = {};
 	this.leftRoad.road = _leftRoad;
 
 	this.leftRoad.turnRightLanes =
-			new Array(_bottomRoad.getForwardLanesAmount());
+			new Array(_bottomRoad.getBackwardLanesAmount());
 
 	this.leftRoad.passLanes = new Array(_rightRoad.getForwardLanesAmount());
 	this.leftRoad.turnLeftLanes = new Array(_topRoad.getForwardLanesAmount());
 
-	addVehiclesArray(this.leftRoad);
+	addVehiclesArray(this.leftRoad.turnRightLanes);
+    setupPassLanes(this.leftRoad.passLanes);
+	addVehiclesArray(this.leftRoad.turnLeftLanes);
 
 	setTurnData(this.leftRoad.turnRightLanes, _leftRoad,
 				_leftRoad.forwardLanes, _bottomRoad.backwardLanes);
@@ -157,17 +173,6 @@ function Junction( _id, _pos, _side,
 		this.turnLeftDuration[i] = 2 * TURN_DURATION_BASE +
 								   i * TURN_DURATION_FOR_LANE;
 	}
-}
-
-function addVehiclesArray( junctionRoad )
-{
-	let initArray = function(lane) {
-		lane.vehicles = [];
-	};
-
-	junctionRoad.turnRightLanes.forEach(initArray);
-	junctionRoad.passLanes.forEach(initArray);
-	junctionRoad.turnLeftLanes.forEach(initArray);
 }
 
 Junction.prototype.getTrafficLight = function( _roadId )
@@ -297,60 +302,6 @@ Junction.prototype.getDestinationLanesForPass =
 	else
 		_source.passDestLanes = destRoad.backwardLanes;
 };
-
-function getRightSide( _side )
-{
-	switch(_side)
-	{
-	case JunctionSides["top"]:
-		return JunctionSides["left"];
-
-	case JunctionSides["right"]:
-		return JunctionSides["top"];
-
-	case JunctionSides["bottom"]:
-		return JunctionSides["right"];
-
-	case JunctionSides["left"]:
-		return JunctionSides["bottom"];
-	}
-}
-
-function getOppositeSide( _side )
-{
-	switch(_side)
-	{
-	case JunctionSides["top"]:
-		return JunctionSides["bottom"];
-
-	case JunctionSides["right"]:
-		return JunctionSides["left"];
-
-	case JunctionSides["bottom"]:
-		return JunctionSides["top"];
-
-	case JunctionSides["left"]:
-		return JunctionSides["right"];
-	}
-}
-
-function getLeftSide( _side )
-{
-	switch(_side)
-	{
-	case JunctionSides["top"]:
-		return JunctionSides["right"];
-
-	case JunctionSides["right"]:
-		return JunctionSides["bottom"];
-
-	case JunctionSides["bottom"]:
-		return JunctionSides["left"];
-
-	case JunctionSides["left"]:
-		return JunctionSides["top"];
-	}
-}
 
 Junction.prototype.trafficLightAllowToMove = function( side )
 {
@@ -632,7 +583,6 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 
 	vehicle.prepareForTurn( this.turnRightDuration[laneIndex],
 							destinationRoad.road);
-
 
 	sourceRoad.turnRightLanes[laneIndex].vehicles.push(vehicle);
 };

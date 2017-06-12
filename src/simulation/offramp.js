@@ -16,17 +16,11 @@ function Offramp( _source, _destination, _outflow, _length,
 	this.connectedLaneType = _connectedLaneType;
 	this.connectedLaneIndex = _connectedLaneIndex;
 
-	this.forwardLanes = new Array( this.source.getForwardLanesAmount() );
-
-	this.forwardLanes.forEach( function(lane) {
-		lane.vehicles = [];
-	});
+	this.forwardlanes = new Array( this.source.getForwardLanesAmount() );
+    setupPassLanes(this.forwardlanes);
 
 	this.backwardLanes = new Array( this.source.getBackwardLanesAmount() );
-
-	this.backwardLanes.forEach( function(lane) {
-		lane.vehicles = [];
-	});
+    setupPassLanes(this.backwardLanes);
 
 	let turnSourceLane = null;
 
@@ -43,8 +37,7 @@ function Offramp( _source, _destination, _outflow, _length,
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( this.destLanesAmount());
-	for (var i = 0;i < this.destLanesAmount; ++i)
-		this.turnLanes[i].vehicles = [];
+    addVehiclesArray(this.turnLanes);
 
 	setOffampTurnData(this.turnLanes, _source, turnSourceLane,
 					  _destination.forwardLanes);

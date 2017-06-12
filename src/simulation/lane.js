@@ -6,7 +6,7 @@ var LaneType =
 	"backward": 1
 };
 
-function Lane( _length, _type, _spawnPoint,startX,startY,finishX,finishY )
+function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
 {
 	this.length = _length;
 	this.type = _type;

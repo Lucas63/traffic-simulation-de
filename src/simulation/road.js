@@ -104,7 +104,10 @@ function RoadConfig( _id, _type, _roadLength, _laneWidth,
 	this.finishConnection = _finishConnection;
 
 	this.forwardLanes = _forwardLanes;
+    setupPassLanes(this.forwardLanes, _roadLength);
+
 	this.backwardLanes = _backwardLanes;
+    setupPassLanes(this.backwardLanes, _roadLength);
 }
 
 // reprents map object connected to the road
