@@ -11,16 +11,24 @@ const downstreamDelta = 3;
 
 const congestedTrafficSpeed = 3;
 
-var freeRoadIDM = null;
+var carFreeRoadIDM = null;
+var truckFreeRoadIDM = null;
+
 var freeRoadMOBIL = null;
 
-var upstreamIDM = null;
+var carUpstreamIDM = null;
+var truckUpstreamIDM = null;
+
 var upstreamMOBIL = null;
 
-var downstreamIDM = null;
+var carDownstreamIDM = null;
+var truckDownstreamIDM = null;
+
 var downstreamMOBIL = null;
 
-var jamIDM = null;
+var carJamIDM = null;
+var truckJamIDM = null;
+
 var jamMOBIL = null;
 
 var carIDMConfig = null;
@@ -38,14 +46,21 @@ function VehicleConfig( _desiredSpeed, _timeHeadway, _minimumGap,
 	this.deceleration = _deceleration; // b
 }
 
-function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
+function IDMConfig(_lambda_a, _lambda_b, _lambda_T)
+{
+	this.lambda_a = _lambda_a;
+	this.lambda_b = _lambda_b;
+	this.lambda_T = _lambda_T;
+}
+
+function IDM( vehicleConfig, modelConfig )
 {
 	this.desiredSpeed = vehicleConfig.desiredSpeed;
-	this.timeHeadway = lambda_T * vehicleConfig.timeHeadway;
+	this.timeHeadway = modelConfig.lambda_T * vehicleConfig.timeHeadway;
 	this.minimumGap = vehicleConfig.minimumGap;
 
-	this.acceleration = lambda_a * vehicleConfig.acceleration;
-	this.deceleration = lambda_b * vehicleConfig.deceleration;
+	this.acceleration = modelConfig.lambda_a * vehicleConfig.acceleration;
+	this.deceleration = modelConfig.lambda_b * vehicleConfig.deceleration;
 
 	this.maximumDeceleration = IDM_MAX_DECELERATION;
 
@@ -57,13 +72,30 @@ function IDM( lambda_T, lambda_a, lambda_b, vehicleConfig )
  * Constructor-time function
  */
 // must be called before simulatin loop
-function createIDMModels( vehicleConfig, freeRoadConfig, upstreamConfig,
-						  downstreamConfig, jamConfig)
+function createCarIDMModels( freeRoadVehicleConfig, freeRoadConfig,
+							 upstreamVehicleConfig, upstreamConfig,
+							 downstreamVehicleConfig, downstreamConfig,
+							 jamVehicleConfig, jamConfig)
 {
-	freeRoadIDM = new IDM( vehicleConfig, freeRoadConfig );
-	upstreamIDM = new IDM( vehicleConfig, upstreamConfig );
-	downstreamIDM = new IDM( vehicleConfig, downstreamConfig );
-	jamIDM = new IDM( vehicleConfig, jamConfig );
+	carFreeRoadIDM = new IDM( freeRoadVehicleConfig, freeRoadConfig );
+	carUpstreamIDM = new IDM( upstreamVehicleConfig, upstreamConfig );
+	carDownstreamIDM = new IDM( downstreamVehicleConfig, downstreamConfig );
+	carJamIDM = new IDM( jamVehicleConfig, jamConfig );
+}
+
+/*
+ * Constructor-time function
+ */
+// must be called before simulatin loop
+function createTruckIDMModels( freeRoadVehicleConfig, freeRoadConfig,
+							   upstreamVehicleConfig, upstreamConfig,
+							   downstreamVehicleConfig, downstreamConfig,
+							   jamVehicleConfig, jamConfig)
+{
+	truckFreeRoadIDM = new IDM( freeRoadVehicleConfig, freeRoadConfig );
+	truckUpstreamIDM = new IDM( upstreamVehicleConfig, upstreamConfig );
+	truckDownstreamIDM = new IDM( downstreamVehicleConfig, downstreamConfig );
+	truckJamIDM = new IDM( jamVehicleConfig, jamConfig );
 }
 
 // gap (s in formula) - actual gap between vehicles

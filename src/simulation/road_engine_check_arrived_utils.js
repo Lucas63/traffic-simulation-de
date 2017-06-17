@@ -180,16 +180,11 @@ function getNextObjectOnRoute( vehicle )
 	let route = this.map.routes[ vehicle.routeId ];
 
 	if ( vehicle.routeItemIndex == route.items.length - 1)
-	{
 		return RoadObject.VOID;
-	}
 
 	let item = this.map.routes[ vehicle.routeItemIndex + 1 ];
 
-	// maybe item.id must be subtracted by 1, because id in configuration
-	// json files start from 1
 	let id = item.id;
-
 	switch( item.type )
 	{
 		case RouteItemType.ROAD:

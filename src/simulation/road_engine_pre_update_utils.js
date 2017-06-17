@@ -133,23 +133,19 @@ function setLongitudinalModel(vehicles)
 		switch( vehicle.trafficState )
 		{
 			case TrafficState.FREE_ROAD:
-				vehicle.longitudinalModel = freeRoadIDM;
-				vehicle.laneChangeModel = freeRoadMOBIL;
+				vehicle.longModel = vehicle.freeRoadLongModel;
 				break;
 
 			case TrafficState.UPSTREAM:
-				vehicle.longitudinalModel = upstreamIDM;
-				vehicle.laneChangeModel = upstreamMOBIL;
+				vehicle.longModel = vehicle.upstreamLongModel;
 				break;
 
 			case  TrafficState.DOWNSTREAM:
-				vehicle.longitudinalModel = downstreamIDM;
-				vehicle.laneChangeModel = downstreamMOBIL;
+				vehicle.longModel = vehicle.downstreamLongModel;
 				break;
 
 			case  TrafficState.JAM:
-				vehicle.longitudinalModel = jamIDM;
-				vehicle.laneChangeModel = jamMOBIL;
+				vehicle.longModel = vehicle.jamLongModel;
 				break;
 		}
 	}

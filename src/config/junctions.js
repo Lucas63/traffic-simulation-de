@@ -9,7 +9,7 @@ var junctions_json = {
 	"junctions":
 		[
 			{
-				"id": 1,
+				"id": 0,
 				"verticalTrafficLight":
 					{
 						"exists": "yes", "initialLight": "green"
@@ -17,6 +17,17 @@ var junctions_json = {
 				"horizontalTrafficLight":
 					{
 						"exists": "yes", "initialLight": "red"
+					}
+			},
+			{
+				"id": 1,
+				"verticalTrafficLight":
+					{
+						"exists": "yes", "initialLight": "red"
+					},
+				"horizontalTrafficLight":
+					{
+						"exists": "yes", "initialLight": "green"
 					}
 			},
 			{
@@ -43,17 +54,6 @@ var junctions_json = {
 			},
 			{
 				"id": 4,
-				"verticalTrafficLight":
-					{
-						"exists": "yes", "initialLight": "red"
-					},
-				"horizontalTrafficLight":
-					{
-						"exists": "yes", "initialLight": "green"
-					}
-			},
-			{
-				"id": 5,
 				"verticalTrafficLight":
 					{
 						"exists": "yes", "initialLight": "green"

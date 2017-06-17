@@ -126,17 +126,32 @@ function Vehicle( config )
 	this.routeId = config.routeId;
 	this.routeItemIndex = 0;
 
+	this.freeRoadLongModel = null;
+	this.upstreamLongModel = null;
+	this.downstreamLongModel = null;
+	this.jamLongModel = null;
+
 	if ( config.type == VehicleType.CAR )
 	{
 		this.length       = CAR_LENGTH;
 		this.desiredSpeed = CAR_DESIRED_SPEED;
 		this.safeDistance = CAR_ROAD_SAFE_DISTANCE;
+
+		this.freeRoadLongModel = carFreeRoadIDM;
+		this.upstreamLongModel = carUpstreamIDM;
+		this.downstreamLongModel = carDownstreamIDM;
+		this.jamLongModel = carJamIDM;
 	}
 	else
 	{
 		this.length       = TRUCK_LENGTH;
 		this.desiredSpeed = TRUCK_DESIRED_SPEED;
 		this.safeDistance = TRUCK_ROAD_SAFE_DISTANCE;
+
+		this.freeRoadLongModel = truckFreeRoadIDM;
+		this.upstreamLongModel = truckUpstreamIDM;
+		this.downstreamLongModel = truckDownstreamIDM;
+		this.jamLongModel = truckJamIDM;
 	}
 
 	// Default values
@@ -145,7 +160,9 @@ function Vehicle( config )
 	this.movementState = MovementState.FREE_MOVEMENT;
 
 	// model used to simulate vehicle's behaviour on the road
-	this.longitudinalModel = null;
+	this.longModel = null;
+
+
 
 	// model to define lane change decisions
 	this.laneChangeModel = null;
