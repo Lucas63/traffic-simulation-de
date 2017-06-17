@@ -101,7 +101,7 @@ Offramp.prototype.canTurn = function( vehicleRequiredSpace)
 	}
 
 	return freeLaneIndex;
-}
+};
 
 Offramp.prototype.isConnectedLane = function( roadId, laneType, laneIndex )
 {

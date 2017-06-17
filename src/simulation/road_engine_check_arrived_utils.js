@@ -328,7 +328,6 @@ function moveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
 				offramp.startTurn(laneIndex, vehicle);
 		break;
 	}
-	break;
 }
 
 function moveToJunction( movement, junction, roadId, laneIndex, vehicle )
