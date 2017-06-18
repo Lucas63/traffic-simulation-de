@@ -572,7 +572,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -600,7 +600,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null

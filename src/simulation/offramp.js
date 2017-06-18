@@ -42,11 +42,11 @@ function Offramp( _source, _destination, _outflow,
 	}
 
 	// virtual lanes for turning vehicles
-	this.turnLanes = new Array( this.destLanesAmount());
+	this.turnLanes = new Array( this.destLanesAmount );
 	initJunctionLanes(this.turnLanes);
 	addVehiclesArray(this.turnLanes);
 
-	setOffampTurnData(this.turnLanes, _source, turnSourceLane,
+	setOfframpTurnData(this.turnLanes, _source, turnSourceLane,
 					  _destination.forwardLanes);
 
 	this.turnDuration = new Array( this.destLanesAmount );

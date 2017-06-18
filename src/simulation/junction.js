@@ -64,12 +64,14 @@ function Junction( _id, _pos, _side,
 	setupPassLanes(this.topRoad.passLanes);
 	addVehiclesArray(this.topRoad.turnLeftLanes);
 
-	setTurnData(this.topRoad.turnRightLanes, _topRoad,
-				_topRoad.backwardLanes, _leftRoad.backwardLanes);
+	if (_topRoad.backwardLanes)
+	{
+		setTurnData(this.topRoad.turnRightLanes, _topRoad,
+					_topRoad.backwardLanes, _leftRoad.backwardLanes);
 
-	setTurnData(this.topRoad.turnLeftLanes, _topRoad,
-				_topRoad.backwardLanes, _rightRoad.forwardLanes);
-
+		setTurnData(this.topRoad.turnLeftLanes, _topRoad,
+					_topRoad.backwardLanes, _rightRoad.forwardLanes);
+	}
 	///////////////////////////////////////////////////////////////////////////
 	// initialize data for "right" road
 	///////////////////////////////////////////////////////////////////////////

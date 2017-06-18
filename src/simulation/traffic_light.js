@@ -40,7 +40,7 @@ function TrafficLight( _id, _x_coord, _y_coord, _connectedRoads,
 						  this.yellowLightPeriod;
 }
 
-TrafficLight.prototype.update( dt )
+TrafficLight.prototype.update =function( dt )
 {
 	elapsed = this.elapsedTime + dt;
 
