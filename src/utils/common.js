@@ -125,7 +125,7 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new virtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 
@@ -163,7 +163,7 @@ function setOnrampTurnData( turnLanes, sourceRoad, sourceLanes, destinationLane)
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new virtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 
@@ -202,7 +202,7 @@ function setOfframpTurnData( turnLanes, sourceRoad,
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new virtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 
