@@ -372,7 +372,7 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
     let startY = sY;
     let finishX = fX;
     let finishY = fY;
-    let furthest_length = logic_lane_width / 2 + ((is_one_way) ? lines_number / 2 : 0);
+    let shift = ((is_one_way) ? -(lines_number / 2) * logic_lane_width + logic_lane_width / 2 : logic_lane_width / 2);
 
 
     if (lines_type == LaneType.backward) {
@@ -386,13 +386,12 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
 
 
     return get_specific_lanes(
-        furthest_length,
         length,
         lines_type,
         lines_number,
         spawn_points,
         is_vertical,
-        lines_type == LaneType.forward ,
+        lines_type == LaneType.forward,
         is_direct,
         startX,
         startY,
@@ -400,14 +399,7 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
         finishY);
 }
 
-/*
-
-
-
-
- */
-function get_specific_lanes(furthest_length,
-                            length,
+function get_specific_lanes(length,
                             type,
                             lines_number,
                             spawn_points,
@@ -422,40 +414,44 @@ function get_specific_lanes(furthest_length,
      RIGHT_TO_LEFT - (-1)
      */
     console.log("----------");
-    console.log("furthest : " + furthest_length);
     console.log("type : " + type);
     console.log("lines_number : " + lines_number);
     console.log("is_vertical : " + is_vertical);
     console.log("is_forward : " + is_forward);
     console.log("is_direct : " + is_direct);
-    console.log("----------");
 
     let way_multiplier = (is_direct) ? 1 : -1;
-    let shift = furthest_length;
+    let shift = (is_direct) ? logic_lane_width / 2 : -logic_lane_width / 2;
+
+    console.log("multiplier : " + way_multiplier);
+    console.log("shift : " + shift);
 
     let lanes = [];
+
     if (is_vertical) {
         if (is_forward) {
             for (let i = 0; i < lines_number; i++) {
+                console.log("vertical_forward");
                 lanes.push(new Lane(
                     length,
                     type,
                     spawn_points[i],
-                    startX + way_multiplier * (-shift + i * logic_lane_width),
+                    startX + shift + way_multiplier * (  i * logic_lane_width),
                     startY,
-                    finishX + way_multiplier * (-shift + i * logic_lane_width),
+                    finishX + shift +  way_multiplier * ( i * logic_lane_width),
                     finishY
                 ));
             }
         } else {
             for (let i = 0; i < lines_number; i++) {
+                console.log("vertical_backward");
                 lanes.push(new Lane(
                     length,
                     type,
                     spawn_points[i],
-                    startX + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
+                    startX - way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     startY,
-                    finishX + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
+                    finishX - way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     finishY
                 ));
             }
@@ -468,9 +464,9 @@ function get_specific_lanes(furthest_length,
                     type,
                     spawn_points[i],
                     startX,
-                    startY + way_multiplier * (-shift + i * logic_lane_width),
+                    startY + shift + way_multiplier * (  i * logic_lane_width),
                     finishX,
-                    finishY + way_multiplier * (-shift + i * logic_lane_width)
+                    finishY + shift + way_multiplier * (  i * logic_lane_width)
                 ));
             }
         } else {
@@ -480,12 +476,14 @@ function get_specific_lanes(furthest_length,
                     type,
                     spawn_points[i],
                     startX,
-                    startY + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
+                    startY - way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     finishX,
-                    finishY + way_multiplier * (i * logic_lane_width + logic_lane_width / 2)
+                    finishY - way_multiplier * (i * logic_lane_width + logic_lane_width / 2)
                 ));
             }
         }
     }
+
+    console.log("----------");
     return lanes;
 }

@@ -1,6 +1,6 @@
 function addVehiclesArray(lanes) {
 	for (let i = 0; i < lanes.length; ++i) {
-		console.log(lanes[i]);
+		//console.log(lanes[i]);
 		lanes[i].vehicles = new Array();
 
 	}

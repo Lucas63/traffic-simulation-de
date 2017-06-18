@@ -109,7 +109,6 @@ function RoadConfig( _id, _direction, _roadLength, _laneWidth,
     setupPassLanes(this.forwardLanes, _roadLength);
 
 	this.backwardLanes = _backwardLanes;
-	console.log(this.backwardLanes);
 
 	if(this.backwardLanes){
         setupPassLanes(this.backwardLanes, _roadLength);
