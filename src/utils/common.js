@@ -110,8 +110,7 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 		else
 		{
 			turnLanes[i].controlPoint =
-				new Point(destinationLanes[i].startX,
-						  sourceLanes[i].finishY);
+				new Point(destinationLanes[i].startX, sourceLanes[i].finishY);
 		}
 
 		turnLanes[i].endPoint =

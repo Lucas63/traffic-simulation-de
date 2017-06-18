@@ -10,13 +10,13 @@ const TrafficLightState =
 	GREEN: 0,
 	YELLOW_AFTER_GREEN: 1,
 	RED: 2,
-	YELLOW_AFTER_RED: 2
+	YELLOW_AFTER_RED: 3
 }
 
 // time in seconds
-const DEFAULT_RED_COLOR_DURATION = 20;
+const DEFAULT_RED_COLOR_DURATION = 14;
 const DEFAULT_YELLOW_COLOR_DURAION = 3;
-const DEFAULT_GREEN_COLOR_DURATION = 15;
+const DEFAULT_GREEN_COLOR_DURATION = 20;
 
 function TrafficLight( _id, _x_coord, _y_coord, _connectedRoads,
 					   _initialState, _initialColor )

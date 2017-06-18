@@ -41,13 +41,6 @@ const MINIMAL_GAP = 2;
 // if vehicle has no leader or follower
 const VIRTUAL_VEHICLE = -1;
 
-
-virtualFreeRoadVehicle = null;
-virtualUpstreamVehicle = null;
-virtualDownstreamVehicle = null;
-virtualJamVehicle = null;
-
-
 // Used length units independent from actual visualization scale
 // Updated after reading and parsing config files
 

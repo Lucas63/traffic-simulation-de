@@ -1,7 +1,7 @@
 function addVehiclesArray(lanes)
 {
-	//for (let i = 0; i < lanes.length; ++i)
-	//	lanes[i].vehicles = [];
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i].vehicles = [];
 }
 
 function addVirtualVehicle(lanes, length)
@@ -21,6 +21,6 @@ function addVirtualVehicle(lanes, length)
 
 function setupPassLanes(lanes, laneLength)
 {
-	//addVehiclesArray(lanes);
-	//addVirtualVehicle(lanes, length);
+	addVehiclesArray(lanes);
+	addVirtualVehicle(lanes, length);
 }
