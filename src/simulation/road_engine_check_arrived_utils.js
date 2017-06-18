@@ -124,6 +124,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 			break;
 
 		case RoadObject.ONRAMP:
+			// currentObject is road, because onramp connected only to roads
 			let roadId = currentObject.getId();
 
 			if (canMoveToOnramp(nextObject, roadId, lane, laneIndex, vehicle))
@@ -134,6 +135,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 			break;
 
 		case RoadObject.OFFRAMP:
+			// currentObject is road, because offramp connected only to roads
 			let roadId = currentObject.getId();
 
 			if (canMoveToOfframp(nextObject, roadId, lane, laneIndex, vehicle))
@@ -182,12 +184,12 @@ function getNextObjectOnRoute( vehicle )
 	if ( vehicle.routeItemIndex == route.items.length - 1)
 		return RoadObject.VOID;
 
-	let item = this.map.routes[ vehicle.routeItemIndex + 1 ];
+	let item = route.items[ vehicle.routeItemIndex + 1 ];
 
 	let id = item.id;
 	switch( item.type )
 	{
-		case RouteItemType["road"]:
+		case RouteItemType.ROAD:
 			return this.map.roads[id];
 
 		case RouteItemType.ONRAMP:

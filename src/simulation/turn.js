@@ -18,34 +18,11 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 					  _source.getBackwardLanesAmount();
 
 	this.lanes = new Array( lanesAmount );
+	addVehiclesArray(this.lanes);
 
-	return;
-	for (let i = 0; i < lanesAmount; ++i)
-		// each lane has array of vehicles on this lane
-		this.lanes[i].vehicles = [];
-
-	// roads connected to turn has only forward lanes, but it is tradeoff
+	// roads connected to turn has only forward lanes, but it is a tradeoff
 	setTurnData(this.lanes, _source, _source.forwardLanes,
 				_destination.forwardLanes);
-
-	// Renderer store here information about Start, Control and End points
-	// to draw Bezier curve for each lane
-	this.turnCoordinates = new Array( lanesAmount );
-
-	for (let i = 0; i < lanesAmount; ++i)
-	{
-		// TODO add real calculation of coordinates
-		// TODO set coordinates of center i-th lane on source road
-		this.turnCoordinates[i].startPoint = { "x": 0, "y": 0 };
-
-		// Canvas implementation of Bezier curve requires 2 control points,
-		// but use only one point twice for simplicity's sake
-		// TODO set x of source lane's center and y of destination lane's center
-		this.turnCoordinates[i].controlPoint = { "x": 0, "y": 0 };
-
-		// TODO set coordinates of center i-th lane on destination road
-		this.turnCoordinates[i].endPoint = { "x": 0, "y": 0};
-	}
 
 	this.turnDuration = new Array( lanesAmount );
 	for (let i = 0; i < lanesAmount; ++i)
@@ -69,9 +46,12 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 
 Turn.prototype.canTurn = function( laneIndex, vehicle )
 {
-	let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
-	assert( isValidIndex, "Wrong index " + laneIndex + "; " +
-			"lanes amount is " + this.lanes.length);
+	// let isValidIndex = laneIndex < 0 || this.lanes.length < laneIndex;
+	// assert( isValidIndex, "Wrong index " + laneIndex + "; " +
+	// 		"lanes amount is " + this.lanes.length);
+
+	if (this.lanes[laneIndex].vehicles.empty())
+		return true;
 
 	// get the last vehicle from selected lane
 	let lastVehicle = this.lanes[laneIndex].vehicles.last();
@@ -79,7 +59,7 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 	// if last vehicle on selected turn lane not far from source road
 	// and there is not enough space for new vehicle,
 	// then vehicle on source road cannot start turning
-	if (lastVehicle.uCoord < vehicle.getMinimalGap())
+	if (lastVehicle.farFrom( vehicle.getMinimalGap() ) == false)
 		return false;
 
 	let destinationLane = null;
@@ -91,7 +71,7 @@ Turn.prototype.canTurn = function( laneIndex, vehicle )
 
 	// check whether lane on destination road has enough space for new vehicle
 	// if does, everything is OK, otherwise reject turn request
-	return destinationLane.hasEnoughSpace( vehicleLength + MINIMAL_GAP );
+	return destinationLane.hasEnoughSpace( vehicle.getMinimalGap() );
 };
 
 // add vehicle to turn's lane with index *laneIndex*

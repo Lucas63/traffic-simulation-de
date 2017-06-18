@@ -67,7 +67,7 @@ RoadEngine.prototype.preUpdate = function()
 		// i.e. reached finish or start of road/onramp/offramp/turn/junction
 		checkArrivedVehiclesOnRoad( road );
 
-		// check whether spawn points ready
+		// check whether spawn points ready to action
 		checkSpawnPoints( roads[i] );
 	}
 

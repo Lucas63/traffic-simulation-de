@@ -83,8 +83,8 @@ function Junction( _id, _pos, _side,
 	setTurnData(this.rightRoad.turnRightLanes, _rightRoad,
 				_rightRoad.backwardLanes, _topRoad.forwardLanes);
 
-	setTurnData(this.rightRoad.turnLeftLanes, _rightRoad.road,
-				_rightRoad.road.backwardLanes, _bottomRoad.road.backwardLanes);
+	setTurnData(this.rightRoad.turnLeftLanes, _rightRoad,
+				_rightRoad.backwardLanes, _bottomRoad.backwardLanes);
 
 	///////////////////////////////////////////////////////////////////////////
 	// initialize data for "bottom" road
@@ -200,16 +200,16 @@ Junction.prototype.getRoadForSide = function( side )
 	switch(side)
 	{
 	case JunctionSides["top"]:
-		return this.topRoad.road;
+		return this.topRoad;
 
 	case JunctionSides["right"]:
-		return this.rightRoad.road;
+		return this.rightRoad;
 
 	case JunctionSides["bottom"]:
-		return this.bottomRoad.road;
+		return this.bottomRoad;
 
 	case JunctionSides["left"]:
-		return this.leftRoad.road;
+		return this.leftRoad;
 	}
 };
 
