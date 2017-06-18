@@ -12,29 +12,29 @@ turns = null;
 
 
 function load_objects(){
-    print_function_start(load_objects.name);
+	print_function_start(load_objects.name);
 
-    load_vehicle_configuration();
+	load_vehicle_configuration();
 
-    spawn_points = load_spawn_points();
-    console.log(spawn_points);
+	spawn_points = load_spawn_points();
+	console.log(spawn_points);
 
-    roads = load_roads(load_road_configs(),spawn_points);
-    console.log(roads);
+	roads = load_roads(load_road_configs(),spawn_points);
+	console.log(roads);
 
-    junctions = load_junctions(roads);
-    console.log(junctions);
+	junctions = load_junctions(roads);
+	console.log(junctions);
 
-    turns = load_turns(roads);
-    console.log(turns);
+	turns = load_turns(roads);
+	console.log(turns);
 
-    onramps = load_onramps(roads);
-    console.log(onramps);
+	onramps = load_onramps(roads);
+	console.log(onramps);
 
-    offramps = load_offramps(roads);
-    console.log(offramps);
+	offramps = load_offramps(roads);
+	console.log(offramps);
 
-    print_function_end(load_objects.name);
+	print_function_end(load_objects.name);
 }
 
 /*
@@ -46,13 +46,13 @@ Function that activating simulation by sequence of actions
 
  */
 function main(){
-    print_function_start(main.name);
+	print_function_start(main.name);
 
-    load_objects();
+	load_objects();
 
-    let map = new Map(roads,junctions,turns,onramps,offramps);
+	let map = new Map(roads,junctions,turns,onramps,offramps);
 
-    map.render_map();
+	map.render_map();
 
-    print_function_end(main.name);
+	print_function_end(main.name);
 }
