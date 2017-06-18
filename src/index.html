@@ -53,6 +53,7 @@
 		<script src="simulation/road.js" type="text/javascript"></script>
 		<script src="simulation/turn.js" type="text/javascript"></script>
 		<script src="simulation/junction.js" type="text/javascript"></script>
+		<script src="simulation/junction_utils.js" type="text/javascript"></script>
 		<script src="simulation/onramp.js" type="text/javascript"></script>
 		<script src="simulation/offramp.js" type="text/javascript"></script>
 		<script src="simulation/vehicle.js" type="text/javascript"></script>
@@ -83,15 +84,15 @@
 
 
 		<script type="text/javascript">
-            canvas = document.getElementById("canvas_map");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+			canvas = document.getElementById("canvas_map");
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
 
-            logic_to_canvas_multiplier = canvas.width / 100;
-            console.log(logic_to_canvas_multiplier);
+			logic_to_canvas_multiplier = canvas.width / 100;
+			console.log(logic_to_canvas_multiplier);
 
 
-            main();
+			main();
 
 		</script>
 

@@ -17,9 +17,11 @@ function Onramp( _source, _destination, _inflow,
 	this.connectedLaneType = _connectedLaneType;
 
 	this.forwardLanes = new Array( this.destination.getForwardLanesAmount() );
+	initJunctionLanes(this.forwardLanes);
 	setupPassLanes(this.forwardLanes, _length);
 
 	this.backwardLanes = new Array( this.destination.getBackwardLanesAmount() );
+	initJunctionLanes(this.backwardLanes);
 	setupPassLanes(this.backwardLanes, _length);
 
 	let turnDestinationLane = null;
@@ -41,6 +43,7 @@ function Onramp( _source, _destination, _inflow,
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( sourceLanesAmount );
+	initJunctionLanes(this.turnLanes);
 	addVehiclesArray(this.turnLanes);
 
 	return;

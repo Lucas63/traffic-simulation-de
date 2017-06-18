@@ -50,11 +50,16 @@ function Junction( _id, _pos, _side,
 
 	console.log(_leftRoad.backwardLanes);
 	this.topRoad.turnRightLanes = new Array(_leftRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.topRoad.turnRightLanes);
+
 	// TODO find out lanes on destination road and take their amount
 	// this code works only because all roads has the same number of
 	// forward and backward lanes
 	this.topRoad.passLanes = new Array(_bottomRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.topRoad.passLanes);
+
 	this.topRoad.turnLeftLanes = new Array(_rightRoad.getForwardLanesAmount());
+	initJunctionLanes(this.topRoad.turnLeftLanes);
 
 	addVehiclesArray(this.topRoad.turnRightLanes);
 	setupPassLanes(this.topRoad.passLanes);
@@ -73,9 +78,14 @@ function Junction( _id, _pos, _side,
 	this.rightRoad.road = _rightRoad;
 
 	this.rightRoad.turnRightLanes = new Array(_topRoad.getForwardLanesAmount());
+	initJunctionLanes(this.rightRoad.turnRightLanes);
+
 	this.rightRoad.passLanes = new Array(_leftRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.rightRoad.passLanes);
+
 	this.rightRoad.turnLeftLanes =
 			new Array(_bottomRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.rightRoad.turnLeftLanes);
 
 	addVehiclesArray(this.rightRoad.turnRightLanes);
 	setupPassLanes(this.rightRoad.passLanes);
@@ -94,12 +104,15 @@ function Junction( _id, _pos, _side,
 	this.bottomRoad.road = _bottomRoad;
 
 	this.bottomRoad.turnRightLanes =
-			new Array(_rightRoad.getForwardLanesAmount());
+		new Array(_rightRoad.getForwardLanesAmount());
+	initJunctionLanes(this.bottomRoad.turnRightLanes);
 
 	this.bottomRoad.passLanes = new Array(_topRoad.getForwardLanesAmount());
+	initJunctionLanes(this.bottomRoad.passLanes);
 
 	this.bottomRoad.turnLeftLanes =
 			new Array(_leftRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.bottomRoad.turnLeftLanes);
 
 	addVehiclesArray(this.bottomRoad.turnRightLanes);
 
@@ -120,9 +133,13 @@ function Junction( _id, _pos, _side,
 
 	this.leftRoad.turnRightLanes =
 			new Array(_bottomRoad.getBackwardLanesAmount());
+	initJunctionLanes(this.leftRoad.turnRightLanes);
 
 	this.leftRoad.passLanes = new Array(_rightRoad.getForwardLanesAmount());
+	initJunctionLanes(this.leftRoad.passLanes);
+
 	this.leftRoad.turnLeftLanes = new Array(_topRoad.getForwardLanesAmount());
+	initJunctionLanes(this.leftRoad.turnLeftLanes);
 
 	addVehiclesArray(this.leftRoad.turnRightLanes);
 	setupPassLanes(this.leftRoad.passLanes);

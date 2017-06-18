@@ -1,3 +1,9 @@
+function initJunctionLanes(lanes)
+{
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i] = {};
+}
+
 function getRightSide( _side )
 {
 	switch(_side)

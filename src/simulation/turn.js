@@ -18,6 +18,7 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 					  _source.getBackwardLanesAmount();
 
 	this.lanes = new Array( lanesAmount );
+	initJunctionLanes(this.lanes);
 	addVehiclesArray(this.lanes);
 
 	// roads connected to turn has only forward lanes, but it is a tradeoff

@@ -18,10 +18,12 @@ function Offramp( _source, _destination, _outflow,
 
 	this.connectedLaneType = _connectedLaneType;
 
-	this.forwardlanes = new Array( this.source.getForwardLanesAmount() );
-	setupPassLanes(this.forwardlanes);
+	this.forwardLanes = new Array( this.source.getForwardLanesAmount() );
+	initJunctionLanes(this.forwardLanes);
+	setupPassLanes(this.forwardLanes);
 
 	this.backwardLanes = new Array( this.source.getBackwardLanesAmount() );
+	initJunctionLanes(this.backwardLanes);
 	setupPassLanes(this.backwardLanes);
 
 
@@ -43,6 +45,7 @@ function Offramp( _source, _destination, _outflow,
 
 	// virtual lanes for turning vehicles
 	this.turnLanes = new Array( this.destLanesAmount());
+	initJunctionLanes(this.turnLanes);
 	addVehiclesArray(this.turnLanes);
 
 	setOffampTurnData(this.turnLanes, _source, turnSourceLane,
