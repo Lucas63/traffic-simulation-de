@@ -187,7 +187,7 @@ function getNextObjectOnRoute( vehicle )
 	let id = item.id;
 	switch( item.type )
 	{
-		case RouteItemType.ROAD:
+		case RouteItemType["road"]:
 			return this.map.roads[id];
 
 		case RouteItemType.ONRAMP:

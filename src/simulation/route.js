@@ -7,11 +7,11 @@ const MovementType =
 
 const RouteItemType =
 {
-	"road": 0,
-	"turn": 1,
-	"offramp": 2,
-	"onramp": 3,
-	"trafficLight": 4
+	"ROAD": "road",
+	"TURN": "turn",
+	"OFFRAMP": "offramp",
+	"ONRAMP": "onramp",
+	"JUNCTION": "junction"
 }
 
 
@@ -20,13 +20,8 @@ const RouteItemType =
 // id - object's id
 // movementType - value from MovementType
 
-function Route( _items )
+function Route( _id, _items )
 {
+	this.id = _id;
 	this.items = _items;
-	this.itemIndex = 0;
 }
-
-Route.prototype.completed = function()
-{
-	return (this.items.length - 1) == this.itemIndex;
-};
