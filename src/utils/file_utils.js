@@ -63,7 +63,6 @@ function load_road_configs() {
 		roadConfigs.push(new_road);
 	}
 
-	console.log(roadConfigs[0]);
 	return roadConfigs;
 }
 
@@ -424,18 +423,9 @@ function get_specific_lanes(length,
 	 LEFT_TO_RIGHT - (1)
 	 RIGHT_TO_LEFT - (-1)
 	 */
-	console.log("----------");
-	console.log("type : " + type);
-	console.log("lines_number : " + lines_number);
-	console.log("is_vertical : " + is_vertical);
-	console.log("is_forward : " + is_forward);
-	console.log("is_direct : " + is_direct);
 
 	let way_multiplier = (is_direct) ? 1 : -1;
 	let shift = (is_direct) ? logic_lane_width / 2 : -logic_lane_width / 2;
-
-	console.log("multiplier : " + way_multiplier);
-	console.log("shift : " + shift);
 
 	let lanes = [];
 

@@ -92,10 +92,8 @@ function draw_junction(context, junction) {
 function draw_turn(context, turn) {
     let is_source_vertical = is_vertical_road(turn.source.direction);
     let is_destination_vertical = is_vertical_road(turn.destination.direction);
-
-
-    console.log(is_source_vertical);
-    console.log(is_destination_vertical);
+    // console.log(is_source_vertical);
+    // console.log(is_destination_vertical);
 
 
     let startX1 = (is_source_vertical) ?
@@ -123,6 +121,23 @@ function draw_turn(context, turn) {
     let finishY2 = (!is_destination_vertical) ?
         turn.destination.startY - turn.destination.getForwardLanesAmount() / 2 : turn.destination.startY;
 
+
+    console.log(turn.id);
+    // console.log("startX : "+turn.source.finishX);
+    // console.log("startY : "+turn.source.finishY);
+    // console.log("startX1 : "+ startX1);
+    // console.log("startX2 : "+ startX2);
+    // console.log("startY1 : "+ startY1);
+    // console.log("startY2 : "+ startY2);
+    //
+    // console.log("finishX : "+turn.destination.startX);
+    // console.log("finishY : "+turn.destination.startY);
+    // console.log("finishX1 : "+ finishX1);
+    // console.log("finishX2 : "+ finishX2);
+    // console.log("finishY1 : "+ finishY1);
+    // console.log("finishY2 : "+ finishY2);
+    //
+
     startX1 *= logic_to_canvas_multiplier;
     startX2 *= logic_to_canvas_multiplier;
     startY1 *= logic_to_canvas_multiplier;
@@ -132,50 +147,107 @@ function draw_turn(context, turn) {
     finishY1 *= logic_to_canvas_multiplier;
     finishY2 *= logic_to_canvas_multiplier;
 
-
     context.beginPath();
-    context.moveTo(startX2, startY2);
-    //context.lineTo(startX2,startY2);
-
-
     context.strokeStyle = "#FF0000";
     context.lineWidth = 1;
 
-    if(turn.source.finishX > turn.destination.startX){
-        if(turn.source.finishY > turn.destination.startY){
 
+    if (turn.source.finishX > turn.destination.startX) {
+        if (turn.source.finishY > turn.destination.startY) {
 
-        } else{
-            console.log("right + up");
-            context.bezierCurveTo(finishX2,startY2,finishX2,startY2,finishX2,finishY2);
-            context.lineTo(finishX1,finishY1);
-            context.bezierCurveTo(finishX1,startY1,finishX1,startY1,startX1,startY1);
-            context.fillStyle = "black";
-            context.fill();
-            context.closePath();
-            context.stroke();
+            context.moveTo(startX1, startY1);
+            context.lineTo(startX2,startY2);
+            context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
+            context.lineTo(finishX1, finishY1);
+            context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
+        }
+        else {
+            if(!is_source_vertical){
+                context.moveTo(startX1, startY1);
+                context.lineTo(startX2,startY2);
+                context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
+                context.lineTo(finishX1, finishY1);
+                context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
+            }
 
+            else{
+                console.log("NOT VERTICAL");
 
-            context.moveTo( turn.source.finishX*logic_to_canvas_multiplier, turn.source.finishY*logic_to_canvas_multiplier);
-            context.fillStyle = "#FF0000";
-            context.bezierCurveTo(turn.destination.startX*logic_to_canvas_multiplier,
-                turn.source.finishY*logic_to_canvas_multiplier,
-                turn.destination.startX*logic_to_canvas_multiplier,
-                turn.source.finishY*logic_to_canvas_multiplier,
-                turn.destination.startX*logic_to_canvas_multiplier,
-                turn.destination.startY*logic_to_canvas_multiplier);
-            context.stroke();
+                context.moveTo(startX1, startY1);
+                context.lineTo(startX2,startY2);
+                context.bezierCurveTo(startX2, finishY2, startX2, finishY2, finishX2, finishY2);
+                context.lineTo(finishX1, finishY1);
+                context.bezierCurveTo(startX1, finishY1, startX1, finishY1, startX1, startY1);
+            }
 
 
         }
+    }
+
+    else {
+        console.log("X : " + turn.source.finishX + " > " + turn.destination.startX);
+        console.log("left");
+        if (turn.source.finishY > turn.destination.startY) {
+            console.log("Y : " + turn.source.finishY + " > " + turn.destination.startY);
+            console.log("up");
+
+            console.log("left down -> right up");
+            context.moveTo(startX1, startY1);
+            context.lineTo(startX2,startY2);
+            context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
+            context.lineTo(finishX1, finishY1);
+            context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
+        }
+
+        else {
+            console.log("Y : " + turn.source.finishY + " > " + turn.destination.startY);
+            console.log("down");
+
+
+            console.log("left up -> right down");
+            context.moveTo(startX1, startY1);
+            context.lineTo(startX2,startY2);
+            context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
+            context.lineTo(finishX1, finishY1);
+            context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
+        }
+    }
+
+
+    context.fillStyle = "black";
+    context.fill();
+    context.closePath();
+    context.stroke();
+
+
+    if(!is_source_vertical){
+        context.moveTo(turn.source.finishX * logic_to_canvas_multiplier, turn.source.finishY * logic_to_canvas_multiplier);
+        context.fillStyle = "green";
+        context.bezierCurveTo(turn.destination.startX * logic_to_canvas_multiplier,
+            turn.source.finishY * logic_to_canvas_multiplier,
+            turn.destination.startX * logic_to_canvas_multiplier,
+            turn.source.finishY * logic_to_canvas_multiplier,
+            turn.destination.startX * logic_to_canvas_multiplier,
+            turn.destination.startY * logic_to_canvas_multiplier);
+
     }
     else{
-        if(turn.source.finishY > turn.destination.startY){
+        context.moveTo(turn.source.finishX * logic_to_canvas_multiplier,
+            turn.source.finishY * logic_to_canvas_multiplier);
 
-        } else{
+        context.fillStyle = "green";
 
-        }
+        context.bezierCurveTo(turn.source.finishX * logic_to_canvas_multiplier,
+            turn.destination.startY * logic_to_canvas_multiplier,
+            turn.source.finishX * logic_to_canvas_multiplier,
+            turn.destination.finishY * logic_to_canvas_multiplier,
+            turn.destination.startX * logic_to_canvas_multiplier,
+            turn.destination.startY * logic_to_canvas_multiplier);
+
+
     }
+    context.stroke();
+
 }
 
 function draw_road_lines(context, rdCnfg, is_vertical) {

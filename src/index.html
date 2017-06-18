@@ -91,7 +91,7 @@
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 
-			logic_to_canvas_multiplier = canvas.width / 100;
+			logic_to_canvas_multiplier =Math.round( canvas.width / 100);
 			console.log(logic_to_canvas_multiplier);
 
 			main();
