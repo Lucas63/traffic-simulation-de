@@ -1,4 +1,5 @@
-function Offramp( _source, _destination, _outflow, _length, _connectedLaneType)
+function Offramp( _source, _destination, _outflow,
+				  _length, _width, _connectedLaneType)
 {
 	this.source = _source;
 	this.destination = _destination;
@@ -7,6 +8,7 @@ function Offramp( _source, _destination, _outflow, _length, _connectedLaneType)
 	this.type = RoadObject.OFFRAMP;
 
 	this.length = _length;
+	this.width = _width;
 
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();
