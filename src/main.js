@@ -2,6 +2,7 @@
  * Created by lucas63 on 11.06.17.
  */
 
+spawn_points = null;
 
 roads = null;
 junctions = null;
@@ -15,8 +16,10 @@ function load_objects(){
 
     load_vehicle_configuration();
 
+    spawn_points = load_spawn_points();
+    console.log(spawn_points);
 
-    roads = load_roads(load_road_configs());
+    roads = load_roads(load_road_configs(),spawn_points);
     console.log(roads);
 
     junctions = load_junctions(roads);

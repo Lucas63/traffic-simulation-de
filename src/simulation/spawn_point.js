@@ -1,5 +1,6 @@
-function SpawnPoint( _minPeriod, _maxPeriod, _truckFraction, _routeId )
+function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction, _routeId )
 {
+	this.id = _id;
 	this.minPeriod = _minPeriod;
 	this.maxPeriod = _maxPeriod;
 	this.truckFraction = _truckFraction;

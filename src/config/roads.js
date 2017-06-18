@@ -18,7 +18,7 @@ var roads_json = {
 			],
 			"backwardLanes": 2,
 			"backwardLanesSpawnPoints": [
-				1,
+				0,
 				null
 			],
 			"startConnection": {
@@ -41,7 +41,7 @@ var roads_json = {
 			"finishY": 38,
 			"forwardLanes":2,
 			"forwardLanesSpawnPoints": [
-				2,
+				null,
 				null
 			],
 			"backwardLanes":2,

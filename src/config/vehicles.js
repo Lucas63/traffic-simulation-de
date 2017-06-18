@@ -4,16 +4,16 @@
 var vehicles_json = {
 	"car":
 	{
-		"length": 4,
-		"width": 2,
-		"minimum_gap": 2,
+		"length": 1,
+		"width": 0.5,
+		"minimum_gap": 0.25,
 
 		"FreeMoveIDMModel":
 		{
-			"desiredSpeed": 80,
+			"desiredSpeed": 1,
 			"timeHeadway": 1.5,
-			"acceleration": 1.2,
-			"deceleration": 1.8,
+			"acceleration": 0.5,
+			"deceleration": 0.5,
 			"lambda_a": 1,
 			"lambda_b": 1,
 			"lambda_T": 1
@@ -26,10 +26,10 @@ var vehicles_json = {
 
 		"UpstreamIDMModel":
 		{
-			"desiredSpeed": 30,
+			"desiredSpeed": 0.75,
 			"timeHeadway": 1.5,
-			"acceleration": 0.4,
-			"deceleration": 2.1,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1,
 			"lambda_b": 1.7,
 			"lambda_T": 1
@@ -42,10 +42,10 @@ var vehicles_json = {
 
 		"DownstreamIDMModel":
 		{
-			"desiredSpeed": 80,
+			"desiredSpeed": 0.75,
 			"timeHeadway": 1.5,
-			"acceleration": 0.8,
-			"deceleration": 1.3,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1,
 			"lambda_b": 2,
 			"lambda_T": 0.5
@@ -58,10 +58,10 @@ var vehicles_json = {
 
 		"JamIDMModel":
 		{
-			"desiredSpeed": 10,
+			"desiredSpeed": 1,
 			"timeHeadway": 1.5,
-			"acceleration": 0.5,
-			"deceleration": 1.5,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1.5,
 			"lambda_b": 1,
 			"lambda_T": 1.5
@@ -70,16 +70,16 @@ var vehicles_json = {
 
 	"truck":
 	{
-		"length": 10,
-		"width": 5,
-		"minimumGap": 2,
+		"length": 1.5,
+		"width": 0.8,
+		"minimumGap": 0.4,
 
 		"FreeMoveIDMModel":
 		{
-			"desiredSpeed": 60,
+			"desiredSpeed": 0.75,
 			"timeHeadway": 1.8,
-			"acceleration": 1.2,
-			"deceleration": 1.8,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1,
 			"lambda_b": 1,
 			"lambda_T": 1
@@ -92,10 +92,10 @@ var vehicles_json = {
 
 		"UpstreamIDMModel":
 		{
-			"desiredSpeed": 15,
+			"desiredSpeed": 1,
 			"timeHeadway": 1.8,
-			"acceleration": 1.2,
-			"deceleration": 1,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1,
 			"lambda_b": 1.7,
 			"lambda_T": 1
@@ -108,10 +108,10 @@ var vehicles_json = {
 
 		"DownstreamIDMModel":
 		{
-			"desiredSpeed": 60,
+			"desiredSpeed": 1,
 			"timeHeadway": 1.5,
-			"acceleration": 1.2,
-			"deceleration": 1,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1,
 			"lambda_b": 2,
 			"lambda_T": 0.5
@@ -124,13 +124,13 @@ var vehicles_json = {
 
 		"JamIDMModel":
 		{
-			"desiredSpeed": 10,
+			"desiredSpeed": 1,
 			"timeHeadway": 2,
-			"acceleration": 1.2,
-			"deceleration": 1,
+			"acceleration": 0.25,
+			"deceleration": 0.25,
 			"lambda_a": 1.5,
 			"lambda_b": 1,
 			"lambda_T": 0.5
 		}
 	}
-}
+};

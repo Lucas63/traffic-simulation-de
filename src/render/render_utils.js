@@ -249,7 +249,6 @@ function draw_offramp(context, offramp) {
     let offramp_height = 0;
 
     if (is_vertical_road(offramp.source.direction)) {
-        console.log("test");
         startX = offramp.source.finishX - offramp.source.getForwardLanesAmount()*logic_lane_width/2;
         startY = offramp.source.finishY;
 
@@ -258,7 +257,6 @@ function draw_offramp(context, offramp) {
 
     }
     else {
-        console.log("test");
         startX = offramp.source.finishX ;
         startY = offramp.source.finishY - offramp.source.getLanesAmount()*logic_lane_width/2;
 
