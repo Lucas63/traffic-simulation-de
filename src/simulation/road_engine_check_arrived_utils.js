@@ -336,8 +336,6 @@ function moveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
 
 function moveToJunction( movement, junction, roadId, laneIndex, vehicle )
 {
-	let space = vehicle.getMinimalGap();
-
 	switch (movement)
 	{
 		case MovementType["pass"]:

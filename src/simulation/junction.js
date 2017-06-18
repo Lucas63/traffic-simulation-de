@@ -337,11 +337,11 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 											vehicleRequiredSpace )
 {
 	let sourceSide = this.getSideForRoad( roadId );
-	if (sourceSide == null)
-	{
-		printError(arguments.callee.name, "Wrong road id!");
-		return false;
-	}
+	// if (sourceSide == null)
+	// {
+	// 	printError(arguments.callee.name, "Wrong road id!");
+	// 	return false;
+	// }
 
 	// vehicle cannot move due to prohibiting traffic light
 	if (this.trafficLightAllowToMove(sourceRide) == false)
@@ -429,11 +429,11 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 											  vehicleRequiredSpace )
 {
 	let sourceSide = this.getSideForRoad( roadId );
-	if (sourceSide == null)
-	{
-		printError(arguments.callee.name, "Wrong road id!");
-		return null;
-	}
+	// if (sourceSide == null)
+	// {
+	// 	printError(arguments.callee.name, "Wrong road id!");
+	// 	return null;
+	// }
 
 	if (this.trafficLightAllowToMove(sourceSide) == false)
 		return false;
