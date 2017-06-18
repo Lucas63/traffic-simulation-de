@@ -119,20 +119,52 @@ function load_junctions(roads) {
 }
 
 function load_onramps(roads) {
-    let array = onramps_json.junctions;
+    let array = onramps_json.onramps;
     let onramps = [];
-    let junction_side_length = 4;
+
+    let lanes_width = 2;
+    let lanes_height = 4;
 
     for (let i = 0; i < array.length; i++) {
 
         let onramp_string = array[i];
 
-        let new_junction = new Onramp(
-
+        let new_onramp = new Onramp(
+            roads[onramp_string.source],
+            roads[onramp_string.destination],
+            roads[onramp_string.inflow],
+            logic_lane_width*lanes_height,
+            logic_lane_width*lanes_width,
+            LaneType.forward
         );
-        junctions.push(new_junction);
+        onramps.push(new_onramp);
     }
-    return junctions;
+    return onramps;
+}
+
+
+function load_offramps(roads) {
+    let array = offramps_json.offramps;
+    let offramps = [];
+
+    let lanes_width = 2;
+    let lanes_height = 4;
+
+    for (let i = 0; i < array.length; i++) {
+
+        let offramp_string = array[i];
+
+        let new_offramp = new Offramp(
+            roads[offramp_string.source],
+            roads[offramp_string.destination],
+            roads[offramp_string.outflow],
+            logic_lane_width*lanes_height,
+            logic_lane_width*lanes_width,
+            LaneType.forward
+        );
+        offramps.push(new_offramp);
+    }
+    return offramps;
 }
 
 

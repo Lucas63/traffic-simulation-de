@@ -8,24 +8,24 @@ var offramps_json = {
 
 			{
 				"id": 0,
-				"source": 6,
-				"destination": 9,
-				"outflow": 11
+				"source": 5,
+				"destination": 8,
+				"outflow": 10
 			},
 			{
 				"id": 1,
-				"source": 22,
-				"destination": 19,
-				"outflow": 21
+				"source": 21,
+				"destination": 18,
+				"outflow": 20
 			},
 			{
 				"id": 2,
-				"source": 17,
-				"destination": 22,
-				"outflow": 24
+				"source": 16,
+				"destination": 21,
+				"outflow": 23
 			}
 		]
-}
+};
 
 
 //

@@ -43,6 +43,7 @@ function Onramp( _source, _destination, _inflow,
 	this.turnLanes = new Array( sourceLanesAmount );
 	addVehiclesArray(this.turnLanes);
 
+	return;
 	setOnrampTurnData(this.turnLanes, _source, _source.forwardLanes,
 					  turnDestinationLane)
 
@@ -246,7 +247,7 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 };
 
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
-											  laneType, laneIndex,)
+											  laneType, laneIndex)
 {
 	vehicle.prepareForMove(MovementState.ON_ONRAMP);
 
