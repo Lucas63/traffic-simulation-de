@@ -216,31 +216,71 @@ function draw_turn(context, turn) {
 }
 
 
-function draw_onramp(context, onramp){
-    let onramp_width = logic_lane_width*onramp.source.getForwardLanesAmount();
-    let onramp_height = logic_lane_width*onramp.inflow.getLanesAmount();
+function draw_onramp(context, onramp) {
+    let onramp_width = logic_lane_width * onramp.source.getForwardLanesAmount();
+    let onramp_height = logic_lane_width * onramp.inflow.getLanesAmount();
+    let startX = 0;
+    let startY = 0;
 
-    if(is_vertical_road(onramp.source.direction)){
-        let startY = onramp.source.finishY - onramp_width/2;
-        let startX = onramp.inflow.startX - onramp_height/2;
-
-        onramp_height *= logic_to_canvas_multiplier;
-        onramp_width *= logic_to_canvas_multiplier;
-
-        startX *= logic_to_canvas_multiplier;
-        startY *= logic_to_canvas_multiplier;
-
-        context.beginPath();
-        context.moveTo(startX,startY);
-        context.fillStyle = "#8ED6FF";
-        context.fillRect(startX, startY, onramp_width, onramp_height);
-        context.closePath();
-        context.stroke();
-        //draw_road_lines(context, road, is_vertical);
+    if (is_vertical_road(onramp.source.direction)) {
+        startY = onramp.source.finishY;
+        startX = onramp.destination.startX - onramp_height / 2;
     }
+
+    onramp_height *= logic_to_canvas_multiplier;
+    onramp_width *= logic_to_canvas_multiplier;
+
+    startX *= logic_to_canvas_multiplier;
+    startY *= logic_to_canvas_multiplier;
+
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.fillStyle = "#8ED6FF";
+    context.fillRect(startX, startY, onramp_width, onramp_height);
+    context.closePath();
+    context.stroke();
 }
 
-function draw_offramp(context, offramp){
+function draw_offramp(context, offramp) {
+
+    let startX = 0;
+    let startY = 0;
+    let offramp_width = 0;
+    let offramp_height = 0;
+
+    if (is_vertical_road(offramp.source.direction)) {
+        console.log("test");
+        startX = offramp.source.finishX - offramp.source.getForwardLanesAmount()*logic_lane_width/2;
+        startY = offramp.source.finishY;
+
+        offramp_width = offramp.source.getForwardLanesAmount()*logic_lane_width;
+        offramp_height = offramp.outflow.getForwardLanesAmount()*logic_lane_width;
+
+    }
+    else {
+        console.log("test");
+        startX = offramp.source.finishX ;
+        startY = offramp.source.finishY - offramp.source.getLanesAmount()*logic_lane_width/2;
+
+        offramp_width = offramp.source.getLanesAmount()*logic_lane_width/2;
+        offramp_height = offramp.outflow.getLanesAmount()*logic_lane_width;
+
+
+    }
+
+    startX *= logic_to_canvas_multiplier;
+    startY *= logic_to_canvas_multiplier;
+
+    offramp_width *= logic_to_canvas_multiplier;
+    offramp_height *= logic_to_canvas_multiplier;
+
+
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.fillStyle = "#8ED6FF";
+    context.fillRect(startX, startY, offramp_width, offramp_height);
+    context.closePath();
+    context.stroke();
 
 }
 
