@@ -44,6 +44,8 @@
 		<!-- render/* -->
 		<script src="render/render_utils.js" type="text/javascript"></script>
 		<script src="render/visualization.js" type="text/javascript"></script>
+		<script src="render/renderer.js" type="text/javascript"></script>
+
 
 		<!-- model/* -->
 		<script src="model/idm.js" type="text/javascript"></script>
@@ -93,7 +95,7 @@
 			canvas.height = window.innerHeight;
 
 			logic_to_canvas_multiplier =Math.round( canvas.width / 100);
-			console.log("select multiplier : "+logic_to_canvas_multiplier);
+			console.log("selected multiplier : "+logic_to_canvas_multiplier);
 
 			main();
 

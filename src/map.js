@@ -22,10 +22,6 @@ function Map(_roads, _junctions, _turns, _onramps, _offramps) {
     print_function_end(Map.name);
 }
 
-// конфигурация путекй вверх направо прямо
-Map.prototype.render_map = function () {
-    render_map(this);
-};
 
 
 /*
