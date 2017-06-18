@@ -27,20 +27,18 @@ function Offramp( _source, _destination, _outflow,
 	setupPassLanes(this.backwardLanes);
 
 
-	let turnSourceLane = null;
-	return;
-
+	let turnSourceLane = {};
 	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
-		this.connectedLaneIndex = _source.getForwardLanesAmount() - 1;
+		this.connectedLaneIndex = this.forwardLanes.length - 1;
 		turnSourceLane = _source.forwardLanes.last();
 	}
 	else
 	{
-		this.connectedLane = this.backwardLanes.first();
-		this.connectedLaneIndex = 0;
-		turnSourceLane = _source.backwardLanes.first();
+		this.connectedLane = this.backwardLanes.last();
+		this.connectedLaneIndex = this.backwardLanes.length - 1;
+		turnSourceLane = _source.backwardLanes.last();
 	}
 
 	// virtual lanes for turning vehicles
@@ -66,7 +64,7 @@ Offramp.prototype.canTurn = function( vehicleRequiredSpace)
 	if ( this.connectedLane.vehicles.empty() &&
 		 this.turnLanes.vehicles.empty())
 	{
-		return true;
+		return freeLaneIndex;
 	}
 
 	// check whether last turning vehicle has completed turn for at least 50%
@@ -81,7 +79,7 @@ Offramp.prototype.canTurn = function( vehicleRequiredSpace)
 
 		// if turn completed for less than 50%,
 		// then another car cannot start turn
-		if ( lastVehicle.turnCompletion < 0.5 )
+		if ( lastVehicle.farFrom(vehicleRequiredSpace) )
 			return freeLaneIndex;
 	}
 

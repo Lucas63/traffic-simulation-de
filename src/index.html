@@ -36,32 +36,36 @@
 
 
 		<!-- utils/* -->
-		<script src="utils/logger_utils.js" type="text/javascript"></script>
 		<script src="utils/common.js" type="text/javascript"></script>
 		<script src="utils/file_utils.js" type="text/javascript"></script>
+		<script src="utils/logger_utils.js" type="text/javascript"></script>
 		<script src="utils/parsing_utils.js" type="text/javascript"></script>
 
 		<!-- render/* -->
-		<script src="render/visualization.js" type="text/javascript"></script>
 		<script src="render/render_utils.js" type="text/javascript"></script>
+		<script src="render/visualization.js" type="text/javascript"></script>
 
 		<!-- simulation/* -->
-		<script src="simulation/vehicle_utils.js" type="text/javascript"></script>
-		<script src="simulation/virtual_vehicle.js" type="text/javascript"></script>
-		<script src="simulation/lane.js" type="text/javascript"></script>
-		<script src="simulation/turn_data.js" type="text/javascript"></script>
-		<script src="simulation/road.js" type="text/javascript"></script>
-		<script src="simulation/turn.js" type="text/javascript"></script>
-		<script src="simulation/junction.js" type="text/javascript"></script>
 		<script src="simulation/junction_utils.js" type="text/javascript"></script>
-		<script src="simulation/onramp.js" type="text/javascript"></script>
+		<script src="simulation/junction.js" type="text/javascript"></script>
+		<script src="simulation/lane.js" type="text/javascript"></script>
 		<script src="simulation/offramp.js" type="text/javascript"></script>
-		<script src="simulation/vehicle.js" type="text/javascript"></script>
-		<script src="simulation/road_engine.js" type="text/javascript"></script>
+		<script src="simulation/onramp.js" type="text/javascript"></script>
+		<script src="simulation/road_engine_check_arrived_utils.js" type="text/javascript"></script>
 		<script src="simulation/road_engine_lane_change_utils.js" type="text/javascript"></script>
 		<script src="simulation/road_engine_pre_update_utils.js" type="text/javascript"></script>
 		<script src="simulation/road_engine_update_neighbours_utils.js" type="text/javascript"></script>
 		<script src="simulation/road_engine_update_vehicle_utils.js" type="text/javascript"></script>
+		<script src="simulation/road_engine.js" type="text/javascript"></script>
+		<script src="simulation/road.js" type="text/javascript"></script>
+		<script src="simulation/route.js" type="text/javascript"></script>
+		<script src="simulation/spawn_point.js" type="text/javascript"></script>
+		<script src="simulation/traffic_light.js" type="text/javascript"></script>
+		<script src="simulation/turn_data.js" type="text/javascript"></script>
+		<script src="simulation/turn.js" type="text/javascript"></script>
+		<script src="simulation/vehicle_utils.js" type="text/javascript"></script>
+		<script src="simulation/vehicle.js" type="text/javascript"></script>
+		<script src="simulation/virtual_vehicle.js" type="text/javascript"></script>
 
 		<!-- config/* -->
 		<script src="config/roads.js" type="text/javascript"></script>
@@ -69,18 +73,13 @@
 		<script src="config/turns.js" type="text/javascript"></script>
 		<script src="config/onramps.js" type="text/javascript"></script>
 		<script src="config/offramps.js" type="text/javascript"></script>
+		<script src="config/idm.js" type="text/javascript"></script>
 		<script src="config/vehicles.js" type="text/javascript"></script>
-
-
-
-		<!-- config/* -->
-		<script src="model/idm.js" type="text/javascript"></script>
-
+		<script src="config/routes.js" type="text/javascript"></script>
 
 		<!-- Main scripts(scripts in root directory) -->
 		<script src="map.js" type="text/javascript"></script>
 		<script src="main.js" type="text/javascript"></script>
-
 
 
 		<script type="text/javascript">
@@ -90,7 +89,6 @@
 
 			logic_to_canvas_multiplier = canvas.width / 100;
 			console.log(logic_to_canvas_multiplier);
-
 
 			main();
 

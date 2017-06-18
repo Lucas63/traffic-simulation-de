@@ -254,7 +254,7 @@ function canMoveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
 
 		case MovementType["turnLeft"]:
 		case MovementType["turnRight"]:
-			if (offramp.canTurn( vehicle.getMinimalGap() ))
+			if ( offramp.canTurn(vehicle.getMinimalGap()) != INVALID )
 				return true;
 
 		break;
@@ -327,6 +327,8 @@ function moveToOfframp( offramp, roadId, lane, laneIndex, vehicle )
 
 		case MovementType["turnLeft"]:
 		case MovementType["turnRight"]:
+				// here must be used value returned from canTurn()
+				// issues can appear due to usage of laneIndex here
 				offramp.startTurn(laneIndex, vehicle);
 		break;
 	}

@@ -29,14 +29,18 @@ function Onramp( _source, _destination, _inflow,
 	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
-		this.connectedLaneIndex = _destination.getForwardLanesAmount() - 1;
+		this.connectedLaneIndex = this.forwardLanes.length - 1;
+
+		this.inflowLane = _inflow.forwardLanes.last();
 		turnDestinationLane = _destination.forwardLanes.last();
 	}
 	else
 	{
-		this.connectedLane = this.backwardLanes.first();
-		this.connectedLaneIndex = 0;
-		turnDestinationLane = _destination.backwardLanes.first();
+		this.connectedLane = this.backwardLanes.last();
+		this.connectedLaneIndex = this.backwardLanes.length - 1;
+
+		this.inflowLane = _inflow.backwardLanes.last();
+		turnDestinationLane = _destination.backwardLanes.last();
 	}
 
 	let sourceLanesAmount = this.source.getLanesAmount();
@@ -60,9 +64,7 @@ function Onramp( _source, _destination, _inflow,
 Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
 {
 	// at first check first vehicle at inflow road
-	let inflowLane = this.inflow.forwardLanes.last();
-
-	if (inflowLane.vehicles.empty() == false)
+	if (this.inflowLane.vehicles.empty() == false)
 	{
 		let firstVehicle = inflowLane.vehicles.first();
 
@@ -71,9 +73,7 @@ Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
 
 		// if vehicle too close for road's end
 		if (firstVehicle.uCoord >= requiredSpace)
-		{
 			return false;
-		}
 	}
 
 	return true;
@@ -95,24 +95,27 @@ Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 	let lastVehicle = null;
 	let vehiclesAmount = 0;
 
-	for (let i = 0; i < this.turnLanes.length; ++i)
+	for (let i = sourceLaneIndex; i < this.turnLanes.length; ++i)
 	{
 		vehicles = this.turnLanes[i].vehicles;
 		lastVehicle = vehicles.last();
 
 		// if turn completed for less than 50%,
 		// then another car cannot start turn
-		if ( lastVehicle.turnCompletion < 0.5 )
+		if ( lastVehicle.farFrom(requiredSpace) == false )
 			return false;
 	}
 
 	if ( this.inflowRoadIsFree(requiredSpace) == false )
-	{
 		return false;
-	}
 
 	let vehicles = this.connectedLane.vehicles;
 	let vehiclesAmount = vehicles.length;
+
+	if (vehiclesAmount == 0)
+		return true;
+
+	return false; // clutch
 
 	// check vehicles in reverse order
 	// try to avoid conflicts with vehicles added recently
@@ -167,14 +170,12 @@ Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 
 		// if turn completed for less than 50%,
 		// then another car cannot start turn
-		if ( lastVehicle.turnCompletion < 0.5 )
+		if ( lastVehicle.farFrom(vehicle.getMinimalGap()) == false )
 			return false;
 	}
 
 	if (this.inflowRoadIsFree() == false)
-	{
 		return false;
-	}
 
 	vehicles = this.connectedLane.vehicles;
 	if (vehicles.empty())
@@ -182,7 +183,7 @@ Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 
 	let lastVehicle = vehicles.last();
 
-	return lastVehicle.farFrom( vehicle.requiredSpace );
+	return lastVehicle.farFrom( vehicle.getMinimalGap() );
 };
 
 Onramp.prototype.canPassThrough = function( vehicle, roadId,
@@ -191,30 +192,26 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 	// The same logic as for offramp
 	// TODO move to one function
 	///////////////////////////////////////////////////////////////////////////
-	assert( roadId == this.source || roadId == this.inflow,
-			"Wrong road id " + roadId);
+	// assert( roadId == this.source || roadId == this.inflow,
+	// 		"Wrong road id " + roadId);
 
 	if (this.isConnectedLane( laneType, laneIndex ))
-	{
 		return this.canPassThroughConnectedLane( vehicle );
-	}
 
 	let selectedLane = null;
-	if ( laneType == LaneType.BACKWARD.value )
+	if ( laneType == LaneType["backward"] )
 	{
-		assert( laneIndex >= this.backwardLanes.length );
+		// assert( laneIndex >= this.backwardLanes.length );
 		selectedLane = this.backwardLanes[ laneIndex ];
 	}
 	else
 	{
-		assert( laneIndex >= this.forwardLanes.length );
+		// assert( laneIndex >= this.forwardLanes.length );
 		selectedLane = this.forwardLanes[ laneIndex ];
 	}
 
 	if ( selectedLane.vehicles.empty() )
-	{
 		return true;
-	}
 	///////////////////////////////////////////////////////////////////////////
 
 	let lastVehicle = selectedLane.vehicles.last();
