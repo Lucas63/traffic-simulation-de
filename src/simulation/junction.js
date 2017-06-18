@@ -48,7 +48,6 @@ function Junction( _id, _pos, _side,
 	this.topRoad = {};
 	this.topRoad.road = _topRoad;
 
-	console.log(_leftRoad.backwardLanes);
 	this.topRoad.turnRightLanes = new Array(_leftRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.topRoad.turnRightLanes);
 
