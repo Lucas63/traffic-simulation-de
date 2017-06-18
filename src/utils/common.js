@@ -1,6 +1,6 @@
 
 // value denoting error, I prefer it to numerical variables instead of null
-const INVALID = -1;
+//const INVALID = -1;
 
 
 const TURN_DURATION_BASE = 0.5;

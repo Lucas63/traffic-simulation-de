@@ -12,80 +12,42 @@
 @multiplier - variable that adjusting drawn map(diagram by @lucas63) to canvas size,
   converting proportion -> to pixels
  */
-var multiplier = 10;
+//var multiplier = 10;
 
 
 /*
  @lane_width - width of one lane before multipling. On canvas canvas_lane_width = lane_width * multiplier
  */
 
-var lane_width = 1;
+//var lane_width = 1;
 
-function render_map(){
+function render_map(map){
+    console.log(map.context);
+    console.log(map.canvas);
 
-    roadConfigs = load_road_configs();
-    roads = load_roads(roadConfigs);
+    //---- map properties
+    draw_map(map.context,map.canvas);
 
+    //---- roads drawing
+    draw_roads(map.context,map.roads);
 
-    console.log(roads);
-    junctions = load_junctions(roads);
-
-    var canvas = document.getElementById('canvas_map');
-    if (canvas.getContext){
-        var ctx = canvas.getContext('2d');
-
-        //---- map properties
-        //draw_map(ctx);
-
-        //---- test function, only for debug purposes
-        test_function(ctx);
-
-        //---- roads drawing
-        draw_roads(ctx,roads);
-
-
-        //---- turns drawing
-
-
-    }
 
 }
 
-function draw_map(canvas){
-    canvas.style.backgroundColor = '#AAAAAA';
-
+function draw_map(context,canvas){
+    context.backgroundColor = "lightblue";
+    //context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function draw_roads(ctx,roadConfigs) {
-    draw_message_separator();
-    console.log("ROADS");
-    draw_message_separator();
+function draw_roads(context,roads) {
 
-    for(let i = 0; i< roadConfigs.length; i++){
-        console.log("road ("+i+")");
-
-        draw_road(ctx,roadConfigs[i]);
-
-        draw_message_separator();
-
+    for(let i = 0; i< roads.length; i++){
+        draw_road(context,roads[i]);
     }
 
 
 }
 
 function draw_junctions(ctx,junctions){
-    draw_message_separator();
-    console.log("JUNCTIONS");
-    draw_message_separator();
-
-}
-
-/*
-Function used for testing of drawing objects
-TODO: delete in production version
- */
-function test_function(ctx) {
-
-
 
 }

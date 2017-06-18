@@ -11,3 +11,11 @@ direction. Start for forward lane is the finish for backward one.
 (Artem) - Backlog
 9. Fix usage of connected objects in road (Oleksii) - Selected for development
 10. Fix usage of route data (Oleksii) - Selected for development
+
+
+
+
+1. До 5 утра пофиксить текущее состояние
+2. До 7 утра выгрузка всех объектов
+3. До 9 утра отрисовка всех объектов
+4. До 11 утра запуск машинок

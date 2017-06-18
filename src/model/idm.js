@@ -109,7 +109,7 @@ function createTruckIDMModels( freeRoadVehicleConfig, freeRoadConfig,
 // \param gap - bumper-to-bumper distance between vehicles
 // \param currentSpeed - speed of current vehicle
 // \param leaderSpeed - leading vehicle speed
-IDM.prototype.calculateAcceleration( gap, currentSpeed, leaderSpeed )
+IDM.prototype.calculateAcceleration = function( gap, currentSpeed, leaderSpeed )
 {
 	let speed = currentSpeed;
 
@@ -139,7 +139,7 @@ IDM.prototype.calculateAcceleration( gap, currentSpeed, leaderSpeed )
 	// prevent deceleration lower than maximum
 	return Math.max(this.maximumDeceleration,
 					freeRoadAcceleration - deceleration);
-}
+};
 
 // compare current (that vehicle has now) and
 // calculated (for next step of simulation) accelerations

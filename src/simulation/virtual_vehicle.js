@@ -11,12 +11,12 @@ function VirtualVehicle( _defaultCoord, _freeMovementCoord,
 	this.actualSpeed = _defaultSpeed;
 }
 
-VirtualVehicle.prototype.setDefaultValues()
+VirtualVehicle.prototype.setDefaultValues = function()
 {
 	this.actualCoord = this.defaultCoord;
 };
 
-VirtualVehicle.prototype.setFreeMovementValues()
+VirtualVehicle.prototype.setFreeMovementValues = function()
 {
 	this.actualCoord = this.freeMovementCoord;
 };

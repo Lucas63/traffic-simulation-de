@@ -2,8 +2,9 @@
 // \param _destination - object of road vehicle moves to
 // \param _pathCalcFunction - function for calculating moved distance on turn
 // \note source and destination roads must have the same lanes quantity!
-function Turn( _source, _destination, _pathCalcFunction )
+function Turn( _id, _source, _destination, _pathCalcFunction )
 {
+	this.id = _id;
 	this.source = _source;
 	this.destination = _destination;
 	this.pathCalcFunction = _pathCalcFunction;
@@ -18,6 +19,7 @@ function Turn( _source, _destination, _pathCalcFunction )
 
 	this.lanes = new Array( lanesAmount );
 
+	return;
 	for (let i = 0; i < lanesAmount; ++i)
 		// each lane has array of vehicles on this lane
 		this.lanes[i].vehicles = [];

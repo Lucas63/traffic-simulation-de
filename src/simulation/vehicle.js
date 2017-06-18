@@ -1,11 +1,11 @@
 // type affects length, max and desired speed, etc.
-var VehicleType =
+VehicleType =
 {
 	CAR : 0,
 	TRUCK : 1
 };
 
-var VehicleState =
+VehicleState =
 {
 	MOVING: 0, // drive on straight road or passing through the junction
 	TURNING: 1, // turning on Turn/Onramp/Offramp/Junction
@@ -16,7 +16,7 @@ var VehicleState =
 // Situation on road for the vehicle
 // Given from "The Intelligent Driver Model: Analysis and
 // Application to Adaptive Cruise Control"
-var TrafficState =
+TrafficState =
 {
 	FREE_ROAD : 0, // drive freely, leading vehicle can be present
 	UPSTREAM : 1, // arriving to congested traffic area
@@ -27,14 +27,14 @@ var TrafficState =
 };
 
 // State of moving, used for simulation and rendering
-var MovementState =
+MovementState =
 {
 	ON_TURN:       0,
 	ON_ONRAMP:     1, // turn to another road
 	ON_OFFRAMP:    2, // keep the same road, but changing lane
 	ON_JUNCTION:   3, // stop and wait, velocity is 0
 	FREE_MOVEMENT: 4
-}
+};
 
 const MINIMAL_GAP = 2;
 
@@ -42,10 +42,10 @@ const MINIMAL_GAP = 2;
 const VIRTUAL_VEHICLE = -1;
 
 
-var virtualFreeRoadVehicle = null;
-var virtualUpstreamVehicle = null;
-var virtualDownstreamVehicle = null;
-var virtualJamVehicle = null;
+virtualFreeRoadVehicle = null;
+virtualUpstreamVehicle = null;
+virtualDownstreamVehicle = null;
+virtualJamVehicle = null;
 
 
 // Used length units independent from actual visualization scale

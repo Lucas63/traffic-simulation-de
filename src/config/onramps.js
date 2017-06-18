@@ -11,4 +11,6 @@ var onramps_json = {
 				"inflow": 15
 			}
 		]
-}
+};
+
+//destination - 2 полосы  прямоугольник 2 на 4

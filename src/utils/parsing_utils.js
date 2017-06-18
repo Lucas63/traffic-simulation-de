@@ -7,12 +7,14 @@
 Function that deciding is road vertical or not
 
  */
-function is_vertical_road(road){
-	if (road.direction == RoadDirection["UP_TO_BOTTOM"] ||
-		road.direction == RoadDirection["BOTTOM_TO_UP"])
+function is_vertical_road(type){
+	if (type == RoadDirection["UP_TO_BOTTOM"] || type == RoadDirection["BOTTOM_TO_UP"])
 	{
 		return true;
 	}
-
-	return false;
+	else if(type == RoadDirection["LEFT_TO_RIGHT"] || type == RoadDirection["RIGHT_TO_LEFT"]){
+		return false
+	}
+	
+	return null;
 }

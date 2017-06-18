@@ -8,8 +8,8 @@ var turn_json = {
 		[
 			{
 				"id": 0,
-				"source": 9,
-				"destination": 8,
+				"source": 7,
+				"destination": 6,
 				"type": "right"
 			},
 			{
@@ -20,8 +20,8 @@ var turn_json = {
 			},
 			{
 				"id": 2,
-				"source": 19,
-				"destination": 16,
+				"source": 18,
+				"destination": 15,
 				"type": "left"
 			}
 		]

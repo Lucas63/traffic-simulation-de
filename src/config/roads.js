@@ -23,7 +23,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 1
+				"id": 0
 			},
 			"finishConnection": {
 				"type": "void",
@@ -55,13 +55,13 @@ var roads_json = {
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 1
+				"id": 0
 			}
 		},
 
 		{
 			"id": 2,
-			"direction": "BOTTOM_TO_UP",
+			"direction": "LEFT_TO_RIGHT",
 			"length": 8,
 			"startX": 4,
 			"startY": 18,
@@ -83,7 +83,7 @@ var roads_json = {
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 2
+				"id": 1
 			}
 		},
 
@@ -107,11 +107,11 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 1
+				"id": 0
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 4
+				"id": 1
 			}
 		},
 		{
@@ -134,7 +134,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 2
+				"id": 1
 			},
 			"finishConnection": {
 				"type": "null",
@@ -161,7 +161,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 1
+				"id": 0
 			},
 			"finishConnection": {
 				"type": "onramp",
@@ -208,7 +208,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -236,7 +236,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -271,11 +271,11 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 2
+				"id": 1
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 3
+				"id": 2
 			}
 		},
 
@@ -303,7 +303,7 @@ var roads_json = {
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 4
+				"id": 3
 			}
 		},
 
@@ -327,7 +327,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 4
+				"id": 3
 			},
 			"finishConnection": {
 				"type": "null",
@@ -355,11 +355,11 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 4
+				"id": 3
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 3
+				"id": 2
 			}
 		},
 
@@ -383,7 +383,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 3
+				"id": 2
 			},
 			"finishConnection": {
 				"type": "null",
@@ -411,7 +411,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 4
+				"id": 3
 			},
 			"finishConnection": {
 				"type": "offroad",
@@ -467,7 +467,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 3
+				"id": 2
 			},
 			"finishConnection": {
 				"type": "onramp",
@@ -499,7 +499,7 @@ var roads_json = {
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 5
+				"id": 4
 			}
 		},
 
@@ -551,7 +551,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 5
+				"id": 4
 			},
 			"finishConnection": {
 				"type": "null",
@@ -583,7 +583,7 @@ var roads_json = {
 			},
 			"finishConnection": {
 				"type": "junction",
-				"id": 5
+				"id": 4
 			}
 		},
 
@@ -635,7 +635,7 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": "junction",
-				"id": 5
+				"id": 4
 			},
 			"finishConnection": {
 				"type": "null",

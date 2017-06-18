@@ -137,9 +137,6 @@ function Road( roadConfig )
 	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;
 
-	let lanesAmount = this.forwardLanes.length +
-					  roadConfig.backwardLanes.length;
-	this.roadWidth = roadConfig.laneWidth * lanesAmount;
 
 	this.startX = roadConfig.startX;
 	this.startY = roadConfig.startY;
@@ -150,8 +147,15 @@ function Road( roadConfig )
 	this.startConnection = roadConfig.startConnection;
 	this.finishConnection = roadConfig.finishConnection;
 
-	this.forwardLanesAmount = roadConfig.forwardLanesAmount;
-	this.backwardLanesAmount = roadConfig.backwardLanesAmount;
+
+	this.forwardLanesAmount = (roadConfig.forwardLanes)? roadConfig.forwardLanes.length : 0;
+	this.backwardLanesAmount = (roadConfig.backwardLanes)? roadConfig.backwardLanes.length : 0;
+
+
+    this.lanesAmount = this.forwardLanesAmount + this.backwardLanesAmount;
+    this.roadWidth = logic_lane_width * this.lanesAmount;
+
+
 }
 
 Road.prototype.getId = function()
@@ -161,17 +165,24 @@ Road.prototype.getId = function()
 
 Road.prototype.getLanesAmount = function()
 {
-	return this.forwardLanes.length + this.backwardLanes.length;
+	return this.lanesAmount;
 };
 
 Road.prototype.getForwardLanesAmount = function()
 {
-	return this.forwardLanes.length;
+	if(this.forwardLanes){
+        return this.forwardLanes.length;
+	}
+	return 0;
 };
 
 Road.prototype.getBackwardLanesAmount = function()
 {
-	return this.backwardLanes.length;
+	if(this.backwardLanes){
+        return this.backwardLanes.length;
+	}
+	return 0;
+
 };
 
 // \param object - object connected to the road

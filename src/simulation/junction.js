@@ -55,6 +55,7 @@ function Junction( _id, _pos, _side,
 	this.topRoad.passLanes = new Array(_bottomRoad.getBackwardLanesAmount());
 	this.topRoad.turnLeftLanes = new Array(_rightRoad.getForwardLanesAmount());
 
+	return;
 	addVehiclesArray(this.topRoad.turnRightLanes);
     setupPassLanes(this.topRoad.passLanes);
 	addVehiclesArray(this.topRoad.turnLeftLanes);

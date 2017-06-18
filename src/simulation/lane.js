@@ -11,11 +11,6 @@ function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
 	this.length = _length;
 	this.type = _type;
 
-	this.startX = _startCenterX;
-	this.startY = _startCenterY;
-
-	this.finishX = _finishCenterX;
-	this.finishY = _finishCenterY;
 
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;

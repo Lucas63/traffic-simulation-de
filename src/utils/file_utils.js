@@ -4,297 +4,411 @@
 
 
 /*
-	Function that reads road objects from src/config/roads.js and pushing them to roads array
+ Function that reads road objects from src/config/roads.js and pushing them to roads array
  */
 function load_road_configs() {
-	let LANE_WIDTH = 1;
+    let LANE_WIDTH = 1;
 
-	let array = roads_json.roads;
-	let roadConfigs = [];
+    let array = roads_json.roads;
+    let roadConfigs = [];
 
 
-	for (let i = 0; i < array.length; i++) {
-		let road_string = array[i];
+    for (let i = 0; i < array.length; i++) {
+        let road_string = array[i];
 
-		let new_road = new RoadConfig(
-			road_string.id,
-			road_string.direction,
-			road_string.length,
-			LANE_WIDTH,
-			road_string.startX,
-			road_string.startY,
-			road_string.finishX,
-			road_string.finishY,
-			road_string.startConnection,
-			road_string.finishConnection,
+        let is_one_way = (road_string.backwardLanes == 0);
 
-			get_lanes(road_string.forwardLanes,
-					  road_string.forwardLanesSpawnPoints, LaneType.forward),
+        let new_road = new RoadConfig(
+            road_string.id,
+            road_string.direction,
+            road_string.length,
+            logic_lane_width,
+            road_string.startX,
+            road_string.startY,
+            road_string.finishX,
+            road_string.finishY,
+            road_string.startConnection,
+            road_string.finishConnection,
 
-			get_lanes(road_string.backwardLanes,
-					  road_string.backwardLanesSpawnPoints,LaneType.backward)
-		);
-		roadConfigs.push(new_road);
-	}
-	return roadConfigs;
+            get_lanes(
+                road_string.startX,
+                road_string.startY,
+                road_string.finishX,
+                road_string.finishY,
+                road_string.length,
+                road_string.forwardLanes,
+                road_string.forwardLanesSpawnPoints,
+                LaneType.forward,
+                is_one_way,
+                road_string.direction),
+
+            get_lanes(
+                road_string.startX,
+                road_string.startY,
+                road_string.finishX,
+                road_string.finishY,
+                road_string.length,
+                road_string.backwardLanes,
+                road_string.backwardLanesSpawnPoints,
+                LaneType.backward,
+                is_one_way,
+                road_string.direction)
+        );
+        roadConfigs.push(new_road);
+    }
+    return roadConfigs;
 }
 
-function load_roads(rdCnfgs){
-	let roads  = [];
-	for(let i = 0; i < rdCnfgs.length; i++){
-		roads.push(new Road(rdCnfgs[i]));
-	}
-	return roads;
+function load_roads(rdCnfgs) {
+    let roads = [];
+    for (let i = 0; i < rdCnfgs.length; i++) {
+        roads.push(new Road(rdCnfgs[i]));
+    }
+    return roads;
 }
 
 /*
  Function that reads turn objects from src/config/turns.js and pushing them to turns array
  */
-function load_turns() {
-	let array = turn_json.turns;
-	let turns = [];
-	let LINES_NUMBER = 4;
+function load_turns(roads) {
+    let array = turn_json.turns;
+    let turns = [];
 
-	for (let i = 0; i < array.length; i++) {
-		let turn_string = array[i];
+    for (let i = 0; i < array.length; i++) {
+        let turn_string = array[i];
 
-		let new_turn = new Turn(
-			turn_string.id,
-			turn_string.destination,
-			turn_string.source,
-			turn_string.type,
-			LINES_NUMBER
-		);
-		turns.push(new_turn);
-	}
-	return turns;
+        let new_turn = new Turn(
+            i,
+            roads[turn_string.source],
+            roads[turn_string.destination],
+            getBezierCurveLength
+        );
+        turns.push(new_turn);
+    }
+    return turns;
 }
 
 
 /*
  Function that reads turn objects from src/config/junctions.js and pushing them to turns array
  */
-function load_junctions(rdConfigs) {
-	let array = junctions_json.junctions;
-	let junctions = [];
-	let junction_side_length = 4;
+function load_junctions(roads) {
+    let array = junctions_json.junctions;
+    let junctions = [];
+    let junction_side_length = 4;
 
-	for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
 
-		let junction_string = array[i];
-		let roads =
-			get_roads_connected_to_junction(junction_string.id,rdConfigs);
+        let junction_string = array[i];
+        let related_roads = get_roads_connected_to_junction(junction_string.id, roads);
 
-		console.log(junction_string);
-		let new_junction = new Junction(
-			junction_string.id,
-			get_center_coordinates(roads,i),
-			junction_side_length,
-			roads[0],
-			roads[1],
-			roads[2],
-			roads[3],
-			junction_string.verticalTrafficLight,
-			junction_string.horizontalTrafficLight
-		);
-		console.log(new_junction);
-		junctions.push(new_junction);
-	}
-	return junctions;
+        let new_junction = new Junction(
+            junction_string.id,
+            get_center_coordinates(related_roads, i),
+            junction_side_length,
+            related_roads[0],
+            related_roads[1],
+            related_roads[2],
+            related_roads[3],
+            junction_string.verticalTrafficLight,
+            junction_string.horizontalTrafficLight
+        );
+        junctions.push(new_junction);
+    }
+    return junctions;
 }
 
-function load_vehicle_configuration()
-{
-	let car_config = vehicles_json.car;
+function load_onramps(roads) {
+    let array = onramps_json.junctions;
+    let onramps = [];
+    let junction_side_length = 4;
 
-	CAR_LENGTH = car_config["length"];
-	CAR_WIDTH = car_config["width"];
+    for (let i = 0; i < array.length; i++) {
 
-	let carMinimumGap = car_config["minimum_gap"];
+        let onramp_string = array[i];
 
-	let model = car_config["FreeMoveIDMModel"];
+        let new_junction = new Onramp(
 
-	let carFreeRoadConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, carMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
-
-	let carFreeRoadIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
-
-	model = car_config["UpstreamIDMModel"];
-	let carUpstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, carMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
-
-	let carUpstreamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
-
-	model = car_config["DownstreamIDMModel"];
-	let carDownstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, carMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
-
-	let carDownstreamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
-
-	model = car_config["JamIDMModel"];
-	let carJamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, carMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
-
-	let carJamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
-
-	createCarIDMModels(carFreeRoadConfig, carFreeRoadIdmConfig,
-					   carUpstreamConfig, carUpstreamIdmConfig,
-					   carDownstreamConfig, carDownstreamIdmConfig,
-					   carJamConfig, carJamIdmConfig);
+        );
+        junctions.push(new_junction);
+    }
+    return junctions;
+}
 
 
-	let truck_config = vehicles_json.truck;
+function load_vehicle_configuration() {
+    let car_config = vehicles_json.car;
 
-	TRUCK_LENGTH = truck_config["length"];
-	TRUCK_WIDTH = truck_config["width"];
+    CAR_LENGTH = car_config["length"];
+    CAR_WIDTH = car_config["width"];
 
-	let truckMinimumGap = truck_config["minimum_gap"];
+    let carMinimumGap = car_config["minimum_gap"];
 
-	let model = truck_config["FreeMoveIDMModel"];
+    let model = car_config["FreeMoveIDMModel"];
 
-	let truckFreeRoadConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, truckMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
+    let carFreeRoadConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, carMinimumGap,
+            model.acceleration,
+            model.deceleration);
 
-	let truckFreeRoadIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+    let carFreeRoadIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
-	model = truck_config["UpstreamIDMModel"];
-	let truckUpstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, truckMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
+    model = car_config["UpstreamIDMModel"];
+    let carUpstreamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, carMinimumGap,
+            model.acceleration,
+            model.deceleration);
 
-	let truckUpstreamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+    let carUpstreamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
-	model = truck_config["DownstreamIDMModel"];
-	let truckDownstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, truckMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
+    model = car_config["DownstreamIDMModel"];
+    let carDownstreamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, carMinimumGap,
+            model.acceleration,
+            model.deceleration);
 
-	let truckDownstreamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+    let carDownstreamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
-	model = truck_config["JamIDMModel"];
-	let truckJamConfig =
-		new VehicleConfig(model.desiredSpeed,
-						  model.timeHeadway, truckMinimumGap,
-						  model.acceleration,
-						  model.deceleration);
+    model = car_config["JamIDMModel"];
+    let carJamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, carMinimumGap,
+            model.acceleration,
+            model.deceleration);
 
-	let truckJamIdmConfig =
-		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+    let carJamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
-	createTruckIDMModels(truckFreeRoadConfig, truckFreeRoadIdmConfig,
-						 truckUpstreamConfig, truckUpstreamIdmConfig,
-						 truckDownstreamConfig, truckDownstreamIdmConfig,
-						 truckJamConfig, truckJamIdmConfig);
+    createCarIDMModels(carFreeRoadConfig, carFreeRoadIdmConfig,
+        carUpstreamConfig, carUpstreamIdmConfig,
+        carDownstreamConfig, carDownstreamIdmConfig,
+        carJamConfig, carJamIdmConfig);
+
+
+    let truck_config = vehicles_json.truck;
+
+    TRUCK_LENGTH = truck_config["length"];
+    TRUCK_WIDTH = truck_config["width"];
+
+    let truckMinimumGap = truck_config["minimum_gap"];
+
+    let model = truck_config["FreeMoveIDMModel"];
+
+    let truckFreeRoadConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, truckMinimumGap,
+            model.acceleration,
+            model.deceleration);
+
+    let truckFreeRoadIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+
+    model = truck_config["UpstreamIDMModel"];
+    let truckUpstreamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, truckMinimumGap,
+            model.acceleration,
+            model.deceleration);
+
+    let truckUpstreamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+
+    model = truck_config["DownstreamIDMModel"];
+    let truckDownstreamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, truckMinimumGap,
+            model.acceleration,
+            model.deceleration);
+
+    let truckDownstreamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+
+    model = truck_config["JamIDMModel"];
+    let truckJamConfig =
+        new VehicleConfig(model.desiredSpeed,
+            model.timeHeadway, truckMinimumGap,
+            model.acceleration,
+            model.deceleration);
+
+    let truckJamIdmConfig =
+        new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
+
+    createTruckIDMModels(truckFreeRoadConfig, truckFreeRoadIdmConfig,
+        truckUpstreamConfig, truckUpstreamIdmConfig,
+        truckDownstreamConfig, truckDownstreamIdmConfig,
+        truckJamConfig, truckJamIdmConfig);
 }
 
 // -------------- UTILS --------------
 
 /*
-function that finding roads related to specified junction(by its ID)
+ function that finding roads related to specified junction(by its ID)
 
-return : @roads = { top_road, right_road, bottom_road, left_road};
+ return : @roads = { top_road, right_road, bottom_road, left_road};
  */
-function get_roads_connected_to_junction(id_junction, rdConfigs){
-	let roads = [null, null, null, null];
-	for(let i = 0; i < rdConfigs.length; i++){
+function get_roads_connected_to_junction(id_junction, roads) {
 
-		if (rdConfigs[i].startConnection.type == "junction" &&
-			rdConfigs[i].startConnection.id == id_junction)
-		{
-			console.log("startconnection");
-			switch(rdConfigs[i].type)
-			{
-				case "UP_TO_BOTTOM":
-					roads[2] = rdConfigs[i];
-					break;
-				case "BOTTOM_TO_UP":
-					roads[0] = rdConfigs[i];
-					break;
-				case "LEFT_TO_RIGHT":
-					roads[3] = rdConfigs[i];
-					break;
-				case "RIGHT_TO_LEFT":
-					roads[1] = rdConfigs[i];
-					break;
-			}
-		}
-		else if (rdConfigs[i].finishConnection.type == "junction" &&
-				 rdConfigs[i].finishConnection.id == id_junction)
-		{
-			console.log("finishconnection");
+    let related_roads = [null, null, null, null];
+    for (let i = 0; i < roads.length; i++) {
 
-			switch(rdConfigs[i].type)
-			{
-				case "UP_TO_BOTTOM":
-					roads[0] = rdConfigs[i];
-					break;
-				case "BOTTOM_TO_UP":
-					roads[2] = rdConfigs[i];
-					break;
-				case "LEFT_TO_RIGHT":
-					roads[1] = rdConfigs[i];
-					break;
-				case "RIGHT_TO_LEFT":
-					roads[3] = rdConfigs[i];
-					break;
-			}
-		}
-	}
+        if (roads[i].startConnection.type == "junction" &&
+            roads[i].startConnection.id == id_junction) {
+            switch (roads[i].direction) {
+                case "UP_TO_BOTTOM":
+                    related_roads[2] = roads[i];
+                    break;
+                case "BOTTOM_TO_UP":
+                    related_roads[0] = roads[i];
+                    break;
+                case "LEFT_TO_RIGHT":
+                    related_roads[1] = roads[i];
+                    break;
+                case "RIGHT_TO_LEFT":
+                    related_roads[3] = roads[i];
+                    break;
+            }
+        }
+        else if (roads[i].finishConnection.type == "junction" &&
+            roads[i].finishConnection.id == id_junction) {
+            switch (roads[i].direction) {
+                case "UP_TO_BOTTOM":
+                    related_roads[0] = roads[i];
+                    break;
+                case "BOTTOM_TO_UP":
+                    related_roads[2] = roads[i];
+                    break;
+                case "LEFT_TO_RIGHT":
+                    related_roads[3] = roads[i];
+                    break;
+                case "RIGHT_TO_LEFT":
+                    related_roads[1] = roads[i];
+                    break;
+            }
+        }
+    }
 
-	return roads;
+    return related_roads;
+}
+
+function get_center_coordinates(roads, id) {
+    let X = 0;
+    let Y = 0;
+
+    for (let i = 0; i < roads.length; i++) {
+        if (roads[i].startConnection.id == id) {
+            X += roads[i].startX;
+            Y += roads[i].startY;
+        }
+        else {
+            X += roads[i].finishX;
+            Y += roads[i].finishY;
+        }
+    }
+
+    return [X / 4, Y / 4];
+}
+
+/*
+
+ */
+function get_lanes(sX, sY, fX, fY, length, lines_number,
+                   spawn_points, lines_type, is_one_way, direction) {
+
+    if (lines_number == 0) {
+        return null;
+    }
+
+    let startX = sX;
+    let startY = sY;
+    let finishX = fX;
+    let finishY = fY;
+    let furthest_length = logic_lane_width / 2 + ((is_one_way) ? lines_number / 2 : lines_number) - 1;
+
+
+    if (lines_type == LaneType.backward) {
+        [startX, finishX] = [finishX, startX];
+        [startX, finishY] = [finishY, startY];
+    }
+
+
+    switch (direction) {
+        case "UP_TO_BOTTOM":
+            return get_specific_lanes(furthest_length, length, lines_type,
+                lines_number, spawn_points, true, false, startX, startY, finishX, finishY);
+        case "BOTTOM_TO_UP":
+            return get_specific_lanes(furthest_length, length, lines_type,
+                lines_number, spawn_points, true, true, startX, startY, finishX, finishY);
+        case "LEFT_TO_RIGHT":
+            return get_specific_lanes(furthest_length, length, lines_type,
+                lines_number, spawn_points, false, true, startX, startY, finishX, finishY);
+        case "RIGHT_TO_LEFT":
+            return get_specific_lanes(furthest_length, length, lines_type,
+                lines_number, spawn_points, false, false, startX, startY, finishX, finishY);
+    }
 }
 
 
-function get_center_coordinates(roads, id){
-	let X = 0;
-	let Y = 0;
-
-	for(let i = 0; i < roads; i++)
-	{
-		if (roads[i].startConnection.type == "junction" &&
-			roads[i].startConnection.id == id)
-		{
-			X += roads[i].startX;
-			Y += roads[i].startY;
-		}
-		else
-		{
-			X += roads[i].finishX;
-			Y += roads[i].finishY;
-		}
-	}
-
-	return [X/4,Y/4];
-}
-
-// TODO Artem impelement me!
-function get_lanes(lines_number,spawn_points,lines_type)
-{
-	lanes = [];
+function get_specific_lanes(furthest_length, length, type, lines_number, spawn_points, is_vertical, is_forward,
+                            startX, startY, finishX, finishY) {
+    let lanes = [];
+    if (is_vertical) {
+        if (is_forward) {
+            for (let i = 0; i < lines_number; i++) {
+                lanes.push(new Lane(
+                    length,
+                    type,
+                    spawn_points[i],
+                    startX + furthest_length - i * logic_lane_width,
+                    startY,
+                    finishX + furthest_length - i * logic_lane_width,
+                    finishY
+                ));
+            }
+        } else {
+            for (let i = 0; i < lines_number; i++) {
+                lanes.push(new Lane(
+                    length,
+                    type,
+                    spawn_points[i],
+                    startX - furthest_length + i * logic_lane_width,
+                    startY,
+                    finishX - furthest_length + i * logic_lane_width,
+                    finishY
+                ));
+            }
+        }
+    } else {
+        if (is_forward) {
+            for (let i = 0; i < lines_number; i++) {
+                lanes.push(new Lane(
+                    length,
+                    type,
+                    spawn_points[i],
+                    startX,
+                    startY + furthest_length - i * logic_lane_width,
+                    finishX,
+                    finishY + furthest_length - i * logic_lane_width
+                ));
+            }
+        } else {
+            for (let i = 0; i < lines_number; i++) {
+                lanes.push(new Lane(
+                    length,
+                    type,
+                    spawn_points[i],
+                    startX,
+                    startY - furthest_length + i * logic_lane_width,
+                    finishX,
+                    finishY - furthest_length + i * logic_lane_width
+                ));
+            }
+        }
+    }
+    return lanes;
 }
