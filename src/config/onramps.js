@@ -6,9 +6,9 @@ var onramps_json = {
 		[
 			{
 				"id": 0,
-				"source": 16,
-				"destination": 18,
-				"inflow": 15
+				"source": 15,
+				"destination": 17,
+				"inflow": 14
 			}
 		]
 };

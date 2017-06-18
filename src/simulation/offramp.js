@@ -25,6 +25,7 @@ function Offramp( _source, _destination, _outflow,
 	setupPassLanes(this.backwardLanes);
 
 	let turnSourceLane = null;
+	return;
 
 	if ( _connectedLaneType == LaneType["forward"] )
 	{

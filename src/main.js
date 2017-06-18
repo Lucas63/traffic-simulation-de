@@ -22,11 +22,13 @@ function load_objects(){
     turns = load_turns(roads);
     console.log(turns);
 
+    onramps = load_onramps(roads);
+    console.log(onramps);
+
     offramps = load_offramps(roads);
     console.log(offramps);
 
-    onramps = load_onramps(roads);
-    console.log(onramps);
+
 
 
 
