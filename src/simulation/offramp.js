@@ -100,10 +100,7 @@ Offramp.prototype.canTurn = function( vehicleRequiredSpace)
 	}
 
 	if ( freeLaneIndex == INVALID )
-	{
 		printWarning(arguments.callee.name, "No free lanes");
-		return freeLaneIndex;
-	}
 
 	return freeLaneIndex;
 };
@@ -158,9 +155,7 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId,
 			"Wrong road id " + roadId);
 
 	if (this.isConnectedLane( roadId, laneType, laneIndex ))
-	{
 		return this.canPassThroughConnectedLane( vehicle );
-	}
 
 	// lane where vehicle moves on
 	var selectedLane = null;
@@ -209,7 +204,8 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 
 Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 {
-	vehicle.prepareForMove(MovementState.ON_OFFRAMP);
+	vehicle.movementState = MovementState.ON_OFFRAMP;
+	vehicle.prepareForMove();
 
 	if ( roadId == this.sourceId )
 	{

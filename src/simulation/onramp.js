@@ -249,7 +249,8 @@ Onramp.prototype.startTurn = function( laneIndex, vehicle )
 Onramp.prototype.startPassThrough = function( vehicle, roadId,
 											  laneType, laneIndex)
 {
-	vehicle.prepareForMove(MovementState.ON_ONRAMP);
+	vehicle.movementState = MovementState.ON_ONRAMP;
+	vehicle.prepareForMove();
 
 	if ( laneType == LaneType["forward"] )
 	{
