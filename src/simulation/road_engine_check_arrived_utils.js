@@ -99,7 +99,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 	if ( nextObject == RoadObject.VOID )
 	{
 		// vehicle finished route and will be destroyed
-		lane.vehicles.splice(0, 1);
+		removeVehicle(lane, 0);
 		return;
 	}
 
@@ -161,7 +161,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 	{
 		++vehicle.routeItemIndex;
 		// reference to vehicle already saved in appropriate object
-		lane.vehicles.splice(0,1);
+		removeVehicle(lane, 0);
 	}
 }
 
@@ -292,7 +292,7 @@ function canMoveToJunction( movement, junction, roadId, laneIndex, vehicle)
 function moveToRoad( currentObject, road, laneIndex, vehicle )
 {
 	let lanes = road.getLanesConnectedWith( currentObject );
-	lanes[laneIndex].addVehicleAsLast(vehicle);
+	lanes[laneIndex].pushVehicle(vehicle);
 }
 
 function moveToTurn( turn, laneIndex, vehicle )

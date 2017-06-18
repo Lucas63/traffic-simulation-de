@@ -31,7 +31,8 @@ function updateNeighbours(current, adjacent, atLeft)
 
 	let currentCoord = 0;
 
-	// place on lane vehicle takes plus required minimal gap between vehicles
+	// place on lane that vehicle takes plus
+	// required minimal gap between vehicles
 	let currentSpace = 0;
 
 	let adjacentCoord = 0;
@@ -91,7 +92,7 @@ function updateNeighbours(current, adjacent, atLeft)
 				leader = null;
 				follower = adjacentVehicles[j];
 
-				// break from outer for loop
+				// break from inner *for* loop
 				break;
 			}
 
@@ -100,9 +101,7 @@ function updateNeighbours(current, adjacent, atLeft)
 
 			// if j is not last valid index
 			if (j + 1 != adjacentVehicles.length)
-			{
 				follower = adjacentVehicles[j + 1];
-			}
 
 			break;
 		}

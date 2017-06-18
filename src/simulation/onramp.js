@@ -252,16 +252,17 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 	vehicle.movementState = MovementState.ON_ONRAMP;
 	vehicle.prepareForMove();
 
+	let sourceLane = null;
 	if ( laneType == LaneType["forward"] )
-	{
-		vehicle.sourceLane = this.forwardLanes[lanesIndex];
-		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
-	}
+		sourceLane = this.forwardLanes[lanesIndex];
 	else
-	{
-		vehicle.sourceLane = this.backwardLanes[lanesIndex];
-		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
-	}
+		sourceLane = this.backwardLanes[lanesIndex];
+
+	vehicle.sourceLane = sourceLane;
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push( vehicle );
 };
 
 Onramp.prototype.calculateTurnDistance = function( vehicle )

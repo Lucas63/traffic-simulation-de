@@ -82,7 +82,7 @@ RoadEngine.prototype.preUpdate = function()
 		// from another road when neighbours already updated on i-th road
 
 		// update following and leading vehicles on each lane
-		updateNeighbours( roads[i] );
+		updateNeighboursOnRoad( roads[i] );
 
 
 		// check upstream/downstream condtion

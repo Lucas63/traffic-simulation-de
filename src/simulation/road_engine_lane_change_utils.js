@@ -1,8 +1,5 @@
 function checkLaneChangeOnLanes( lanes )
 {
-	let vehicles = null;
-	let vehicle = null;
-
 	// check the very first lane
 	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
 
@@ -10,7 +7,7 @@ function checkLaneChangeOnLanes( lanes )
 		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
 
 	// check the last lane
-	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 1],
+	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 2],
 									 lanes.last(), null);
 }
 
@@ -53,7 +50,7 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 			if (resultAtLeft.currentAcceleration >
 				resultAtRight.currentAcceleration)
 			{
-				doLaneChange( current,left, vehicle, true );
+				doLaneChange( current, left, vehicle, true );
 			}
 			else
 			{
@@ -141,6 +138,7 @@ function doLaneChange( currentLane, newLane, vehicle, atLeft )
 {
 	let adjacentFollower = null;
 
+	// think about situation for the very first vehicle!
 	if (atLeft)
 		adjacentFollower = vehicle.followerAtLeft;
 	else

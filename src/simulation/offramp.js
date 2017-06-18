@@ -207,16 +207,17 @@ Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 	vehicle.prepareForMove();
 
+	let sourceLane = null;
 	if ( roadId == this.sourceId )
-	{
-		vehicle.sourceLane = this.forwardLanes[ laneIndex ];
-		this.forwardLanes[ laneIndex ].vehicles.push( vehicle );
-	}
+		sourceLane = this.forwardLanes[ laneIndex ];
 	else
-	{
-		vehicle.sourceLane = this.backwardLanes[ laneIndex ];
-		this.backwardLanes[ laneIndex ].vehicles.push( vehicle );
-	}
+		sourceLane = this.backwardLanes[ laneIndex ];
+
+	vehicle.sourceLane = sourceLane;
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push( vehicle );
 };
 
 Offramp.prototype.calculateTurnDistance = function( vehicle )

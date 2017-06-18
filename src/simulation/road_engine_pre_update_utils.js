@@ -7,7 +7,6 @@ function checkSpawnPoints(road)
 function checkSpawnPointsForLanes( lanes )
 {
 	let point = null;
-
 	for (let i = 0;i < lanes.length; ++i)
 	{
 		point  = lanes[i].spawnPoint;
@@ -24,7 +23,7 @@ function checkSpawnPointsForLanes( lanes )
 			if (lanes[i].hasEnoughSpace( TRUCK_LENGTH ))
 			{
 				let vehicle = point.spawn();
-				lanes[i].addVehicleAsLast(vehicle);
+				lanes[i].pushVehicle(vehicle);
 			}
 		}
 	}
@@ -34,15 +33,11 @@ function checkVehiclesPositionOnRoad( road )
 {
 	let lanes = road.forwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
-	{
 		checkVehiclesOnLane( lanes[i], road );
-	}
 
 	lanes = road.backwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
-	{
 		checkVehiclesOnLane( lanes[i], road );
-	}
 }
 
 // check vehicles at safe distance and update model or stop them
@@ -67,9 +62,8 @@ function checkVehiclesOnLane( lane, road )
 
 		if ( road.length - vehicle.uCoord < vehicle.safeDistance )
 		{
-			vehicle.longModel = UPSTREAM_IDM;
-			vehicle.laneChangeModel = UPSTREAM_MOBIL;
-			continue;
+			vehicle.trafficState = TrafficState.UPSTREAM;
+			// add here LC model update if required
 		}
 	}
 }
@@ -88,26 +82,27 @@ function checkTrafficState( road )
 
 function checkTrafficStateForVehicles(vehicles)
 {
-	let vehicle = null;
-	for (let i = 0; i < vehicles.length; ++i)
+	// the very first vehicle has virtual leader
+	let vehicle = vehicles[0];
+	checkTrafficStateForAdjacentVehicles(vehicle, vehicle.leader);
+
+	for (let i = 1; i < vehicles.length; ++i)
 	{
 		vehicle = vehicles[i];
-
-		if (onUpstream(vehicle, vehicle.leader))
-		{
-			vehicle.trafficState = TrafficState.UPSTREAM;
-			continue;
-		}
-
-		if (onDownstream(vehicle, vehicle.leader))
-			continue;
-
-		if (onJam(vehicle))
-		{
-			vehicle.trafficState = TrafficState.JAM;
-			continue;
-		}
+		checkTrafficStateForAdjacentVehicles(vehicle, vehicles[i - 1]);
 	}
+}
+
+function checkTrafficStateForAdjacentVehicles(follower, leader)
+{
+	if (onUpstream(vehicle, vehicle.leader))
+		vehicle.trafficState = TrafficState.UPSTREAM;
+
+	if (onDownstream(vehicle, vehicle.leader))
+		vehicle.trafficState = TrafficState.DOWNSTREAM;
+
+	if (onJam(vehicle))
+		vehicle.trafficState = TrafficState.JAM;
 }
 
 // update longitudinal and lane change models for vehicles on roads
@@ -129,7 +124,6 @@ function setLongitudinalModel(vehicles)
 	for (let i = 0; i < vehicles.length; ++i)
 	{
 		vehicle = vehicles[i];
-
 		switch( vehicle.trafficState )
 		{
 			case TrafficState.FREE_ROAD:

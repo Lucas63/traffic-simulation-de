@@ -621,10 +621,13 @@ Junction.prototype.startPassThrough = function( roadId, laneIndex, vehicle)
 	let sourceSide = this.getSideForRoad( roadId );
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	vehicle.movementState = MovementState.ON_JUNCTION;
-	vehicle.sourceLane = sourceRoad.passLanes[laneIndex];
-
 	vehicle.prepareForMove();
+	vehicle.movementState = MovementState.ON_JUNCTION;
+	let sourceLane = sourceRoad.passLanes[laneIndex];
+	vehicle.sourceLane = sourceLane;
+
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
 
 	sourceRoad.passLanes[laneIndex].vehicles.push( vehicle );
 };
