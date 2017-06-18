@@ -608,12 +608,16 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 	let destinationRoad = this.getJunctionRoadFromSide( rightSide );
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
-	vehicle.sourceLane = sourceRoad.turnRightLanes[laneIndex];
 
-	vehicle.prepareForTurn( this.turnRightDuration[laneIndex],
-							sourceRoad.turnRightLanes[laneIndex]);
+	let sourceLane = sourceRoad.turnRightLanes[laneIndex];
 
-	sourceRoad.turnRightLanes[laneIndex].vehicles.push(vehicle);
+	vehicle.sourceLane = sourceLane;
+
+	vehicle.prepareForTurn( this.turnRightDuration[laneIndex], sourceLane);
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push(vehicle);
 };
 
 Junction.prototype.startPassThrough = function( roadId, laneIndex, vehicle)
@@ -641,12 +645,16 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 	let destinationLane = this.getJunctionRoadFromSide( leftSide )
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
-	vehicle.sourceLane = sourceRoad.turnLeftLanes[laneIndex];
 
-	vehicle.prepareForTurn(this.turnLeftDuration[laneIndex],
-						   sourceRoad.turnLeftLanes[laneIndex]);
+	let sourceLane = sourceRoad.turnLeftLanes[laneIndex];
 
-	sourceRoad.turnLeftLanes[laneIndex].vehicles.push(vehicle);
+	vehicle.sourceLane = sourceLane;
+
+	vehicle.prepareForTurn(this.turnLeftDuration[laneIndex], sourceLane);
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push(vehicle);
 };
 
 Junction.prototype.updateTrafficLights = function(dt)

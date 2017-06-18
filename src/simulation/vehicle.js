@@ -36,7 +36,7 @@ MovementState =
 	FREE_MOVEMENT: 4
 };
 
-const MINIMAL_GAP = 2;
+const MINIMAL_GAP = 0.25;
 
 // if vehicle has no leader or follower
 const VIRTUAL_VEHICLE = -1;
@@ -47,10 +47,10 @@ const VIRTUAL_VEHICLE = -1;
 const INVALID = -1;
 
 var CAR_LENGTH = INVALID;
-var CAR_WIDTH  = 2;
+var CAR_WIDTH  = INVALID;
 
 var TRUCK_LENGTH = INVALID;
-var TRUCK_WIDTH  = 3;
+var TRUCK_WIDTH  = INVALID;
 
 var CAR_DESIRED_SPEED   = INVALID;
 var TRUCK_DESIRED_SPEED = INVALID;
@@ -66,17 +66,6 @@ var TRUCK_INITIAL_SPEED = INVALID;
 // car has bigger safe distance, because usually has higher speed, than truck
 var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
-
-
-/*
- * Constructor-time function
- */
-// virtual vehicles with different road_elements used for leading vehicle,
-// namely the very first vehicle on each map object
-function createVirtualVehicles()
-{
-	// TODO implement me!
-}
 
 
 function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed )

@@ -97,6 +97,7 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 	// has horizontal orientation
 	let vertical = is_vertical_road(sourceRoad);
 
+	let turnLength = 0;
 	for (let i = 0; i < turnLanes.length; ++i)
 	{
 		turnLanes[i].startPoint =
@@ -115,6 +116,16 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 
 		turnLanes[i].endPoint =
 			new Point(destinationLanes[i].startX, destinationLanes[i].startY);
+
+		turnLength =
+			getBezierCurveLength(1,
+								 turnLanes[i].startPoint,
+								 turnLanes[i].controlPoint,
+								 turnLanes[i].endPoint);
+
+		// virtual vehicle with zero length at the end of turn
+		turnLanes[i].virtualVehicle =
+			new virtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 
@@ -124,6 +135,7 @@ function setOnrampTurnData( turnLanes, sourceRoad, sourceLanes, destinationLane)
 	// has horizontal orientation
 	let vertical = is_vertical_road(sourceRoad);
 
+	let turnLength = 0;
 	for (let i = 0; i < turnLanes.length; ++i)
 	{
 		turnLanes[i].startPoint =
@@ -142,6 +154,16 @@ function setOnrampTurnData( turnLanes, sourceRoad, sourceLanes, destinationLane)
 
 		turnLanes[i].endPoint =
 			new Point(destinationLane.startX, destinationLane.startY);
+
+		turnLength =
+			getBezierCurveLength(1,
+								 turnLanes[i].startPoint,
+								 turnLanes[i].controlPoint,
+								 turnLanes[i].endPoint);
+
+		// virtual vehicle with zero length at the end of turn
+		turnLanes[i].virtualVehicle =
+			new virtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 
@@ -152,6 +174,7 @@ function setOfframpTurnData( turnLanes, sourceRoad,
 	// has horizontal orientation
 	let vertical = is_vertical_road(sourceRoad);
 
+	let turnLength = 0;
 	for (let i = 0; i < turnLanes.length; ++i)
 	{
 		turnLanes[i].startPoint =
@@ -170,6 +193,16 @@ function setOfframpTurnData( turnLanes, sourceRoad,
 
 		turnLanes[i].endPoint =
 			new Point(destinationLanes[i].startX, destinationLanes[i].startY);
+
+		turnLength =
+			getBezierCurveLength(1,
+								 turnLanes[i].startPoint,
+								 turnLanes[i].controlPoint,
+								 turnLanes[i].endPoint);
+
+		// virtual vehicle with zero length at the end of turn
+		turnLanes[i].virtualVehicle =
+			new virtualVehicle(turnLength, turnLength, 0, 0);
 	}
 }
 

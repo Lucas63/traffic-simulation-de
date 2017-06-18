@@ -192,14 +192,17 @@ Offramp.prototype.canPassThrough = function( vehicle, roadId,
 // laneIndex - index of lane on destination road
 Offramp.prototype.startTurn = function( laneIndex, vehicle )
 {
-	vehicle.turnLane = this.turnLanes[laneIndex];
-
 	vehicle.movementState = MovementState.ON_OFFRAMP;
 
-	vehicle.prepareForTurn(this.turnDuration[laneIndex],
-						   this.turnLanes[laneIndex])
+	let sourceLane = this.turnLanes[laneIndex];
 
-	this.turnLanes[laneIndex].vehicles.push( vehicle );
+	vehicle.sourceLane = sourceLane;
+	vehicle.prepareForTurn(this.turnDuration[laneIndex], sourceLane);
+
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push( vehicle );
 };
 
 Offramp.prototype.startPassThrough = function( vehicle, roadId, laneIndex )

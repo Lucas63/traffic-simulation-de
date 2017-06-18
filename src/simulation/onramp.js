@@ -238,12 +238,16 @@ Onramp.prototype.canPassThrough = function( vehicle, roadId,
 Onramp.prototype.startTurn = function( laneIndex, vehicle )
 {
 	vehicle.movementState = MovementState.ON_ONRAMP;
-	vehicle.sourceLane = this.turnLanes[laneIndex];
 
-	vehicle.prepareForTurn(this.turnDuration[laneIndex],
-						   this.connectedLane);
+	let sourceLane = this.turnLanes[laneIndex];
 
-	this.turnLanes[laneIndex].vehicles.push( vehicle );
+	vehicle.sourceLane = sourceLane;
+	vehicle.prepareForTurn(this.turnDuration[laneIndex], sourceLane);
+
+	if (sourceLane.vehicles.empty())
+		vehicle.leader = sourceLane.virtualVehicle;
+
+	sourceLane.vehicles.push( vehicle );
 };
 
 Onramp.prototype.startPassThrough = function( vehicle, roadId,

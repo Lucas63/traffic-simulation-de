@@ -7,16 +7,20 @@ function VirtualVehicle( _defaultCoord, _freeMovementCoord,
 	this.defaultSpeed = _defaultSpeed;
 	this.freeMovementSpeed = _freeMovementSpeed;
 
-	this.actualCoord = _defaultCoord;
-	this.actualSpeed = _defaultSpeed;
+	this.uCoord = _defaultCoord;
+	this.speed = _defaultSpeed;
+
+	this.length = 0;
 }
 
 VirtualVehicle.prototype.setDefaultValues = function()
 {
-	this.actualCoord = this.defaultCoord;
+	this.uCoord = this.defaultCoord;
+	this.speed = this.defaultSpeed;
 };
 
 VirtualVehicle.prototype.setFreeMovementValues = function()
 {
-	this.actualCoord = this.freeMovementCoord;
+	this.uCoord = this.freeMovementCoord;
+	this.speed = this.freeMovementSpeed;
 };

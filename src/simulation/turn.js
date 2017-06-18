@@ -83,7 +83,11 @@ Turn.prototype.startTurn = function( laneIndex, vehicle )
 	vehicle.prepareForTurn(this.turnDuration[laneIndex],
 						   this.turnLanes[laneIndex]);
 
-	this.lanes[laneIndex].vehicles.push( vehicle );
+	let lane = this.lanes[laneIndex];
+	if (lane.vehicles.empty())
+		vehicle.leader = lane.virtualVehicle;
+
+	lane.vehicles.push( vehicle );
 };
 
 Turn.prototype.calculateTurnDistance = function( vehicle )

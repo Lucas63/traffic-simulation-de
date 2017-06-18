@@ -69,13 +69,11 @@ function updateStraightMove( vehicle, mapObject, dt )
 	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
 	vehicle.uCoord += Math.Max(0, newPosition);
 
-	let safeDistance = mapObject.length - MINIMAL_GAP;
+	let safeDistance = mapObject.length;
 	if (vehicle.uCoord >= safeDistance)
 	{
 		vehicle.uCoord = safeDistance;
 		vehicle.arrived = true;
-
-		return;
 	}
 
 	vehicle.speed += vehicle.acceleration * dt;
@@ -92,7 +90,7 @@ function updateTurn( vehicle, lane, mapObject, dt )
 	let vehicleIndex = lane.vehicles.indexOf(vehicle);
 	let leader = null;
 
-	if (vehicleIndex == 0)
+	if (vehicleIndex != 0)
 		leader = vehicle.leader;
 	else
 		leader = lane.vehicles[vehicleIndex - 1];
@@ -125,7 +123,7 @@ function updateTurn( vehicle, lane, mapObject, dt )
 
 function vehicleCanMoveOnTurn(newPosition, leader)
 {
-	return leader.uCoord - leader.length - MINIMAL_GAP > newPosition;
+	return leader.getSafeDistance() > newPosition;
 }
 
 function updateLaneChange( vehicle, dt )
