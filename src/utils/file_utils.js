@@ -18,9 +18,6 @@ function load_road_configs() {
 
 		let is_one_way = (road_string.backwardLanes == 0);
 
-		if (road_string.id == 3)
-			console.log(">>>>> road id 3 <<<<<<");
-
 		let new_road = new RoadConfig(
 			road_string.id,
 			RoadDirection[road_string.direction],
@@ -58,8 +55,6 @@ function load_road_configs() {
 				road_string.direction)
 		);
 
-		if (road_string.id == 3)
-			console.log(">>>>> road id 3 <<<<<<");
 		roadConfigs.push(new_road);
 	}
 
@@ -383,11 +378,6 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
 	if (lines_type == LaneType.backward) {
 		[startX, finishX] = [finishX, startX];
 		[startY, finishY] = [finishY, startY];
-
-		console.log("start X " + startX);
-		console.log("start Y " + startY);
-		console.log("finish X " + finishX);
-		console.log("finish Y " + finishY);
 	}
 
 
@@ -435,7 +425,7 @@ function get_specific_lanes(length,
 		{
 			for (let i = 0; i < lines_number; i++)
 			{
-				console.log("vertical_forward");
+
 				lanes.push(new Lane(
 					length,
 					type,
@@ -451,8 +441,7 @@ function get_specific_lanes(length,
 		{
 			for (let i = 0; i < lines_number; i++)
 			{
-				console.log("vertical_backward");
-				console.log("start Y " + startY + " finish Y " + finishY);
+
 				lanes.push(new Lane(
 					length,
 					type,
@@ -495,6 +484,5 @@ function get_specific_lanes(length,
 		}
 	}
 
-	console.log("----------");
 	return lanes;
 }

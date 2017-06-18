@@ -92,8 +92,6 @@ function draw_junction(context, junction) {
 function draw_turn(context, turn) {
     let is_source_vertical = is_vertical_road(turn.source.direction);
     let is_destination_vertical = is_vertical_road(turn.destination.direction);
-    // console.log(is_source_vertical);
-    // console.log(is_destination_vertical);
 
 
     let startX1 = (is_source_vertical) ?
@@ -121,23 +119,6 @@ function draw_turn(context, turn) {
     let finishY2 = (!is_destination_vertical) ?
         turn.destination.startY - turn.destination.getForwardLanesAmount() / 2 : turn.destination.startY;
 
-
-    console.log(turn.id);
-    // console.log("startX : "+turn.source.finishX);
-    // console.log("startY : "+turn.source.finishY);
-    // console.log("startX1 : "+ startX1);
-    // console.log("startX2 : "+ startX2);
-    // console.log("startY1 : "+ startY1);
-    // console.log("startY2 : "+ startY2);
-    //
-    // console.log("finishX : "+turn.destination.startX);
-    // console.log("finishY : "+turn.destination.startY);
-    // console.log("finishX1 : "+ finishX1);
-    // console.log("finishX2 : "+ finishX2);
-    // console.log("finishY1 : "+ finishY1);
-    // console.log("finishY2 : "+ finishY2);
-    //
-
     startX1 *= logic_to_canvas_multiplier;
     startX2 *= logic_to_canvas_multiplier;
     startY1 *= logic_to_canvas_multiplier;
@@ -156,57 +137,43 @@ function draw_turn(context, turn) {
         if (turn.source.finishY > turn.destination.startY) {
 
             context.moveTo(startX1, startY1);
-            context.lineTo(startX2,startY2);
+            context.lineTo(startX2, startY2);
             context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
             context.lineTo(finishX1, finishY1);
             context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
         }
         else {
-            if(!is_source_vertical){
+            if (!is_source_vertical) {
                 context.moveTo(startX1, startY1);
-                context.lineTo(startX2,startY2);
+                context.lineTo(startX2, startY2);
                 context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
                 context.lineTo(finishX1, finishY1);
                 context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
             }
 
-            else{
-                console.log("NOT VERTICAL");
+            else {
 
                 context.moveTo(startX1, startY1);
-                context.lineTo(startX2,startY2);
+                context.lineTo(startX2, startY2);
                 context.bezierCurveTo(startX2, finishY2, startX2, finishY2, finishX2, finishY2);
                 context.lineTo(finishX1, finishY1);
                 context.bezierCurveTo(startX1, finishY1, startX1, finishY1, startX1, startY1);
             }
-
-
         }
     }
 
     else {
-        console.log("X : " + turn.source.finishX + " > " + turn.destination.startX);
-        console.log("left");
         if (turn.source.finishY > turn.destination.startY) {
-            console.log("Y : " + turn.source.finishY + " > " + turn.destination.startY);
-            console.log("up");
-
-            console.log("left down -> right up");
             context.moveTo(startX1, startY1);
-            context.lineTo(startX2,startY2);
+            context.lineTo(startX2, startY2);
             context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
             context.lineTo(finishX1, finishY1);
             context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
         }
 
         else {
-            console.log("Y : " + turn.source.finishY + " > " + turn.destination.startY);
-            console.log("down");
-
-
-            console.log("left up -> right down");
             context.moveTo(startX1, startY1);
-            context.lineTo(startX2,startY2);
+            context.lineTo(startX2, startY2);
             context.bezierCurveTo(finishX2, startY2, finishX2, startY2, finishX2, finishY2);
             context.lineTo(finishX1, finishY1);
             context.bezierCurveTo(finishX1, startY1, finishX1, startY1, startX1, startY1);
@@ -220,7 +187,7 @@ function draw_turn(context, turn) {
     context.stroke();
 
 
-    if(!is_source_vertical){
+    if (!is_source_vertical) {
         context.moveTo(turn.source.finishX * logic_to_canvas_multiplier, turn.source.finishY * logic_to_canvas_multiplier);
         context.fillStyle = "green";
         context.bezierCurveTo(turn.destination.startX * logic_to_canvas_multiplier,
@@ -231,7 +198,7 @@ function draw_turn(context, turn) {
             turn.destination.startY * logic_to_canvas_multiplier);
 
     }
-    else{
+    else {
         context.moveTo(turn.source.finishX * logic_to_canvas_multiplier,
             turn.source.finishY * logic_to_canvas_multiplier);
 
@@ -243,10 +210,37 @@ function draw_turn(context, turn) {
             turn.destination.finishY * logic_to_canvas_multiplier,
             turn.destination.startX * logic_to_canvas_multiplier,
             turn.destination.startY * logic_to_canvas_multiplier);
-
-
     }
     context.stroke();
+
+}
+
+
+function draw_onramp(context, onramp){
+    let onramp_width = logic_lane_width*onramp.source.getForwardLanesAmount();
+    let onramp_height = logic_lane_width*onramp.inflow.getLanesAmount();
+
+    if(is_vertical_road(onramp.source.direction)){
+        let startY = onramp.source.finishY - onramp_width/2;
+        let startX = onramp.inflow.startX - onramp_height/2;
+
+        onramp_height *= logic_to_canvas_multiplier;
+        onramp_width *= logic_to_canvas_multiplier;
+
+        startX *= logic_to_canvas_multiplier;
+        startY *= logic_to_canvas_multiplier;
+
+        context.beginPath();
+        context.moveTo(startX,startY);
+        context.fillStyle = "#8ED6FF";
+        context.fillRect(startX, startY, onramp_width, onramp_height);
+        context.closePath();
+        context.stroke();
+        //draw_road_lines(context, road, is_vertical);
+    }
+}
+
+function draw_offramp(context, offramp){
 
 }
 
