@@ -352,6 +352,9 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 	// check vehicles turning right
 	//////////////////////////////////////////////////////////////////////
 	let turnLanes = sourceRoad.turnRightLanes;
+	if (turnLanes.length == 0)
+		return false;
+
 	let vehicles = turnLanes[laneIndex].vehicles;
 	var vehicle = null;
 
@@ -441,6 +444,9 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
 	let passLanes = sourceRoad.passLanes;
+	if (passLanes.length == 0)
+		return false;
+
 	var lastVehicle = passLanes[laneIndex].vehicles.last();
 
 	// there is no enough space before last vehicle
