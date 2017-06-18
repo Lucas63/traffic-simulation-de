@@ -1,5 +1,5 @@
-function Offramp( _source, _destination, _outflow, _length,
-				 _connectedLaneType, _connectedLaneIndex )
+function Offramp( _source, _destination, _outflow,
+				  _length, _width, _connectedLaneType)
 {
 	this.source = _source;
 	this.destination = _destination;
@@ -8,6 +8,7 @@ function Offramp( _source, _destination, _outflow, _length,
 	this.type = RoadObject.OFFRAMP;
 
 	this.length = _length;
+	this.width = _width;
 
 	this.sourceId = this.source.getId();
 	this.destinationId = this.destination.getId();
@@ -16,7 +17,6 @@ function Offramp( _source, _destination, _outflow, _length,
 	this.destLanesAmount = this.destination.getLanesAmount();
 
 	this.connectedLaneType = _connectedLaneType;
-	this.connectedLaneIndex = _connectedLaneIndex;
 
 	this.forwardlanes = new Array( this.source.getForwardLanesAmount() );
 	setupPassLanes(this.forwardlanes);
@@ -29,11 +29,13 @@ function Offramp( _source, _destination, _outflow, _length,
 	if ( _connectedLaneType == LaneType["forward"] )
 	{
 		this.connectedLane = this.forwardLanes.last();
+		this.connectedLaneIndex = _source.getForwardLanesAmount() - 1;
 		turnSourceLane = _source.forwardLanes.last();
 	}
 	else
 	{
 		this.connectedLane = this.backwardLanes.first();
+		this.connectedLaneIndex = 0;
 		turnSourceLane = _source.backwardLanes.first();
 	}
 

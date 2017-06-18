@@ -245,6 +245,17 @@ function load_vehicle_configuration() {
         truckJamConfig, truckJamIdmConfig);
 }
 
+function load_routes()
+{
+	let routes_config = routes_json.routes;
+	let routes = [];
+
+	for (let i = 0; i < routes_config.length; ++i)
+		routes.push(new Route(routes_config[i].id, routes_config[i].items));
+
+	return routes;
+}
+
 // -------------- UTILS --------------
 
 /*
