@@ -72,6 +72,7 @@ function main() {
 
     load_objects();
 
+
     window.requestAnimationFrame(step);
 
     print_function_end(main.name);
