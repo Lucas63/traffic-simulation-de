@@ -28,7 +28,7 @@
 	<!-- ############################################## -->
 
 	<div id="contents">
-		<canvas id="canvas_map" width="1000" height="600" >
+		<canvas id="canvas_map" width="1500" height="900" >
 			You are probably using a very ancient web browser (or an Internet Explorer)
 			not supporting html5 canvas. Please switch to another browser for
 			running this simulation.
@@ -68,6 +68,8 @@
 		<script src="config/turns.js" type="text/javascript"></script>
 		<script src="config/onramps.js" type="text/javascript"></script>
 		<script src="config/offramps.js" type="text/javascript"></script>
+		<script src="config/vehicles.js" type="text/javascript"></script>
+
 
 
 		<!-- config/* -->
@@ -81,6 +83,14 @@
 
 
 		<script type="text/javascript">
+            canvas = document.getElementById("canvas_map");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            logic_to_canvas_multiplier = canvas.width / 100;
+            console.log(logic_to_canvas_multiplier);
+
+
             main();
 
 		</script>

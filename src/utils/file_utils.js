@@ -20,7 +20,7 @@ function load_road_configs() {
 
         let new_road = new RoadConfig(
             road_string.id,
-            road_string.direction,
+            RoadDirection[road_string.direction],
             road_string.length,
             logic_lane_width,
             road_string.startX,
@@ -56,6 +56,8 @@ function load_road_configs() {
         );
         roadConfigs.push(new_road);
     }
+
+    console.log(roadConfigs[0]);
     return roadConfigs;
 }
 
@@ -133,8 +135,8 @@ function load_onramps(roads) {
             roads[onramp_string.source],
             roads[onramp_string.destination],
             roads[onramp_string.inflow],
-            logic_lane_width*lanes_height,
-            logic_lane_width*lanes_width,
+            logic_lane_width * lanes_height,
+            logic_lane_width * lanes_width,
             LaneType.forward
         );
         onramps.push(new_onramp);
@@ -158,8 +160,8 @@ function load_offramps(roads) {
             roads[offramp_string.source],
             roads[offramp_string.destination],
             roads[offramp_string.outflow],
-            logic_lane_width*lanes_height,
-            logic_lane_width*lanes_width,
+            logic_lane_width * lanes_height,
+            logic_lane_width * lanes_width,
             LaneType.forward
         );
         offramps.push(new_offramp);
@@ -230,7 +232,7 @@ function load_vehicle_configuration() {
 
     let truckMinimumGap = truck_config["minimum_gap"];
 
-    let model = truck_config["FreeMoveIDMModel"];
+    model = truck_config["FreeMoveIDMModel"];
 
     let truckFreeRoadConfig =
         new VehicleConfig(model.desiredSpeed,
@@ -277,15 +279,14 @@ function load_vehicle_configuration() {
         truckJamConfig, truckJamIdmConfig);
 }
 
-function load_routes()
-{
-	let routes_config = routes_json.routes;
-	let routes = [];
+function load_routes() {
+    let routes_config = routes_json.routes;
+    let routes = [];
 
-	for (let i = 0; i < routes_config.length; ++i)
-		routes.push(new Route(routes_config[i].id, routes_config[i].items));
+    for (let i = 0; i < routes_config.length; ++i)
+        routes.push(new Route(routes_config[i].id, routes_config[i].items));
 
-	return routes;
+    return routes;
 }
 
 // -------------- UTILS --------------
@@ -303,16 +304,16 @@ function get_roads_connected_to_junction(id_junction, roads) {
         if (roads[i].startConnection.type == "junction" &&
             roads[i].startConnection.id == id_junction) {
             switch (roads[i].direction) {
-                case "UP_TO_BOTTOM":
+                case RoadDirection["UP_TO_BOTTOM"]:
                     related_roads[2] = roads[i];
                     break;
-                case "BOTTOM_TO_UP":
+                case RoadDirection["BOTTOM_TO_UP"]:
                     related_roads[0] = roads[i];
                     break;
-                case "LEFT_TO_RIGHT":
+                case RoadDirection["LEFT_TO_RIGHT"]:
                     related_roads[1] = roads[i];
                     break;
-                case "RIGHT_TO_LEFT":
+                case RoadDirection["RIGHT_TO_LEFT"]:
                     related_roads[3] = roads[i];
                     break;
             }
@@ -320,16 +321,16 @@ function get_roads_connected_to_junction(id_junction, roads) {
         else if (roads[i].finishConnection.type == "junction" &&
             roads[i].finishConnection.id == id_junction) {
             switch (roads[i].direction) {
-                case "UP_TO_BOTTOM":
+                case RoadDirection["UP_TO_BOTTOM"]:
                     related_roads[0] = roads[i];
                     break;
-                case "BOTTOM_TO_UP":
+                case RoadDirection["BOTTOM_TO_UP"]:
                     related_roads[2] = roads[i];
                     break;
-                case "LEFT_TO_RIGHT":
+                case RoadDirection["LEFT_TO_RIGHT"]:
                     related_roads[3] = roads[i];
                     break;
-                case "RIGHT_TO_LEFT":
+                case RoadDirection["RIGHT_TO_LEFT"]:
                     related_roads[1] = roads[i];
                     break;
             }
@@ -371,7 +372,7 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
     let startY = sY;
     let finishX = fX;
     let finishY = fY;
-    let furthest_length = logic_lane_width / 2 + ((is_one_way) ? lines_number / 2 : lines_number) - 1;
+    let furthest_length = logic_lane_width / 2 + ((is_one_way) ? lines_number / 2 : 0);
 
 
     if (lines_type == LaneType.backward) {
@@ -380,25 +381,58 @@ function get_lanes(sX, sY, fX, fY, length, lines_number,
     }
 
 
-    switch (direction) {
-        case "UP_TO_BOTTOM":
-            return get_specific_lanes(furthest_length, length, lines_type,
-                lines_number, spawn_points, true, false, startX, startY, finishX, finishY);
-        case "BOTTOM_TO_UP":
-            return get_specific_lanes(furthest_length, length, lines_type,
-                lines_number, spawn_points, true, true, startX, startY, finishX, finishY);
-        case "LEFT_TO_RIGHT":
-            return get_specific_lanes(furthest_length, length, lines_type,
-                lines_number, spawn_points, false, true, startX, startY, finishX, finishY);
-        case "RIGHT_TO_LEFT":
-            return get_specific_lanes(furthest_length, length, lines_type,
-                lines_number, spawn_points, false, false, startX, startY, finishX, finishY);
-    }
+    let is_direct = (direction == "LEFT_TO_RIGHT" || direction == "BOTTOM_TO_UP");
+    let is_vertical = (direction == "UP_TO_BOTTOM" || direction == "BOTTOM_TO_UP");
+
+
+    return get_specific_lanes(
+        furthest_length,
+        length,
+        lines_type,
+        lines_number,
+        spawn_points,
+        is_vertical,
+        lines_type == LaneType.forward ,
+        is_direct,
+        startX,
+        startY,
+        finishX,
+        finishY);
 }
 
+/*
 
-function get_specific_lanes(furthest_length, length, type, lines_number, spawn_points, is_vertical, is_forward,
+
+
+
+ */
+function get_specific_lanes(furthest_length,
+                            length,
+                            type,
+                            lines_number,
+                            spawn_points,
+                            is_vertical, is_forward, is_direct,
                             startX, startY, finishX, finishY) {
+
+    /*
+     direct - for lanes placing relatevily to middle of road
+     BOTTOM_TO_UP - (1)
+     UP_TO_BOTTOM - (-1)
+     LEFT_TO_RIGHT - (1)
+     RIGHT_TO_LEFT - (-1)
+     */
+    console.log("----------");
+    console.log("furthest : " + furthest_length);
+    console.log("type : " + type);
+    console.log("lines_number : " + lines_number);
+    console.log("is_vertical : " + is_vertical);
+    console.log("is_forward : " + is_forward);
+    console.log("is_direct : " + is_direct);
+    console.log("----------");
+
+    let way_multiplier = (is_direct) ? 1 : -1;
+    let shift = furthest_length;
+
     let lanes = [];
     if (is_vertical) {
         if (is_forward) {
@@ -407,9 +441,9 @@ function get_specific_lanes(furthest_length, length, type, lines_number, spawn_p
                     length,
                     type,
                     spawn_points[i],
-                    startX + furthest_length - i * logic_lane_width,
+                    startX + way_multiplier * (-shift + i * logic_lane_width),
                     startY,
-                    finishX + furthest_length - i * logic_lane_width,
+                    finishX + way_multiplier * (-shift + i * logic_lane_width),
                     finishY
                 ));
             }
@@ -419,9 +453,9 @@ function get_specific_lanes(furthest_length, length, type, lines_number, spawn_p
                     length,
                     type,
                     spawn_points[i],
-                    startX - furthest_length + i * logic_lane_width,
+                    startX + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     startY,
-                    finishX - furthest_length + i * logic_lane_width,
+                    finishX + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     finishY
                 ));
             }
@@ -434,9 +468,9 @@ function get_specific_lanes(furthest_length, length, type, lines_number, spawn_p
                     type,
                     spawn_points[i],
                     startX,
-                    startY + furthest_length - i * logic_lane_width,
+                    startY + way_multiplier * (-shift + i * logic_lane_width),
                     finishX,
-                    finishY + furthest_length - i * logic_lane_width
+                    finishY + way_multiplier * (-shift + i * logic_lane_width)
                 ));
             }
         } else {
@@ -446,9 +480,9 @@ function get_specific_lanes(furthest_length, length, type, lines_number, spawn_p
                     type,
                     spawn_points[i],
                     startX,
-                    startY - furthest_length + i * logic_lane_width,
+                    startY + way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
                     finishX,
-                    finishY - furthest_length + i * logic_lane_width
+                    finishY + way_multiplier * (i * logic_lane_width + logic_lane_width / 2)
                 ));
             }
         }

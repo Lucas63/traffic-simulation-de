@@ -13,6 +13,9 @@ turns = null;
 function load_objects(){
     print_function_start(load_objects.name);
 
+    load_vehicle_configuration();
+
+
     roads = load_roads(load_road_configs());
     console.log(roads);
 
@@ -27,11 +30,6 @@ function load_objects(){
 
     offramps = load_offramps(roads);
     console.log(offramps);
-
-
-
-
-
 
     print_function_end(load_objects.name);
 }

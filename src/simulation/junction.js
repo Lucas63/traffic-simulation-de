@@ -48,6 +48,7 @@ function Junction( _id, _pos, _side,
 	this.topRoad = {};
 	this.topRoad.road = _topRoad;
 
+	console.log(_leftRoad.backwardLanes);
 	this.topRoad.turnRightLanes = new Array(_leftRoad.getBackwardLanesAmount());
 	// TODO find out lanes on destination road and take their amount
 	// this code works only because all roads has the same number of
@@ -95,12 +96,13 @@ function Junction( _id, _pos, _side,
 	this.bottomRoad.turnRightLanes =
 			new Array(_rightRoad.getForwardLanesAmount());
 
-	this.passLanes = new Array(_topRoad.getForwardLanesAmount());
+	this.bottomRoad.passLanes = new Array(_topRoad.getForwardLanesAmount());
 
 	this.bottomRoad.turnLeftLanes =
 			new Array(_leftRoad.getBackwardLanesAmount());
 
 	addVehiclesArray(this.bottomRoad.turnRightLanes);
+
 	setupPassLanes(this.bottomRoad.passLanes);
 	addVehiclesArray(this.bottomRoad.turnLeftLanes);
 
@@ -157,7 +159,7 @@ function Junction( _id, _pos, _side,
 
 
 	// all roads on junction have the same quantity of lanes
-	let lanesAmount = this.topRoad.getForwardLanesAmount();
+	let lanesAmount = this.topRoad.road.getForwardLanesAmount();
 
 	this.turnRightDuration = new Array(lanesAmount);
 	for (let i = 0; i < lanesAmount; ++i)

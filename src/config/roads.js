@@ -147,7 +147,7 @@ var roads_json = {
 			"length": 16,
 			"startX": 16,
 			"startY": 38,
-			"finishX": 32,
+			"finishX": 33,
 			"finishY": 38,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
@@ -181,7 +181,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -283,7 +283,7 @@ var roads_json = {
 			"id": 10,
 			"direction": "LEFT_TO_RIGHT",
 			"length": 12,
-			"startX": 36,
+			"startX": 35,
 			"startY": 38,
 			"finishX": 48,
 			"finishY": 38,
@@ -397,7 +397,7 @@ var roads_json = {
 			"length": 8,
 			"startX": 52,
 			"startY": 38,
-			"finishX": 60,
+			"finishX": 61,
 			"finishY": 38,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
@@ -432,7 +432,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -479,7 +479,7 @@ var roads_json = {
 			"id": 17,
 			"direction": "LEFT_TO_RIGHT",
 			"length":12,
-			"startX": 64,
+			"startX": 63,
 			"startY": 38,
 			"finishX": 76,
 			"finishY": 38,
@@ -516,7 +516,7 @@ var roads_json = {
 				null,
 				null
 			],
-			"backwardLanes": 2,
+			"backwardLanes": 0,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -564,7 +564,7 @@ var roads_json = {
 			"direction": "UP_TO_BOTTOM",
 			"length": 8,
 			"startX": 78,
-			"startY": 28,
+			"startY": 27,
 			"finishX": 78,
 			"finishY": 36,
 			"forwardLanes": 2,
@@ -594,7 +594,7 @@ var roads_json = {
 			"startX": 78,
 			"startY": 20,
 			"finishX": 78,
-			"finishY": 24,
+			"finishY": 25,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				null,
