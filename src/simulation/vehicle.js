@@ -52,8 +52,8 @@ var CAR_WIDTH  = INVALID;
 var TRUCK_LENGTH = INVALID;
 var TRUCK_WIDTH  = INVALID;
 
-var CAR_INITIAL_SPEED   = 1.5;
-var TRUCK_INITIAL_SPEED = 1.5;
+var CAR_INITIAL_SPEED   = 0.1;
+var TRUCK_INITIAL_SPEED = 0.1;
 
 // Safe distance it's a distance before road's end where vehicle moves slower
 // before new map object ahead: junction/turn/etc.
@@ -81,8 +81,8 @@ function Vehicle( config )
 	this.speed = config.speed;
 	this.acceleration = 0;
 
-    console.log("speed " + this.speed);
-    console.log("acceleration " + this.acceleration);
+	console.log("speed " + this.speed);
+	console.log("acceleration " + this.acceleration);
 
 
 	// position along lane and it is independent of lane orientation
@@ -99,15 +99,15 @@ function Vehicle( config )
 	this.vCoord = 0; // v in UV coordinates
 
 
-    this.turn_dx = 0;
-    this.turn_dy = 0;
+	this.turn_dx = 0;
+	this.turn_dy = 0;
 
-    this.hitBox = {
-        leftBottom: new Point(0, 0),
-        leftTop: new Point(0, 0),
-        rigthBottom: new Point(0, 0),
-        rightTop: new Point(0, 0)
-    }
+	this.hitBox = {
+		leftBottom: new Point(0, 0),
+		leftTop: new Point(0, 0),
+		rigthBottom: new Point(0, 0),
+		rightTop: new Point(0, 0)
+	}
 
 	// id of route this vehicle keeps to
 	this.routeId = config.routeId;
@@ -168,9 +168,9 @@ function Vehicle( config )
 	this.leaderAtRight   = null;
 	this.followerAtRight = null;
 
-    // bases for vehicle's movement
-    this.dx = 0;
-    this.dy = 0;
+	// bases for vehicle's movement
+	this.dx = 0;
+	this.dy = 0;
 
 	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
 	// coordinate on Bezier curve for rendering during turn
@@ -237,5 +237,5 @@ Vehicle.prototype.getSafeDistance = function()
 
 Vehicle.prototype.getSafeSpace = function()
 {
-    return this.uCoord + this.safeDistance;
+	return this.uCoord + this.safeDistance;
 };

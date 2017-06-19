@@ -34,8 +34,8 @@ var jamMOBIL = null;
 var carIDMConfig = null;
 var truckIDMConfig = null;
 
-function VehicleConfig( _desiredSpeed, _timeHeadway, _minimumGap,
-						_acceleration, _deceleration)
+function IDMVehicleConfig( _desiredSpeed, _timeHeadway, _minimumGap,
+						  _acceleration, _deceleration)
 {
 	this.desiredSpeed = _desiredSpeed; // v0
 

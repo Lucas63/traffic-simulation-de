@@ -9,7 +9,7 @@ function updateVehiclesOnLane( lane, mapObject, dt )
 	vehicle.acceleration =
 		updateAccelerationForVehicle(vehicle, vehicle.leader);
 
-	updateSpeedAndPosition(vehicle, mapObject, dt);
+	updateSpeedAndPosition(vehicle, lane, mapObject, dt);
 
 	for (let i = 1; i < vehicles.length; ++i)
 	{

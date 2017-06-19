@@ -13,7 +13,7 @@ function checkSpawnPointsForLanes( lanes, dt )
 		if (null == point)
 			continue;
 
-        point.update(dt);
+		point.update(dt);
 
 		if (point.ready())
 		{
@@ -24,17 +24,18 @@ function checkSpawnPointsForLanes( lanes, dt )
 			// car, but not for truck.
 			if (lanes[i].hasEnoughSpace( TRUCK_LENGTH ))
 			{
-                console.log("SP id " + point.id + " created vehicle for route "
-                            + point.routeId);
+				console.log("SP id " + point.id + " created vehicle for route "
+							+ point.routeId);
 
 				let vehicle = point.spawn();
+				vehicle.leader = lanes[i].virtualVehicle;
 				lanes[i].pushVehicle(vehicle);
 			}
-            else {
-                console.log("truck length " + TRUCK_LENGTH);
-                console.log("No space on lane");
-                console.log(lanes[i]);
-            }
+			// else {
+			//     console.log("truck length " + TRUCK_LENGTH);
+			//     console.log("No space on lane");
+			//     console.log(lanes[i]);
+			// }
 		}
 	}
 }

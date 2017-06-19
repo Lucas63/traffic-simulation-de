@@ -21,5 +21,5 @@ function addVirtualVehicle(lanes, length) {
 
 function setupPassLanes(lanes, laneLength) {
 	addVehiclesArray(lanes);
-	addVirtualVehicle(lanes, length);
+	addVirtualVehicle(lanes, laneLength);
 }

@@ -17,47 +17,49 @@ var start = 0;
 
 function step(timestamp)
 {
-    let progress = timestamp - start;
-    progress = Math.round(progress);
-    progress /= 1000;
+	let progress = timestamp - start;
+	// progress = Math.round(progress);
+	// progress /= 1000;
+	//
+	// start = timestamp;
 
-    start = timestamp;
+	progress = 0.1;
 
-    road_engine.update(progress);
-    renderer.update_map();
+	road_engine.update(progress);
+	renderer.update_map();
 
-    window.requestAnimationFrame(step);
+	window.requestAnimationFrame(step);
 }
 
 function load_objects() {
-    print_function_start(load_objects.name);
+	print_function_start(load_objects.name);
 
-    load_vehicle_configuration();
+	load_vehicle_configuration();
 
-    spawn_points = load_spawn_points();
-    console.log(spawn_points);
+	spawn_points = load_spawn_points();
+	console.log(spawn_points);
 
-    roads = load_roads(load_road_configs(), spawn_points);
-    console.log(roads);
+	roads = load_roads(load_road_configs(), spawn_points);
+	console.log(roads);
 
-    junctions = load_junctions(roads);
-    console.log(junctions);
+	junctions = load_junctions(roads);
+	console.log(junctions);
 
-    turns = load_turns(roads);
-    console.log(turns);
+	turns = load_turns(roads);
+	console.log(turns);
 
-    onramps = load_onramps(roads);
-    console.log(onramps);
+	onramps = load_onramps(roads);
+	console.log(onramps);
 
-    offramps = load_offramps(roads);
-    console.log(offramps);
+	offramps = load_offramps(roads);
+	console.log(offramps);
 
-    let map = new Map(roads, junctions, turns, onramps, offramps);
+	let map = new Map(roads, junctions, turns, onramps, offramps);
 
-    renderer = new Renderer(map);
-    road_engine = new RoadEngine(map);
+	renderer = new Renderer(map);
+	road_engine = new RoadEngine(map);
 
-    print_function_end(load_objects.name);
+	print_function_end(load_objects.name);
 }
 
 /*
@@ -69,16 +71,16 @@ function load_objects() {
 
  */
 function main() {
-    print_function_start(main.name);
+	print_function_start(main.name);
 
-    load_objects();
+	load_objects();
 
-    renderer.draw_map();
+	renderer.draw_map();
 
 
-    window.requestAnimationFrame(step);
+	window.requestAnimationFrame(step);
 
-    print_function_end(main.name);
+	print_function_end(main.name);
 }
 
 

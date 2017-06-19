@@ -198,7 +198,7 @@ function load_vehicle_configuration() {
 	let car_config = vehicles_json.car;
 
 	CAR_LENGTH = car_config["length"];
-    CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
+	CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 	CAR_WIDTH = car_config["width"];
 
 	let carMinimumGap = car_config["minimum_gap"];
@@ -206,37 +206,34 @@ function load_vehicle_configuration() {
 	let model = car_config["FreeMoveIDMModel"];
 
 	let carFreeRoadConfig =
-		new VehicleConfig(model.desiredSpeed,
-			model.timeHeadway, carMinimumGap,
-			model.acceleration,
-			model.deceleration);
+		new IDMVehicleConfig(model.desiredSpeed,
+						  model.timeHeadway, carMinimumGap,
+						  model.acceleration, model.deceleration);
 
 	let carFreeRoadIdmConfig =
 		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
 	model = car_config["UpstreamIDMModel"];
 	let carUpstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-			model.timeHeadway, carMinimumGap,
-			model.acceleration,
-			model.deceleration);
+		new IDMVehicleConfig(model.desiredSpeed,
+						  model.timeHeadway, carMinimumGap,
+						  model.acceleration, model.deceleration);
 
 	let carUpstreamIdmConfig =
 		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
 	model = car_config["DownstreamIDMModel"];
 	let carDownstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
-			model.timeHeadway, carMinimumGap,
-			model.acceleration,
-			model.deceleration);
+		new IDMVehicleConfig(model.desiredSpeed,
+						  model.timeHeadway, carMinimumGap,
+						  model.acceleration, model.deceleration);
 
 	let carDownstreamIdmConfig =
 		new IDMConfig(model.lambda_a, model.lambda_b, model.lambda_T);
 
 	model = car_config["JamIDMModel"];
 	let carJamConfig =
-		new VehicleConfig(model.desiredSpeed,
+		new IDMVehicleConfig(model.desiredSpeed,
 			model.timeHeadway, carMinimumGap,
 			model.acceleration,
 			model.deceleration);
@@ -253,7 +250,7 @@ function load_vehicle_configuration() {
 	let truck_config = vehicles_json.truck;
 
 	TRUCK_LENGTH = truck_config["length"];
-    TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
+	TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 	TRUCK_WIDTH = truck_config["width"];
 
 	let truckMinimumGap = truck_config["minimum_gap"];
@@ -261,7 +258,7 @@ function load_vehicle_configuration() {
 	model = truck_config["FreeMoveIDMModel"];
 
 	let truckFreeRoadConfig =
-		new VehicleConfig(model.desiredSpeed,
+		new IDMVehicleConfig(model.desiredSpeed,
 			model.timeHeadway, truckMinimumGap,
 			model.acceleration,
 			model.deceleration);
@@ -271,7 +268,7 @@ function load_vehicle_configuration() {
 
 	model = truck_config["UpstreamIDMModel"];
 	let truckUpstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
+		new IDMVehicleConfig(model.desiredSpeed,
 			model.timeHeadway, truckMinimumGap,
 			model.acceleration,
 			model.deceleration);
@@ -281,7 +278,7 @@ function load_vehicle_configuration() {
 
 	model = truck_config["DownstreamIDMModel"];
 	let truckDownstreamConfig =
-		new VehicleConfig(model.desiredSpeed,
+		new IDMVehicleConfig(model.desiredSpeed,
 			model.timeHeadway, truckMinimumGap,
 			model.acceleration,
 			model.deceleration);
@@ -291,7 +288,7 @@ function load_vehicle_configuration() {
 
 	model = truck_config["JamIDMModel"];
 	let truckJamConfig =
-		new VehicleConfig(model.desiredSpeed,
+		new IDMVehicleConfig(model.desiredSpeed,
 			model.timeHeadway, truckMinimumGap,
 			model.acceleration,
 			model.deceleration);

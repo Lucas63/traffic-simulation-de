@@ -25,7 +25,7 @@ var RoadObject =
 	// see junction.js for more details
 	JUNCTION: 4,
 
-    ROAD: 6
+	ROAD: 6
 };
 
 /*
@@ -106,20 +106,17 @@ function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 	this.finishConnection = _finishConnection;
 
 	this.forwardLanes = _forwardLanes;
-    setupPassLanes(this.forwardLanes, _roadLength);
+	setupPassLanes(this.forwardLanes, _roadLength);
 
 	this.backwardLanes = _backwardLanes;
-
-	if(this.backwardLanes){
-        setupPassLanes(this.backwardLanes, _roadLength);
-	}
-
+	if(this.backwardLanes)
+		setupPassLanes(this.backwardLanes, _roadLength);
 }
 
 function RoadBases(_move_dx, _move_dy)
 {
-    this.move_dx = _move_dx;
-    this.move_dy = _move_dy;
+	this.move_dx = _move_dx;
+	this.move_dy = _move_dy;
 }
 
 // reprents map object connected to the road
@@ -140,9 +137,9 @@ function Road( roadConfig )
 	this.id = roadConfig.id;
 	this.direction = roadConfig.direction;
 
-    this.type = RoadObject.ROAD;
+	this.type = RoadObject.ROAD;
 
-	this.length = roadConfig.laneWidth;
+	this.length = roadConfig.roadLength;
 
 	this.forwardLanes = roadConfig.forwardLanes;
 	this.backwardLanes = roadConfig.backwardLanes;
@@ -162,11 +159,11 @@ function Road( roadConfig )
 	this.backwardLanesAmount = (roadConfig.backwardLanes)? roadConfig.backwardLanes.length : 0;
 
 
-    this.lanesAmount = this.forwardLanesAmount + this.backwardLanesAmount;
-    this.roadWidth = logic_lane_width * this.lanesAmount;
+	this.lanesAmount = this.forwardLanesAmount + this.backwardLanesAmount;
+	this.roadWidth = logic_lane_width * this.lanesAmount;
 
-    this.forwardBases = new RoadBases(0, 0);
-    this.backwardBases = new RoadBases(0, 0);
+	this.forwardBases = new RoadBases(0, 0);
+	this.backwardBases = new RoadBases(0, 0);
 }
 
 Road.prototype.getId = function()
@@ -182,7 +179,7 @@ Road.prototype.getLanesAmount = function()
 Road.prototype.getForwardLanesAmount = function()
 {
 	if(this.forwardLanes){
-        return this.forwardLanes.length;
+		return this.forwardLanes.length;
 	}
 	return 0;
 };
@@ -190,7 +187,7 @@ Road.prototype.getForwardLanesAmount = function()
 Road.prototype.getBackwardLanesAmount = function()
 {
 	if(this.backwardLanes){
-        return this.backwardLanes.length;
+		return this.backwardLanes.length;
 	}
 	return 0;
 
