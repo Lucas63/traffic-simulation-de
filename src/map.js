@@ -6,7 +6,9 @@ logic_lane_width = 1;
 logic_to_canvas_multiplier = null;
 logic_junction_length = 4;
 
-function Map(_roads, _junctions, _turns, _onramps, _offramps) {
+map_routes = [];
+
+function Map(_roads, _junctions, _turns, _onramps, _offramps, _routes) {
     print_function_start(Map.name);
 
     this.roads = _roads;
@@ -14,46 +16,123 @@ function Map(_roads, _junctions, _turns, _onramps, _offramps) {
     this.turns = _turns;
     this.onramps = _onramps;
     this.offramps = _offramps;
-
+    //this.routes = _routes;
+    map_routes = _routes;
 
     print_function_end(Map.name);
 }
 
 
+Map.prototype.get_road_lanes_with_car = function () {
 
-/*
+    let array = [];
 
-This function return object that matches given parameters
-@type - {road,turn,offramp,onramp,junction}
-@id - object ID in given array(NOT INDEX OF ARRAY!!)
-
- */
-Map.prototype.get_map_object = function(type,id)
-{
-    switch(type){
-        case "road":
-            return this.get_object_from_array(roads,id);
-        case "junction":
-            return this.get_object_from_array(junctions,id);
-        case "turn":
-            return this.get_object_from_array(turns,id);
-        case "offramp":
-            return this.get_object_from_array(offramps,id);
-    }
-};
-
-/*
-
-This function searching for object in specified array by id
-@array - given array of objects(junctions,roads,turns,offramps,onramps or etc)
-@id - ID of object(NOT INDEX IN ARRAY!)
-
- */
-Map.prototype.get_object_from_array = function(array,id){
-    for(let i =0; i< array.length; i++){
-        if(array[i].id == id){
-            return array[i];
+    for (let i = 0; i < this.roads.length; i++) {
+        for( let j = 0; j < this.roads[i].forwardLanesAmount; j++){
+            if(!this.roads[i].forwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.roads[i].forwardLanes[j].vehicles,
+                        this.roads[i].forwardLanes[j]]);
+            }
         }
     }
-    return null;
+
+    for (let i = 0; i < this.roads.length; i++) {
+        for( let j = 0; j < this.roads[i].backwardLanesAmount; j++){
+            if(!this.roads[i].backwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.roads[i].forwardLanes[j].vehicles,
+                        this.roads[i].forwardLanes[j]]);
+            }
+        }
+    }
+
+    return array;
 };
+
+
+Map.prototype.get_onramp_lanes_with_car = function () {
+
+    let array = [];
+
+    for (let i = 0; i < this.onramps.length; i++) {
+        for( let j = 0; j < this.onramps[i].forwardLanesAmount; j++){
+            if(!this.onramps[i].forwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.onramps[i].forwardLanes[j].vehicles,
+                    this.onramps[i].forwardLanes[j]]);
+            }
+        }
+    }
+
+    for (let i = 0; i < this.onramps.length; i++) {
+        for( let j = 0; j < this.onramps[i].backwardLanesAmount; j++){
+            if(!this.onramps[i].backwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.onramps[i].backwardLanes[j].vehicles,
+                    this.onramps[i].backwardLanes[j]]);
+            }
+        }
+    }
+
+    return array;
+};
+
+
+
+Map.prototype.get_offramp_lanes_with_car = function () {
+
+    let array = [];
+
+    for (let i = 0; i < this.offramps.length; i++) {
+        for( let j = 0; j < this.offramps[i].forwardLanesAmount; j++){
+            if(!this.offramps[i].forwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.offramps[i].forwardLanes[j].vehicles,
+                        this.offramps[i].forwardLanes[j]]);
+            }
+        }
+    }
+
+    for (let i = 0; i < this.offramps.length; i++) {
+        for( let j = 0; j < this.offramps[i].backwardLanesAmount; j++){
+            if(!this.offramps[i].backwardLanes[j].vehicles.empty()){
+                array.push(
+                    [this.offramps[i].backwardLanes[j].vehicles,
+                        this.offramps[i].backwardLanes[j]]);
+            }
+        }
+    }
+
+    for (let i = 0; i < this.offramps.length; i++) {
+        for( let j = 0; j < this.offramps[i].turnLanes.length; j++){
+            if(!this.offramps[i].turnLanes[j].vehicles.empty()){
+                array.push(
+                    [this.offramps[i].turnLanes[j].vehicles,
+                        this.offramps[i].turnLanes[j]]);
+            }
+        }
+    }
+
+    return array;
+};
+
+
+
+Map.prototype.get_turn_lanes_with_car = function () {
+
+    let array = [];
+
+    for (let i = 0; i < this.turns.length; i++) {
+        for( let j = 0; j < this.turns[i].lanes.length; j++){
+            if(!this.turns[i].lanes[j].vehicles.empty()){
+                array.push(
+                    [this.turns[i].lanes[j].vehicles,
+                        this.turns[i].lanes[j]]);
+            }
+        }
+    }
+
+    return array;
+};
+

@@ -331,9 +331,6 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
     }
 }
 
-
-
-
 function draw_tree(context, startX, startY, finishX, finishY){
     let windowX = finishX - startX;
     let windowY = finishY - startY;
@@ -343,7 +340,6 @@ function draw_tree(context, startX, startY, finishX, finishY){
 
     let image_source = 'sources/top.png';
 
-    var ctx = document.getElementById('canvas_map').getContext('2d');
     var img = new Image();
     img.onload = function() {
         ctx.drawImage(img,

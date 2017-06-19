@@ -10,6 +10,8 @@ offramps = null;
 onramps = null;
 turns = null;
 
+routes = null;
+
 renderer = null;
 road_engine = null;
 
@@ -54,7 +56,10 @@ function load_objects() {
 	offramps = load_offramps(roads);
 	console.log(offramps);
 
-	let map = new Map(roads, junctions, turns, onramps, offramps);
+	routes = load_routes();
+	console.log(routes);
+
+	let map = new Map(roads, junctions, turns, onramps, offramps,routes);
 
 	renderer = new Renderer(map);
 	road_engine = new RoadEngine(map);
@@ -78,6 +83,7 @@ function main() {
 	renderer.draw_map();
 
 
+	console.log(renderer.map_object.get_onramp_lanes_with_car());
 	window.requestAnimationFrame(step);
 
 	print_function_end(main.name);
