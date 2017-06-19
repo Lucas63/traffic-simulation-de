@@ -1,7 +1,21 @@
 function updateVehiclesOnLane( lane, mapObject, dt )
 {
+
 	let vehicles = lane.vehicles;
-	let vehicle = vehicles[0];
+	/*
+	TODO : new code
+
+	 */
+	if(vehicles.empty())
+		return;
+
+	/*
+	 TODO : new code finish
+
+	 */
+
+
+    let vehicle = vehicles[0];
 
 	vehicle.acceleration =
 		updateAccelerationForVehicle(vehicle, vehicle.leader);

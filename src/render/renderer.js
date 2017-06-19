@@ -6,6 +6,12 @@
 function Renderer(_map){
     this.map = _map;
 
+    this.map_color = "";
+    this.road_color = "";
+    this.dotted_line_color = "";
+    this.boiled_line_color = "";
+    this.road_side_line_color = "";
+
     render_map(this.map);
 }
 
