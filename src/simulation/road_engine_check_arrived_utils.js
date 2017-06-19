@@ -169,18 +169,19 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 // get movement to the next map object: pass through, turn left or right
 function getNextMovement( vehicle )
 {
-	let route = road_engine.map.routes[ vehicle.routeId ];
+	let route = map_routes[ vehicle.routeId ];
 
 	if ( vehicle.routeItemIndex == route.items.length - 1)
 		return null;
 
-	let item = road_engine.map.routes[ vehicle.routeItemIndex + 1 ];
+	let item = route.items[ vehicle.routeItemIndex + 1 ];
+	console.log(item);
 	return item.movement;
 }
 
 function getNextObjectOnRoute( vehicle )
 {
-	let route = road_engine.map.routes[ vehicle.routeId ];
+	let route = map_routes[ vehicle.routeId ];
 
 	if ( vehicle.routeItemIndex == route.items.length - 1)
 		return RoadObject.VOID;

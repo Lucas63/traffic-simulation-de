@@ -71,12 +71,16 @@ function VehicleConfig( _type, _routeId, _uCoord, _initialSpeed )
 	this.routeId  = _routeId;
 	this.uCoord   = _uCoord;
 	this.speed    = _initialSpeed;
+
+	this.canvas_object = get_canvas_object(this.type,0,0);
 }
+
 
 function Vehicle( config )
 {
 	// value from VehicleType
 	this.type = config.type;
+	this.canvas_object = config.canvas_object;
 
 	this.speed = config.speed;
 	this.acceleration = 0;
