@@ -4,7 +4,10 @@
 
 
 function Renderer(_map){
-    this.map = _map;
+    this.map_object = _map;
+
+    this.canvas = document.getElementById('canvas_map');
+    this.context = this.canvas.getContext('2d');
 
     this.map_color = "";
     this.road_color = "";
@@ -12,10 +15,12 @@ function Renderer(_map){
     this.boiled_line_color = "";
     this.road_side_line_color = "";
 
-    render_map(this.map);
+
 }
 
-
+Renderer.prototype.draw_map = function(){
+    render_map(this);
+};
 
 // конфигурация путекй вверх направо прямо
 Renderer.prototype.update_map = function () {

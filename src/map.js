@@ -16,9 +16,6 @@ function Map(_roads, _junctions, _turns, _onramps, _offramps) {
     this.offramps = _offramps;
 
 
-    this.canvas = document.getElementById('canvas_map');
-    this.context = this.canvas.getContext('2d');
-
     print_function_end(Map.name);
 }
 
