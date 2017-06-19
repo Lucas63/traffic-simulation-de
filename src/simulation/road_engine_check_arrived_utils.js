@@ -169,18 +169,18 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 // get movement to the next map object: pass through, turn left or right
 function getNextMovement( vehicle )
 {
-	let route = this.map.routes[ vehicle.routeId ];
+	let route = road_engine.map.routes[ vehicle.routeId ];
 
 	if ( vehicle.routeItemIndex == route.items.length - 1)
 		return null;
 
-	let item = this.map.routes[ vehicle.routeItemIndex + 1 ];
+	let item = road_engine.map.routes[ vehicle.routeItemIndex + 1 ];
 	return item.movement;
 }
 
 function getNextObjectOnRoute( vehicle )
 {
-	let route = this.map.routes[ vehicle.routeId ];
+	let route = road_engine.map.routes[ vehicle.routeId ];
 
 	if ( vehicle.routeItemIndex == route.items.length - 1)
 		return RoadObject.VOID;
@@ -191,19 +191,19 @@ function getNextObjectOnRoute( vehicle )
 	switch( item.type )
 	{
 		case RouteItemType.ROAD:
-			return this.map.roads[id];
+			return road_engine.map.roads[id];
 
 		case RouteItemType.ONRAMP:
-			return this.map.onramps[id];
+			return road_engine.map.onramps[id];
 
 		case RouteItemType.OFFRAMP:
-			return this.map.offramps[id];
+			return road_engine.map.offramps[id];
 
 		case RouteItemType.TURN:
-			return this.map.turns[id];
+			return road_engine.map.turns[id];
 
 		case RouteItemType.JUNCTION:
-			return this.map.junctions[id];
+			return road_engine.map.junctions[id];
 	}
 }
 
