@@ -3,10 +3,8 @@ function checkLaneChangeOnLanes( lanes )
 	// check the very first lane
 	checkLaneChangeForNeighbourLanes(null, lanes[0], lanes[1]);
 
-	for (let i = 1; i < lanes.length - 1; ++i){
-        checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
-    }
-
+	for (let i = 1; i < lanes.length - 1; ++i)
+		checkLaneChangeForNeighbourLanes(lanes[i - 1], lanes[i], lanes[i + 1]);
 
 	// check the last lane
 	checkLaneChangeForNeighbourLanes(lanes[lanes.length - 2],
@@ -38,7 +36,7 @@ function checkLaneChangeForNeighbourLanes( left, current, right)
 	if(current == null)
 		return;
 
-    let vehicles = (current.vehicles.empty)? [] : current.vehicles;
+	let vehicles = current.vehicles;
 	/*
 	TODO : new code finish
 	 */
