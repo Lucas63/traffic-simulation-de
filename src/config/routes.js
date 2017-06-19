@@ -9,57 +9,57 @@ var routes_json =
 				{
 					"type": "road",
 					"id": 0,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "junction",
 					"id": 0,
-					"movement": "turnRight"
+					"movement": RouteItemType["turnRight"]
 				},
 				{
 					"type": "road",
 					"id": 5,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "onramp",
 					"id": 0,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "road",
 					"id": 10,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "junction",
 					"id": 2,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "road",
 					"id": 14,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "offramp",
 					"id": 0,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "road",
 					"id": 17,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "junction",
 					"id": 4,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				},
 				{
 					"type": "road",
 					"id": 22,
-					"movement": "pass"
+					"movement": RouteItemType["pass"]
 				}
 			]
 		}

@@ -80,18 +80,18 @@ RoadEngine.prototype.preUpdate = function( dt )
 	// 	// new vehicles can be added to this road by
 	// 	// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
 	// 	// from another road when neighbours already updated on i-th road
-    //
+	//
 	// 	// update following and leading vehicles on each lane
 	// 	updateNeighboursOnRoad( roads[i] );
-    //
-    //
+	//
+	//
 	// 	// check upstream/downstream condtion
 	// 	checkTrafficState( roads[i] );
-    //
+	//
 	// 	// Vehicles on another map objects don't change own models, thus only
 	// 	// vehicles on road are updated
 	// 	checkVehiclesPositionOnRoad( roads[i] );
-    //
+	//
 	// 	// and this updates models
 	// 	updateModels( roads[i] );
 	// }
