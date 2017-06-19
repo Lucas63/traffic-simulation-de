@@ -83,7 +83,7 @@ function main() {
 	renderer.draw_map();
 
 
-	console.log(renderer.map_object.get_onramp_lanes_with_car());
+	// console.log(renderer.map_object.get_onramp_lanes_with_car());
 	window.requestAnimationFrame(step);
 
 	print_function_end(main.name);

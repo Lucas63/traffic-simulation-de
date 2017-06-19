@@ -74,27 +74,27 @@ RoadEngine.prototype.preUpdate = function( dt )
 	// vehicle's traffic state can be changed after previous functions,
 	// so check and update models if required
 
-	// for (let i = 0; i < roads.length; ++i)
-	// {
-	// 	// update separately, because after updating road with index i,
-	// 	// new vehicles can be added to this road by
-	// 	// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
-	// 	// from another road when neighbours already updated on i-th road
-	//
-	// 	// update following and leading vehicles on each lane
-	// 	updateNeighboursOnRoad( roads[i] );
-	//
-	//
-	// 	// check upstream/downstream condtion
-	// 	checkTrafficState( roads[i] );
-	//
-	// 	// Vehicles on another map objects don't change own models, thus only
-	// 	// vehicles on road are updated
-	// 	checkVehiclesPositionOnRoad( roads[i] );
-	//
-	// 	// and this updates models
-	// 	updateModels( roads[i] );
-	// }
+	for (let i = 0; i < roads.length; ++i)
+	{
+		// update separately, because after updating road with index i,
+		// new vehicles can be added to this road by
+		// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
+		// from another road when neighbours already updated on i-th road
+
+		// update following and leading vehicles on each lane
+		updateNeighboursOnRoad( roads[i] );
+
+
+		// check upstream/downstream condtion
+		checkTrafficState( roads[i] );
+
+		// Vehicles on another map objects don't change own models, thus only
+		// vehicles on road are updated
+		checkVehiclesPositionOnRoad( roads[i] );
+
+		// and this updates models
+		updateModels( roads[i] );
+	}
 
 	this.map.turns.forEach(checkArrivedVehiclesOnTurn);
 	this.map.onramps.forEach(checkArrivedVehiclesOnOnramp);

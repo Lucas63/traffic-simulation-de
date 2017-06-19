@@ -233,7 +233,7 @@ Junction.prototype.getRoadForSide = function( side )
 	}
 };
 
-Junction.prototype.getTrafficLightForSide = function( side )
+Junction.prototype.getTrafficLightForSide = function( _side )
 {
 	switch(_side)
 	{
@@ -344,7 +344,7 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 	// }
 
 	// vehicle cannot move due to prohibiting traffic light
-	if (this.trafficLightAllowToMove(sourceRide) == false)
+	if (this.trafficLightAllowToMove(sourceSide) == false)
 		return false;
 
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );

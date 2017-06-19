@@ -7,59 +7,59 @@ var routes_json =
 			"items":
 			[
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 0,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "junction",
+					"type": RouteItemType.JUNCTION,
 					"id": 0,
-					"movement": RouteItemType["turnRight"]
+					"movement": MovementType["turnRight"]
 				},
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 5,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "onramp",
+					"type": RouteItemType.ONRAMP,
 					"id": 0,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 10,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "junction",
+					"type": RouteItemType.JUNCTION,
 					"id": 2,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 14,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "offramp",
+					"type": RouteItemType.OFFRAMP,
 					"id": 0,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 17,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "junction",
+					"type": RouteItemType.JUNCTION,
 					"id": 4,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				},
 				{
-					"type": "road",
+					"type": RouteItemType.ROAD,
 					"id": 22,
-					"movement": RouteItemType["pass"]
+					"movement": MovementType["pass"]
 				}
 			]
 		}

@@ -85,10 +85,6 @@ function Vehicle( config )
 	this.speed = config.speed;
 	this.acceleration = 0;
 
-	console.log("speed " + this.speed);
-	console.log("acceleration " + this.acceleration);
-
-
 	// position along lane and it is independent of lane orientation
 	// each vehicle just move alone lane and only renderer know how to present
 	// this moving
@@ -182,6 +178,10 @@ function Vehicle( config )
 
 	this.turnElapsedTime = 0;
 	this.turnFullTime = 0;
+
+	this.turnX = 0;
+	this.turnY = 0;
+	this.turnAngle = 0;
 
 	// lane where vehicle is turninng now
 	this.turnLane = null;

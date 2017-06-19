@@ -6,18 +6,39 @@ function updateVehiclesOnLane( lane, mapObject, dt )
 
 	let vehicle = vehicles[0];
 
+	// console.log(">>>>>> leading vehicle before update");
+	// console.log(">>>>>> u coord " + vehicle.uCoord);
+	// console.log(">>>>>> speed " + vehicle.speed);
+	// console.log(">>>>>> acceleration " + vehicle.acceleration);
+
 	vehicle.acceleration =
 		updateAccelerationForVehicle(vehicle, vehicle.leader);
 
 	updateSpeedAndPosition(vehicle, lane, mapObject, dt);
 
+	// console.log(">>>>>> leading vehicle after update");
+	// console.log(">>>>>> u coord " + vehicle.uCoord);
+	// console.log(">>>>>> speed " + vehicle.speed);
+	// console.log(">>>>>> acceleration " + vehicle.acceleration);
+
 	for (let i = 1; i < vehicles.length; ++i)
 	{
 		vehicle = vehicles[i];
+
+		// console.log(">>>>>> vehicle before update");
+		// console.log(">>>>>> u coord " + vehicle.uCoord);
+		// console.log(">>>>>> speed " + vehicle.speed);
+		// console.log(">>>>>> acceleration " + vehicle.acceleration);
+
 		vehicle.acceleration =
 			updateAccelerationForVehicle(vehicle, vehicles[i - 1]);
 
 		updateSpeedAndPosition(vehicle, lane, mapObject, dt);
+
+		// console.log(">>>>>> vehicle after update");
+		// console.log(">>>>>> u coord " + vehicle.uCoord);
+		// console.log(">>>>>> speed " + vehicle.speed);
+		// console.log(">>>>>> acceleration " + vehicle.acceleration);
 	}
 }
 

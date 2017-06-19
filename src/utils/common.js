@@ -2,6 +2,8 @@
 // value denoting error, I prefer it to numerical variables instead of null
 //const INVALID = -1;
 
+const RADIANS_TO_DEGREES_CONVERTION = 180 / Math.PI;
+
 
 const TURN_DURATION_BASE = 0.5;
 const TURN_DURATION_FOR_LANE = 0.5;
@@ -87,6 +89,12 @@ function getBezierCurveCoord(t, coord1, coord2, coord3)
 	return Math.pow(1 - t, 2) * coord1 +
 		   2 * (1 - t) * coord2 +
 		   Math.pow(t, 2) * coord3;
+}
+
+function getBezierTangent(t, startCoord, controlCoord, endCoord)
+{
+	return 2 * ( t * (startCoord -2 * controlCoord + endCoord) +
+				 controlCoord - startCoord );
 }
 
 // calculate points for turn on each of *turnLanes* required
@@ -206,9 +214,55 @@ function setOfframpTurnData( turnLanes, sourceRoad,
 	}
 }
 
-function calculateTurnDistance(vehicle, pathCalcFunction )
+function getTangentVectorAngle(vehicle)
 {
 	let turnLane = vehicle.turnLane;
+
+	// calculate tangent vector for actual position of vehicle
+	// that's why used actual coordinates of vehicle as end point for
+	// Bezier curve
+	let x = getBezierTangent(vehicle.turnCompletion, turnLane.startPoint.x,
+							 turnLane.controlPoint.x, vehicle.turnX ) ;
+	let y = getBezierTangent(vehicle.turnCompletion, turnLane.startPoint.y,
+							 turnLane.controlPoint.y, vehicle.turny ) ;
+
+	// if (x == 0)
+	// {
+	// 	if (y > 0)
+	// 		vehicle.turnAngle = 270;
+	// 	else
+	// 		vehicle.turnAngle = 90;
+	//
+	// 	return;
+	// }
+
+	if (y == 0)
+	{
+		if (x > 0)
+			vehicle.turnAngle = 0;
+		else
+			vehicle.turnAngle = 180;
+
+		return;
+	}
+
+	// + Pi, because positive Y axis oriented to the bottom, not the top
+	vehicle.turnAngle = Math.atan(y / x) * RADIANS_TO_DEGREES_CONVERTION + 180;
+}
+
+function calculateTurnDistance( vehicle, pathCalcFunction )
+{
+	let turnLane = vehicle.turnLane;
+
+	vehicle.turnX =
+		getBezierCurveCoord(vehicle.turnCompletion, turnLane.startPoint.x,
+							turnLane.controlPoint.x, turnLane.endPoint.x);
+
+	vehicle.turnY =
+		getBezierCurveCoord(vehicle.turnCompletion, turnLane.startPoint.y,
+							turnLane.controlPoint.y, turnLane.endPoint.y);
+
+	getTangentVectorAngle(vehicle);
 
 	return pathCalcFunction( vehicle.turnCompletion,
 							 turnLane.startPoint,

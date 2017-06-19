@@ -175,7 +175,9 @@ function getNextMovement( vehicle )
 		return null;
 
 	let item = route.items[ vehicle.routeItemIndex + 1 ];
-	console.log(item);
+	// console.log("item id " + item.id);
+	// console.log("item type " + item.type);
+	// console.log("item movement " + item.movement);
 	return item.movement;
 }
 
