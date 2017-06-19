@@ -2,17 +2,17 @@ function checkArrivedVehiclesOnRoad( road )
 {
 	let lanes = road.forwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
-		checkArrivedVehicle( road, lanes[i], i)
+		checkArrivedVehicle( road, lanes[i], i);
 
 	lanes = road.backwardLanes;
 	for (let i = 0; i < lanes.length; ++i)
-		checkArrivedVehicle( road, lanes[i], i)
+		checkArrivedVehicle( road, lanes[i], i);
 }
 
 function checkArrivedVehiclesOnTurn( turn )
 {
 	for (let i = 0; i < turn.lanes.length; ++i)
-		checkArrivedVehicle(turn, turn.lanes[i], i)
+		checkArrivedVehicle(turn, turn.lanes[i], i);
 }
 
 function checkArrivedVehiclesOnOnramp( onramp )
@@ -52,20 +52,20 @@ function checkArrivedVehiclesOnOfframp( offramp )
  */
 function checkArrivedVehiclesOnJunction( junction )
 {
-	let road = junction.getJunctionRoadForSide( JunctionSides["top"]);
-	checkArrivedVehiclesOnJunctionRoad(road);
+	let road = junction.getRoadForSide( JunctionSides["top"]);
+	checkArrivedVehiclesOnJunctionRoad(junction, road);
 
 	road = junction.getRoadForSide( JunctionSides["right"] );
-	checkArrivedVehiclesOnJunctionRoad(road);
+	checkArrivedVehiclesOnJunctionRoad(junction, road);
 
 	road = junction.getRoadForSide( JunctionSides["bottom"] );
-	checkArrivedVehiclesOnJunctionRoad(road);
+	checkArrivedVehiclesOnJunctionRoad(junction, road);
 
 	road = junction.getRoadForSide( JunctionSides["left"] );
-	checkArrivedVehiclesOnJunctionRoad(road);
+	checkArrivedVehiclesOnJunctionRoad(junction, road);
 }
 
-function checkArrivedVehiclesOnJunctionRoad( road )
+function checkArrivedVehiclesOnJunctionRoad( junction, junctionRoad )
 {
 	let lanes = junctionRoad.passLanes;
 	for (let i = 0; i < lanes.length; ++i)
@@ -75,7 +75,7 @@ function checkArrivedVehiclesOnJunctionRoad( road )
 	for (let i = 0; i < lanes.length; ++i)
 		checkArrivedVehicle(junction, lanes[i], i);
 
-	lanes = road.turnLeftLanes;
+	lanes = junctionRoad.turnLeftLanes;
 	for (let i = 0; i < lanes.length; ++i)
 		checkArrivedVehicle(junction, lanes[i], i);
 }
@@ -104,6 +104,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 	}
 
 	let moved = false;
+	let roadId = 0;
 
 	switch ( nextObject.type )
 	{
@@ -125,7 +126,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 
 		case RoadObject.ONRAMP:
 			// currentObject is road, because onramp connected only to roads
-			let roadId = currentObject.getId();
+			roadId = currentObject.getId();
 
 			if (canMoveToOnramp(nextObject, roadId, lane, laneIndex, vehicle))
 			{
@@ -136,7 +137,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 
 		case RoadObject.OFFRAMP:
 			// currentObject is road, because offramp connected only to roads
-			let roadId = currentObject.getId();
+			roadId = currentObject.getId();
 
 			if (canMoveToOfframp(nextObject, roadId, lane, laneIndex, vehicle))
 			{

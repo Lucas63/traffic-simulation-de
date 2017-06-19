@@ -6,7 +6,10 @@ function updateNeighboursOnRoad( road )
 
 function updateNeighboursOnLanes( lanes )
 {
-	updateNeighbours(lanes[0], null, false);
+	if (lanes.empty())
+		return;
+
+	updateNeighbours(lanes[0], lanes[1], false);
 
 	// actually not executed:) because each road has only 2 lanes
 	// with the same direction
@@ -16,7 +19,7 @@ function updateNeighboursOnLanes( lanes )
 		updateNeighbours(lanes[i], lanes[i + 1], false);
 	}
 
-	updateNeighbours(lanes.last(), lanes[lanes.length - 1], true);
+	updateNeighbours(lanes.last(), lanes[lanes.length - 2], true);
 }
 
 // current - lane which vehicles updated for

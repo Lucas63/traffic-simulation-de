@@ -18,16 +18,19 @@ const DEFAULT_RED_COLOR_DURATION = 14;
 const DEFAULT_YELLOW_COLOR_DURAION = 3;
 const DEFAULT_GREEN_COLOR_DURATION = 20;
 
-function TrafficLight( _id, _x_coord, _y_coord, _connectedRoads,
-					   _initialState, _initialColor )
+function TrafficLight( _x_coord, _y_coord, _initialColor )
 {
-	this.id = _id;
 	this.x_coord = _x_coord;
 	this.y_coord = _y_coord;
 
-	this.connectedRoads = _connectedRoads;
-	this.state = _initialState;
 	this.color = _initialColor;
+
+	if (this.color == TrafficLightColor.GREEN)
+		this.state = TrafficLightState.GREEN;
+	else
+		this.state = TrafficLightState.RED;
+
+
 	this.elapsedTime = 0;
 
 	this.greenLightPeriod = DEFAULT_GREEN_COLOR_DURATION;

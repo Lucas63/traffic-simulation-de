@@ -64,7 +64,7 @@ function Junction( _id, _pos, _side,
 	setupPassLanes(this.topRoad.passLanes);
 	addVehiclesArray(this.topRoad.turnLeftLanes);
 
-	if (_topRoad.backwardLanes)
+	if (_topRoad.backwardLanes.empty() == false)
 	{
 		setTurnData(this.topRoad.turnRightLanes, _topRoad,
 					_topRoad.backwardLanes, _leftRoad.backwardLanes);

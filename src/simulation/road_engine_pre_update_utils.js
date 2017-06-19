@@ -82,6 +82,9 @@ function checkTrafficState( road )
 
 function checkTrafficStateForVehicles(vehicles)
 {
+	if (vehicles.empty())
+		return;
+
 	// the very first vehicle has virtual leader
 	let vehicle = vehicles[0];
 	checkTrafficStateForAdjacentVehicles(vehicle, vehicle.leader);

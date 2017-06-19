@@ -56,7 +56,7 @@ RoadEngine.prototype.preUpdate = function()
 	let roads = this.map.roads;
 
 	// check whether vehicles on upstream, downstream or jam
-	for (let i = 0;i < roads.length;++i)
+	for (let i = 0; i < roads.length; ++i)
 	{
 		// check the first vehicle on each lane or map object
 		// for completing move on current object, namely vehicle
@@ -65,7 +65,7 @@ RoadEngine.prototype.preUpdate = function()
 
 		// check vehicles that have moved to the end of current map object,
 		// i.e. reached finish or start of road/onramp/offramp/turn/junction
-		checkArrivedVehiclesOnRoad( road );
+		checkArrivedVehiclesOnRoad( roads[i] );
 
 		// check whether spawn points ready to action
 		checkSpawnPoints( roads[i] );
