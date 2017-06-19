@@ -23,9 +23,6 @@ function updateVehiclesOnLane( lane, mapObject, dt )
 
 function updateAccelerationForVehicle( currentVehicle, leaderVehicle )
 {
-	let gap = 0;
-	let leaderSpeed = 0;
-
 	let gap = leaderVehicle.uCoord - leaderVehicle.length -
 			  currentVehicle.uCoord;
 
@@ -70,7 +67,7 @@ function updateStraightMove( vehicle, mapObject, dt )
 
 	// update velocity
 	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
-	vehicle.uCoord += Math.Max(0, newPosition);
+	vehicle.uCoord += Math.max(0, newPosition);
 
 	let safeDistance = mapObject.length;
 	if (vehicle.uCoord >= safeDistance)

@@ -1,10 +1,10 @@
-function checkSpawnPoints(road)
+function checkSpawnPoints(road, dt)
 {
-	checkSpawnPointsForLanes(road.forwardLanes);
-	checkSpawnPointsForLanes(road.backwardLanes);
+	checkSpawnPointsForLanes(road.forwardLanes, dt);
+	checkSpawnPointsForLanes(road.backwardLanes, dt);
 }
 
-function checkSpawnPointsForLanes( lanes )
+function checkSpawnPointsForLanes( lanes, dt )
 {
 	let point = null;
 	for (let i = 0;i < lanes.length; ++i)
@@ -12,6 +12,8 @@ function checkSpawnPointsForLanes( lanes )
 		point  = lanes[i].spawnPoint;
 		if (null == point)
 			continue;
+
+        point.update(dt);
 
 		if (point.ready())
 		{
@@ -22,9 +24,17 @@ function checkSpawnPointsForLanes( lanes )
 			// car, but not for truck.
 			if (lanes[i].hasEnoughSpace( TRUCK_LENGTH ))
 			{
+                console.log("SP id " + point.id + " created vehicle for route "
+                            + point.routeId);
+
 				let vehicle = point.spawn();
 				lanes[i].pushVehicle(vehicle);
 			}
+            else {
+                console.log("truck length " + TRUCK_LENGTH);
+                console.log("No space on lane");
+                console.log(lanes[i]);
+            }
 		}
 	}
 }
@@ -98,14 +108,14 @@ function checkTrafficStateForVehicles(vehicles)
 
 function checkTrafficStateForAdjacentVehicles(follower, leader)
 {
-	if (onUpstream(vehicle, vehicle.leader))
-		vehicle.trafficState = TrafficState.UPSTREAM;
+	if (onUpstream(follower, leader))
+		follower.trafficState = TrafficState.UPSTREAM;
 
-	if (onDownstream(vehicle, vehicle.leader))
-		vehicle.trafficState = TrafficState.DOWNSTREAM;
+	if (onDownstream(follower, leader))
+		follower.trafficState = TrafficState.DOWNSTREAM;
 
-	if (onJam(vehicle))
-		vehicle.trafficState = TrafficState.JAM;
+	if (onJam(follower))
+		follower.trafficState = TrafficState.JAM;
 }
 
 // update longitudinal and lane change models for vehicles on roads

@@ -6,12 +6,9 @@ var LaneType =
 	"backward": 1
 };
 
-function LaneBases(_move_dx, _move_dy, _leftLC_dx, _leftLC_dy,
+function LaneBases( _leftLC_dx, _leftLC_dy,
                    _rightLC_dx, _rightLC_dy)
 {
-    this.move_dx = _move_dx;
-    this.move_dy = _move_dy;
-
     this.leftLC_dx = _leftLC_dx;
     this.leftLC_dy = _leftLC_dy;
 
@@ -75,7 +72,7 @@ Lane.prototype.hasEnoughSpace = function( requiredSpace )
 	if (this.isEmpty())
 		return true;
 
-	let lastVehicle = this.vehicles.slice(-1)[0];
+	let lastVehicle = this.vehicles.last();
 
 	// check whether there is enough space between vehicle and road's finish
 	return lastVehicle.farFrom(requiredSpace);

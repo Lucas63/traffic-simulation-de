@@ -116,6 +116,12 @@ function RoadConfig( _id, _direction, _roadLength, _laneWidth,
 
 }
 
+function RoadBases(_move_dx, _move_dy)
+{
+    this.move_dx = _move_dx;
+    this.move_dy = _move_dy;
+}
+
 // reprents map object connected to the road
 // \param [RoadObject] type - type of map object
 // \param id - id of connected object
@@ -159,7 +165,8 @@ function Road( roadConfig )
     this.lanesAmount = this.forwardLanesAmount + this.backwardLanesAmount;
     this.roadWidth = logic_lane_width * this.lanesAmount;
 
-
+    this.forwardBases = new RoadBases(0, 0);
+    this.backwardBases = new RoadBases(0, 0);
 }
 
 Road.prototype.getId = function()

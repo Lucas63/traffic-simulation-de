@@ -13,19 +13,20 @@ turns = null;
 renderer = null;
 road_engine = null;
 
-start = 0;
+var start = 0;
 
-function step(timestamp) {
-    if (!start)
-        start = timestamp;
-
+function step(timestamp)
+{
     let progress = timestamp - start;
+    progress = Math.round(progress);
+    progress /= 1000;
+
+    start = timestamp;
 
     road_engine.update(progress);
     renderer.update_map();
 
     window.requestAnimationFrame(step);
-
 }
 
 function load_objects() {

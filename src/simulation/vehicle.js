@@ -52,11 +52,8 @@ var CAR_WIDTH  = INVALID;
 var TRUCK_LENGTH = INVALID;
 var TRUCK_WIDTH  = INVALID;
 
-var CAR_DESIRED_SPEED   = INVALID;
-var TRUCK_DESIRED_SPEED = INVALID;
-
-var CAR_INITIAL_SPEED   = INVALID;
-var TRUCK_INITIAL_SPEED = INVALID;
+var CAR_INITIAL_SPEED   = 1.5;
+var TRUCK_INITIAL_SPEED = 1.5;
 
 // Safe distance it's a distance before road's end where vehicle moves slower
 // before new map object ahead: junction/turn/etc.
@@ -84,10 +81,14 @@ function Vehicle( config )
 	this.speed = config.speed;
 	this.acceleration = 0;
 
+    console.log("speed " + this.speed);
+    console.log("acceleration " + this.acceleration);
+
+
 	// position along lane and it is independent of lane orientation
 	// each vehicle just move alone lane and only renderer know how to present
 	// this moving
-	this.uCoord = config.uCoord; // u in UV coordinates
+	this.uCoord = 0; // u in UV coordinates
 
 	// true if vehicle has reached end of map object it's moving on
 	this.arrived = false;
@@ -97,12 +98,6 @@ function Vehicle( config )
 	// by default, vehicle moves in the straight direction
 	this.vCoord = 0; // v in UV coordinates
 
-	// Data for Renderer
-	this.turnData = {
-		"startX": 0, "startY": 0,
-		"controlX": 0, "controlY": 0,
-		"endX": 0, "endY": 0
-	};
 
     this.turn_dx = 0;
     this.turn_dy = 0;
@@ -126,7 +121,6 @@ function Vehicle( config )
 	if ( config.type == VehicleType.CAR )
 	{
 		this.length       = CAR_LENGTH;
-		this.desiredSpeed = CAR_DESIRED_SPEED;
 		this.safeDistance = CAR_ROAD_SAFE_DISTANCE;
 
 		this.freeRoadLongModel = carFreeRoadIDM;
@@ -137,7 +131,6 @@ function Vehicle( config )
 	else
 	{
 		this.length       = TRUCK_LENGTH;
-		this.desiredSpeed = TRUCK_DESIRED_SPEED;
 		this.safeDistance = TRUCK_ROAD_SAFE_DISTANCE;
 
 		this.freeRoadLongModel = truckFreeRoadIDM;
@@ -152,7 +145,7 @@ function Vehicle( config )
 	this.movementState = MovementState.FREE_MOVEMENT;
 
 	// model used to simulate vehicle's behaviour on the road
-	this.longModel = null;
+	this.longModel = this.freeRoadLongModel;
 
 
 
@@ -240,4 +233,9 @@ Vehicle.prototype.farFrom = function( distance )
 Vehicle.prototype.getSafeDistance = function()
 {
 	return this.uCoord - this.length - MINIMAL_GAP;
+};
+
+Vehicle.prototype.getSafeSpace = function()
+{
+    return this.uCoord + this.safeDistance;
 };

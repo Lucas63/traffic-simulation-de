@@ -49,6 +49,20 @@ function Offramp( _source, _destination, _outflow,
 	setOfframpTurnData(this.turnLanes, _source, turnSourceLane,
 					  _destination.forwardLanes);
 
+    let sourceBases = null;
+    if (_source.finishConnection.type == RoadObject.OFFRAMP)
+        sourceBases = _source.forwardBases;
+    else
+        sourceBases = _source.backwardBases;
+
+    let destBases = _destination.forwardLanes[0].bases;
+
+    this.dx = sourceBases.move_dx == 0 ?
+        destBases.move_dx : sourceBases.move_dx;
+
+    this.dy = sourceBases.move_dy == 0 ?
+        destBases.move_dy : sourceBases.move_dy;
+
 	this.turnDuration = new Array( this.destLanesAmount );
 
 	for (var i = 0;i < this.destLanesAmount; ++i)
@@ -201,6 +215,9 @@ Offramp.prototype.startTurn = function( laneIndex, vehicle )
 
 	if (sourceLane.vehicles.empty())
 		vehicle.leader = sourceLane.virtualVehicle;
+
+    vehicle.dx = this.dx;
+    vehicle.dy = this.dy;
 
 	sourceLane.vehicles.push( vehicle );
 };

@@ -105,7 +105,8 @@ function assesLaneChange(currentVehicle, atLeft, result)
 	}
 
 	// actual gap between prospective leader and current vehicle
-	let gapBeforeLeader =
+	let gapBeforeLeader = currentVehicle.getSafeSpace();
+    if (adjacentLeader != null)
 		adjacentLeader.getSafeDistance() - currentVehicle.uCoord;
 
 	// there is not enough space before neighbour leader to change lane
@@ -113,24 +114,37 @@ function assesLaneChange(currentVehicle, atLeft, result)
 		return false;
 
 	// actual gap between current vehicle and prospective follower
-	gapAfterFollower =
-		currentVehicle.getSafeDistance() - adjacentFollower.uCoord;
+	gapAfterFollower = currentVehicle.uCoord - currentVehicle.getSafeSpace();
+    if (adjacentFollower != null)
+    {
+		gapAfterFollower =
+            currentVehicle.getSafeDistance() - adjacentFollower.uCoord;
+    }
 
 	// there is not enough space after neighbour follower to change lane
-	if (gapAfterFollower < 0)
+	if (gapAfterFollower <= 0)
 		return false;
 
 	// acceleration of current vehicle after prospective lane change
-	let currentAccAfterChange = currentVehicle.longModel.
-		calculateAcceleration(gapBeforeLeader, currentVehicle.speed,
-							  adjacentLeader.speed);
+
+	let currentAccAfterChange = currentVehicle.acceleration;
+    if (adjacentLeader)
+    {
+        currentAccAfterChange = currentVehicle.longModel.
+            calculateAcceleration( gapBeforeLeader, currentVehicle.speed,
+                                   adjacentLeader.speed);
+    }
 
 	result.currentAcceleration = currentAccAfterChange;
 
 	// acceleration of follower after prospective lane change
-	let followerAccAfterChange = adjacentFollower.longModel.
-		calculateAcceleration(gapAfterFollower, adjacentFollower.speed,
-							  currentVehicle.speed);
+	let followerAccAfterChange = 0;
+    if (adjacentFollower)
+    {
+        adjacentFollower.longModel.
+    		calculateAcceleration(gapAfterFollower, adjacentFollower.speed,
+    							  currentVehicle.speed);
+    }
 
 	result.followerAccAfterChange = followerAccAfterChange;
 
@@ -138,6 +152,7 @@ function assesLaneChange(currentVehicle, atLeft, result)
 		currentVehicle.speed / currentVehicle.longModel.desiredSpeed;
 
 	// decide whether it be better to change lane or not
+    console.log(currentVehicle);
 	return currentVehicle.laneChangeModel.
 		analyzeLaneChange(velocitiesRatio, currentVehicle.acceleration,
 						  currentAccAfterChange, followerAccAfterChange);

@@ -6,7 +6,7 @@ function updateNeighboursOnRoad( road )
 
 function updateNeighboursOnLanes( lanes )
 {
-	if (lanes.empty())
+	if (lanes.length < 2)
 		return;
 
 	updateNeighbours(lanes[0], lanes[1], false);

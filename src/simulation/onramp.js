@@ -50,15 +50,26 @@ function Onramp( _source, _destination, _inflow,
 	initJunctionLanes(this.turnLanes);
 	addVehiclesArray(this.turnLanes);
 
-	return;
 	setOnrampTurnData(this.turnLanes, _source, _source.forwardLanes,
 					  turnDestinationLane)
 
+    let sourceBases = _source.forwardBases;
+
+    let destBases = null;
+    if (_destination.startConnection.type == RoadObject.ONRAMP)
+        destBases = _destination.forwardBases;
+    else
+        destBases = _destination.backwardBases;
+
+    this.dx = sourceBases.move_dx == 0 ?
+        destBases.move_dx : sourceBases.move_dx;
+
+    this.dy = sourceBases.move_dy == 0 ?
+        destBases.move_dy : sourceBases.move_dy;
+
 	this.turnDuration = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
-	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
-	}
 }
 
 Onramp.prototype.inflowRoadIsFree = function( requiredSpace )

@@ -198,6 +198,7 @@ function load_vehicle_configuration() {
 	let car_config = vehicles_json.car;
 
 	CAR_LENGTH = car_config["length"];
+    CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 	CAR_WIDTH = car_config["width"];
 
 	let carMinimumGap = car_config["minimum_gap"];
@@ -252,6 +253,7 @@ function load_vehicle_configuration() {
 	let truck_config = vehicles_json.truck;
 
 	TRUCK_LENGTH = truck_config["length"];
+    TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 	TRUCK_WIDTH = truck_config["width"];
 
 	let truckMinimumGap = truck_config["minimum_gap"];

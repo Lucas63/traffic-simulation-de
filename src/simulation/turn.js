@@ -25,9 +25,8 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 	setTurnData(this.lanes, _source, _source.forwardLanes,
 				_destination.forwardLanes);
 
-    console();
-    let sourceBases = _source.forwardLanes[0].bases;
-    let destBases = _destination.forwardLanes[0].bases;
+    let sourceBases = _source.forwardBases;
+    let destBases = _destination.forwardBases;
 
     this.dx = sourceBases.move_dx == 0 ?
         destBases.move_dx : sourceBases.move_dx;
@@ -37,22 +36,7 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 
 	this.turnDuration = new Array( lanesAmount );
 	for (let i = 0; i < lanesAmount; ++i)
-	{
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
-	}
-
-	// this formula used to decide direction of this turn
-	// switching to the road with orientation UP_TO_BOTTOM is a different
-	// turn whether vehicle moves on LEFT_TO_RIGHT or RIGHT_TO_LEFT road.
-	// so find difference between road orientation, add 4 to avoid negative
-	// values and wrap around 4
-	// each road's direction points at side of the world and I found
-	// whether new direction less than old or not
-	//               BOTTOM_TO_UP: 0
-	//                    ↑
-	// RIGHT_TO_LEFT: 3 ←  → LEFT_TO_RIGHT: 1
-	//                   ↓
-	//               UP_TO_BOTTOM: 2
 }
 
 Turn.prototype.canTurn = function( laneIndex, vehicle )

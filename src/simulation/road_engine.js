@@ -23,13 +23,13 @@ RoadEngine.prototype.update = function( dt )
 	// on road. After that check all first vehicles at any map object and
 	// decide to start passing through or turn.
 	//
-	this.preUpdate();
+	this.preUpdate( dt );
 
 
 	// now update situation on map
 
 	// change lane if it is preferable for vehicle
-	this.checkLaneChange();
+	// this.checkLaneChange();
 
 	// calculate new acceleration, speed and position
 	// for each vehicle on the map
@@ -51,7 +51,7 @@ RoadEngine.prototype.updateTrafficLights = function( dt )
 // to prevent iteration over the same arrays several times, all computations
 // done for each array only once instead of separate functions
 // Yes, I know that "premature optimization is the root of all evil".
-RoadEngine.prototype.preUpdate = function()
+RoadEngine.prototype.preUpdate = function( dt )
 {
 	let roads = this.map.roads;
 
@@ -68,33 +68,33 @@ RoadEngine.prototype.preUpdate = function()
 		checkArrivedVehiclesOnRoad( roads[i] );
 
 		// check whether spawn points ready to action
-		checkSpawnPoints( roads[i] );
+		checkSpawnPoints( roads[i], dt );
 	}
 
 	// vehicle's traffic state can be changed after previous functions,
 	// so check and update models if required
 
-	for (let i = 0; i < roads.length; ++i)
-	{
-		// update separately, because after updating road with index i,
-		// new vehicles can be added to this road by
-		// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
-		// from another road when neighbours already updated on i-th road
-
-		// update following and leading vehicles on each lane
-		updateNeighboursOnRoad( roads[i] );
-
-
-		// check upstream/downstream condtion
-		checkTrafficState( roads[i] );
-
-		// Vehicles on another map objects don't change own models, thus only
-		// vehicles on road are updated
-		checkVehiclesPositionOnRoad( roads[i] );
-
-		// and this updates models
-		updateModels( roads[i] );
-	}
+	// for (let i = 0; i < roads.length; ++i)
+	// {
+	// 	// update separately, because after updating road with index i,
+	// 	// new vehicles can be added to this road by
+	// 	// checkArrivedVehiclesOnRoad(), i.e. vehicle move to the i-th road
+	// 	// from another road when neighbours already updated on i-th road
+    //
+	// 	// update following and leading vehicles on each lane
+	// 	updateNeighboursOnRoad( roads[i] );
+    //
+    //
+	// 	// check upstream/downstream condtion
+	// 	checkTrafficState( roads[i] );
+    //
+	// 	// Vehicles on another map objects don't change own models, thus only
+	// 	// vehicles on road are updated
+	// 	checkVehiclesPositionOnRoad( roads[i] );
+    //
+	// 	// and this updates models
+	// 	updateModels( roads[i] );
+	// }
 
 	this.map.turns.forEach(checkArrivedVehiclesOnTurn);
 	this.map.onramps.forEach(checkArrivedVehiclesOnOnramp);
