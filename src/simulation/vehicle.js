@@ -104,6 +104,16 @@ function Vehicle( config )
 		"endX": 0, "endY": 0
 	};
 
+    this.turn_dx = 0;
+    this.turn_dy = 0;
+
+    this.hitBox = {
+        leftBottom: new Point(0, 0),
+        leftTop: new Point(0, 0),
+        rigthBottom: new Point(0, 0),
+        rightTop: new Point(0, 0)
+    }
+
 	// id of route this vehicle keeps to
 	this.routeId = config.routeId;
 	this.routeItemIndex = 0;
@@ -164,6 +174,10 @@ function Vehicle( config )
 
 	this.leaderAtRight   = null;
 	this.followerAtRight = null;
+
+    // bases for vehicle's movement
+    this.dx = 0;
+    this.dy = 0;
 
 	// calculated as turnElapsedTime / turnFullTime and used to get vehicle
 	// coordinate on Bezier curve for rendering during turn

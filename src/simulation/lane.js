@@ -6,6 +6,19 @@ var LaneType =
 	"backward": 1
 };
 
+function LaneBases(_move_dx, _move_dy, _leftLC_dx, _leftLC_dy,
+                   _rightLC_dx, _rightLC_dy)
+{
+    this.move_dx = _move_dx;
+    this.move_dy = _move_dy;
+
+    this.leftLC_dx = _leftLC_dx;
+    this.leftLC_dy = _leftLC_dy;
+
+    this.rightLC_dx = _rightLC_dx;
+    this.rightLC_dy = _rightLC_dy;
+}
+
 function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
 {
 	this.length = _length;
@@ -21,6 +34,9 @@ function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
 
 	this.finishX = finishX;
 	this.finishY = finishY;
+
+    // TODO actual *LaneBases* object must be passed
+    this.bases = new LaneBases(0,0,0,0,0,0);
 }
 
 // true if lane has no vehicles
