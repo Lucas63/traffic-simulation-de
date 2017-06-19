@@ -198,15 +198,10 @@ function updateVehiclesOnOnrampOrOfframp( mapObject, dt )
 
 function updateVehiclesOnJunction( junction, dt )
 {
-	/*
-	TODO function doesnt exist
-
-	 updateAccelerationsOnJunctionRoad( junciton, junction.topRoad, dt );
-	 updateAccelerationsOnJunctionRoad( junction, junction.rightRoad, dt );
-	 updateAccelerationsOnJunctionRoad( junction, junction.bottomRoad, dt );
-	 updateAccelerationsOnJunctionRoad( junction, junction.leftRoad, dt );
-
-	 */
+	updateVehiclesOnJunctionRoad( junction, junction.topRoad, dt );
+	updateVehiclesOnJunctionRoad( junction, junction.rightRoad, dt );
+	updateVehiclesOnJunctionRoad( junction, junction.bottomRoad, dt );
+	updateVehiclesOnJunctionRoad( junction, junction.leftRoad, dt );
 }
 
 function updateVehiclesOnJunctionRoad( junction, junctionRoad, dt )
