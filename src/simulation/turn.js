@@ -25,14 +25,14 @@ function Turn( _id, _source, _destination, _pathCalcFunction )
 	setTurnData(this.lanes, _source, _source.forwardLanes,
 				_destination.forwardLanes);
 
-    let sourceBases = _source.forwardBases;
-    let destBases = _destination.forwardBases;
+	let sourceBases = _source.forwardBases;
+	let destBases = _destination.forwardBases;
 
-    this.dx = sourceBases.move_dx == 0 ?
-        destBases.move_dx : sourceBases.move_dx;
+	this.dx = sourceBases.move_dx == 0 ?
+		destBases.move_dx : sourceBases.move_dx;
 
-    this.dy = sourceBases.move_dy == 0 ?
-        destBases.move_dy : sourceBases.move_dy;
+	this.dy = sourceBases.move_dy == 0 ?
+		destBases.move_dy : sourceBases.move_dy;
 
 	this.turnDuration = new Array( lanesAmount );
 	for (let i = 0; i < lanesAmount; ++i)
@@ -81,8 +81,8 @@ Turn.prototype.startTurn = function( laneIndex, vehicle )
 	if (lane.vehicles.empty())
 		vehicle.leader = lane.virtualVehicle;
 
-    vehicle.dx = this.dx;
-    vehicle.dy = this.dy;
+	vehicle.dx = this.dx;
+	vehicle.dy = this.dy;
 
 	lane.vehicles.push( vehicle );
 };

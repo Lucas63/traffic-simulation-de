@@ -295,6 +295,7 @@ function canMoveToJunction( movement, junction, roadId, laneIndex, vehicle)
 
 function moveToRoad( currentObject, road, laneIndex, vehicle )
 {
+	vehicle.prepareForMove();
 	let lanes = road.getLanesConnectedWith( currentObject );
 	lanes[laneIndex].pushVehicle(vehicle);
 }

@@ -55,9 +55,7 @@ Renderer.prototype.update_map = function () {
 
 	let junctions = this.map_object.junctions;
 	for (let i = 0; i < junctions.length; ++i)
-	{
 		drawVehiclesOnJunction(junctions[i]);
-	}
 };
 
 function drawVehiclesOnLane( bases, lane )
@@ -98,6 +96,7 @@ function drawTurningVehicles( lane )
 	for (let i = 0; i < lane.vehicles.length; ++i)
 	{
 		vehicle = lane.vehicles[i];
+		console.log("vehicle on junction" + vehicle);
 
 		vehicle.canvas_object.angle = vehicle.turnAngle;
 		update_canvas_object(vehicle.canvas_object,

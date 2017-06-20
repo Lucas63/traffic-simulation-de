@@ -13,7 +13,7 @@ function addVirtualVehicle(lanes, length) {
 		// used models for car, but must be created virtual vehicle
 		// for each type of real vehicle: car, truck, etc.
 		lanes[i].virtualVehicle =
-			new VirtualVehicle(length, 1.5 * length,
+			new VirtualVehicle(length, 1.2 * length,
 				carUpstreamIDM.desiredSpeed,
 				carFreeRoadIDM.desiredSpeed);
 	}

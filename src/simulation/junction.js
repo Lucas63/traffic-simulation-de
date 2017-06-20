@@ -205,6 +205,8 @@ function Junction( _id, _pos, _side,
 		this.turnLeftDuration[i] = 2 * TURN_DURATION_BASE +
 								   i * TURN_DURATION_FOR_LANE;
 	}
+
+	this.pathCalcFunction = getBezierCurveLength;
 }
 
 Junction.prototype.getTrafficLight = function( roadId )
@@ -683,7 +685,7 @@ Junction.prototype.updateTrafficLights = function(dt)
 		this.verticalTrafficLight.update(dt);
 };
 
-Junction.prototype.calculateTurnDistance = function( vehicle, dt )
+Junction.prototype.calculateTurnDistance = function( vehicle )
 {
 	return calculateTurnDistance(vehicle, this.pathCalcFunction);
 };

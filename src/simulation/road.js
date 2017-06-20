@@ -226,7 +226,7 @@ Road.prototype.getLanesConnectedWith = function( object )
 // return true if added, otherwise false
 Road.prototype.pushLane = function( lane, laneDirection )
 {
-	assert( lane, "pushLane(): lane object is null!")
+	// assert( lane, "pushLane(): lane object is null!")
 
 	switch(laneDirection)
 	{

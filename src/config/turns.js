@@ -10,13 +10,13 @@ var turn_json = {
 				"id": 0,
 				"source": 7,
 				"destination": 6,
-				"type": "right"
+				"type": "left"
 			},
 			{
 				"id": 1,
 				"source": 8,
 				"destination": 7,
-				"type": "left"
+				"type": "right"
 			},
 			{
 				"id": 2,

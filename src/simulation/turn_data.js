@@ -13,3 +13,13 @@ function Point( _x, _y )
 	this.x = _x;
 	this.y = _y;
 }
+
+Point.prototype.length = function()
+{
+	return Max.sqrt( this.x * this.x + this.y * this.y);
+}
+
+Point.prototype.dotProduct = function(point)
+{
+	return this.x * point.x + this.y * point.y;
+}

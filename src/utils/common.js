@@ -133,16 +133,46 @@ function getBezierCurveLength(t, startPoint, controlPoint, endPoint)
 {
 	// This formula taken from "Approximate Arc Length Parametrization"
 	// MARCELO WALTER and ALAIN FOURNIER. Formula 7
-	let b = t / 2;
+	// let b = t / 2;
+	//
+	// let s = b; // length of the curve
+	//
+	// s *=
+	// 	COEF1 * getNormOfCurve(COEF3 * b, startPoint, controlPoint, endPoint) +
+	// 	COEF2 * getNormOfCurve(b, startPoint, controlPoint, endPoint) +
+	// 	COEF1 * getNormOfCurve(COEF4 * b, startPoint, controlPoint, endPoint);
 
-	let s = b; // length of the curve
+	let A0 = new Point(controlPoint.x - startPoint.x,
+					   controlPoint.y - startPoint.y);
 
-	s *=
-		COEF1 * getNormOfCurve(COEF3 * b, startPoint, controlPoint, endPoint) +
-		COEF2 * getNormOfCurve(b, startPoint, controlPoint, endPoint) +
-		COEF1 * getNormOfCurve(COEF4 * b, startPoint, controlPoint, endPoint);
+	let A1 = new Point(startPoint.x - 2 * controlPoint.x + endPoint.x,
+					   startPoint.y - 2 * controlPoint.y + endPoint.y);
 
-	return s;
+	// V3D A0 = B - A;
+	// V3D A1 = A - 2.0 * B + C;
+
+	if (A1.x == 0 && A1.y == 0)
+		return 2 * A1.length();
+
+	let c = 4 * A1.dotProduct( A1 );
+	let b = 8 * A0.dotProduct( A1 );
+	let a = 4 * A0.dotProduct( A0 );
+	let q = 4 * a * c - b * b;
+
+	let twoCpB = 2 * c + b;
+	let sumCBA = c + b + a;
+
+	let l0 = (0.25 / c) * (twoCpB * Math.sqrt(sumCBA) - b * Math.sqrt(a));
+	if (q == 0.0)
+		return l0;
+
+	let l1 = (q / (8 * Math.pow(c, 1.5))) *
+		(Math.log(2 * Math.sqrt(c * sumCBA) + twoCpB) -
+		 Math.log(2 * Math.sqrt(c * a) + b));
+
+	return l0 + l1;
+
+	// return s;
 }
 
 function getNormOfCurve(t, startPoint, controlPoint, endPoint)
@@ -156,7 +186,7 @@ function getNormOfCurve(t, startPoint, controlPoint, endPoint)
 function getBezierCurveCoord(t, coord1, coord2, coord3)
 {
 	return Math.pow(1 - t, 2) * coord1 +
-		   2 * (1 - t) * coord2 +
+		   2 * (1 - t) * t * coord2 +
 		   Math.pow(t, 2) * coord3;
 }
 
@@ -202,7 +232,9 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new VirtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, 1.2 * turnLength,
+							   carUpstreamIDM.desiredSpeed,
+							   carFreeRoadIDM.desiredSpeed);
 	}
 }
 
@@ -240,7 +272,9 @@ function setOnrampTurnData( turnLanes, sourceRoad, sourceLanes, destinationLane)
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new VirtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, 1.2 * turnLength,
+							   carUpstreamIDM.desiredSpeed,
+							   carFreeRoadIDM.desiredSpeed);
 	}
 }
 
@@ -279,7 +313,9 @@ function setOfframpTurnData( turnLanes, sourceRoad,
 
 		// virtual vehicle with zero length at the end of turn
 		turnLanes[i].virtualVehicle =
-			new VirtualVehicle(turnLength, turnLength, 0, 0);
+			new VirtualVehicle(turnLength, 1.2 * turnLength,
+							   carUpstreamIDM.desiredSpeed,
+							   carFreeRoadIDM.desiredSpeed);
 	}
 }
 

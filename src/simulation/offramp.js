@@ -72,6 +72,8 @@ function Offramp( _source, _destination, _outflow,
 
 	for (var i = 0;i < this.destLanesAmount; ++i)
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
+
+	this.pathCalcFunction = getBezierCurveLength;
 }
 
 // check is it possible to turn now and return index of lane on destination
@@ -170,8 +172,8 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 Offramp.prototype.canPassThrough = function( vehicle, roadId,
 											 laneType, laneIndex )
 {
-	assert( roadId == this.source || roadId == this.outflow,
-			"Wrong road id " + roadId);
+	// assert( roadId == this.source || roadId == this.outflow,
+	// 		"Wrong road id " + roadId);
 
 	if (this.isConnectedLane( roadId, laneType, laneIndex ))
 		return this.canPassThroughConnectedLane( vehicle );

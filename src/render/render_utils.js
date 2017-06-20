@@ -340,7 +340,6 @@ function draw_tree(startX, startY, finishX, finishY) {
 
 	let image_source = 'sources/top.png';
 
-	console.log("test");
 	var img = new Image();
 	img.onload = function () {
 		context.drawImage(img,

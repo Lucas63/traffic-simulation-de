@@ -22,7 +22,7 @@ var routes_json =
 					"movement": MovementType["pass"]
 				},
 				{
-					"type": RouteItemType.ONRAMP,
+					"type": RouteItemType.OFFRAMP,
 					"id": 0,
 					"movement": MovementType["pass"]
 				},
@@ -33,7 +33,7 @@ var routes_json =
 				},
 				{
 					"type": RouteItemType.JUNCTION,
-					"id": 2,
+					"id": 3,
 					"movement": MovementType["pass"]
 				},
 				{
@@ -42,7 +42,7 @@ var routes_json =
 					"movement": MovementType["pass"]
 				},
 				{
-					"type": RouteItemType.OFFRAMP,
+					"type": RouteItemType.ONRAMP,
 					"id": 0,
 					"movement": MovementType["pass"]
 				},
@@ -59,6 +59,11 @@ var routes_json =
 				{
 					"type": RouteItemType.ROAD,
 					"id": 22,
+					"movement": MovementType["pass"]
+				},
+				{
+					"type": RouteItemType.VOID,
+					"id": 0,
 					"movement": MovementType["pass"]
 				}
 			]

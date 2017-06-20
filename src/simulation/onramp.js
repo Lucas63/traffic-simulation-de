@@ -76,6 +76,8 @@ function Onramp( _source, _destination, _inflow,
 	this.turnDuration = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)
 		this.turnDuration[i] = TURN_DURATION_BASE + i * TURN_DURATION_FOR_LANE;
+
+	this.pathCalcFunction = getBezierCurveLength;
 }
 
 Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
@@ -152,7 +154,7 @@ Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 				return false;
 
 			case VehicleState.CHANGE_LANE:
-				assert(false, "No lane change on onramp!!!");
+				printDebug(this.arguments.calle, "No lane change on onramp!!!");
 				return false;;
 		}
 	}
@@ -275,9 +277,9 @@ Onramp.prototype.startPassThrough = function( vehicle, roadId,
 
 	let sourceLane = null;
 	if ( laneType == LaneType["forward"] )
-		sourceLane = this.forwardLanes[lanesIndex];
+		sourceLane = this.forwardLanes[laneIndex];
 	else
-		sourceLane = this.backwardLanes[lanesIndex];
+		sourceLane = this.backwardLanes[laneIndex];
 
 	vehicle.sourceLane = sourceLane;
 	if (sourceLane.vehicles.empty())

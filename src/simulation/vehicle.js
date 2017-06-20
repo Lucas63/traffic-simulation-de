@@ -204,10 +204,11 @@ Vehicle.prototype.stop = function (_uCoord) {
 	this.vehicleState = VehicleState.IDLE;
 };
 
-Vehicle.prototype.prepareForTurn = function (turnFullTime, _turnLane) {
-	vehicle.arrived = false;
+Vehicle.prototype.prepareForTurn = function (turnFullTime, _turnLane)
+{
+	this.arrived = false;
 
-	vehicle.uCoord = 0;
+	this.uCoord = 0;
 
 	this.trafficState = TrafficState.FREE_ROAD;
 	this.vehicleState = VehicleState.TURNING;
@@ -218,7 +219,8 @@ Vehicle.prototype.prepareForTurn = function (turnFullTime, _turnLane) {
 	this.turnFullTime = turnFullTime;
 };
 
-Vehicle.prototype.prepareForMove = function () {
+Vehicle.prototype.prepareForMove = function ()
+{
 	// TODO think about is free road state actual one?
 	this.trafficState = TrafficState.FREE_ROAD;
 	this.vehicleState = VehicleState.MOVING;
@@ -228,18 +230,22 @@ Vehicle.prototype.prepareForMove = function () {
 };
 
 // the minimal distance between bamper of current vehicle and the following one
-Vehicle.prototype.getMinimalGap = function () {
+Vehicle.prototype.getMinimalGap = function ()
+{
 	return this.length + MINIMAL_GAP;
 };
 
-Vehicle.prototype.farFrom = function (distance) {
+Vehicle.prototype.farFrom = function (distance)
+{
 	return (this.uCoord - this.length) > distance;
 };
 
-Vehicle.prototype.getSafeDistance = function () {
+Vehicle.prototype.getSafeDistance = function ()
+{
 	return this.uCoord - this.length - MINIMAL_GAP;
 };
 
-Vehicle.prototype.getSafeSpace = function () {
+Vehicle.prototype.getSafeSpace = function ()
+{
 	return this.uCoord + this.safeDistance;
 };

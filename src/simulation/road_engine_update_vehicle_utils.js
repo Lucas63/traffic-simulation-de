@@ -111,17 +111,16 @@ function updateTurn( vehicle, lane, mapObject, dt )
 	let vehicleIndex = lane.vehicles.indexOf(vehicle);
 	let leader = null;
 
-	if (vehicleIndex != 0)
+	if (vehicleIndex == 0)
 		leader = vehicle.leader;
 	else
 		leader = lane.vehicles[vehicleIndex - 1];
 
+	let newPosition = mapObject.calculateTurnDistance( vehicle );
 
 	vehicle.turnElapsedTime += dt;
 	vehicle.turnCompletion =
-		Math.max(vehicle.turnElapsedTime / vehicle.turnFullTime, 1);
-
-	let newPosition = mapObject.calculateTurnDistance( vehicle );
+		Math.min(vehicle.turnElapsedTime / vehicle.turnFullTime, 1);
 
 	// vehicle cannot move further due to leading vehicle
 	// rollback elapsed time and re-calculate turn completion
