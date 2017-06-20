@@ -148,7 +148,7 @@ Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 
 	for (var i = 0; i < lanesAmount; ++i)
 	{
-		vehicles = this.turnlanes[i].vehicles;
+		vehicles = this.turnLanes[i].vehicles;
 		if (vehicles.empty())
 			continue;
 
