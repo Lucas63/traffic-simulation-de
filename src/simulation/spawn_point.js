@@ -1,4 +1,4 @@
-function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction, _routeId )
+function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction, _routeId, _laneId, _lane_type)
 {
 	this.id = _id;
 	this.minPeriod = _minPeriod;
@@ -6,6 +6,8 @@ function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction, _routeId )
 
 	this.truckFraction = _truckFraction;
 	this.routeId = _routeId;
+	this.laneId = _laneId;
+	this.lane_type = _lane_type;
 
 	this.difference = _maxPeriod - _minPeriod;
 	this.elapsedTime = 0;
@@ -41,7 +43,7 @@ SpawnPoint.prototype.spawn = function()
 
 	// create empty config
 	var vehicleConfig = new VehicleConfig( VehicleType.CAR, this.routeId,
-										   0, CAR_INITIAL_SPEED );
+										   0, CAR_INITIAL_SPEED,this.laneId,this.lane_type);
 
 	if (truckCreationProbability <= this.truckFraction )
 	{

@@ -67,13 +67,13 @@ function load_objects() {
 	print_function_end(load_objects.name);
 }
 
-/*
 
- Function that activating simulation by sequence of actions
+
+/*
+Function that activating simulation by sequence of actions
  1. Load objects
  2. Create Map object
  3. Render map objects
-
  */
 function main() {
 	print_function_start(main.name);
@@ -83,12 +83,10 @@ function main() {
 	renderer.draw_map();
 
 
-	// console.log(renderer.map_object.get_onramp_lanes_with_car());
 	window.requestAnimationFrame(step);
 
 	print_function_end(main.name);
 }
-
 
 /*
  tasks

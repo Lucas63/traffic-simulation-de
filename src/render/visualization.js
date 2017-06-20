@@ -25,27 +25,27 @@ function render_map(renderer) {
     print_function_start(render_map.name);
 
     //---- map properties
-    draw_map(renderer.canvas);
+    draw_map();
 
     //---- draw roads
-    draw_roads(renderer.context, renderer.map_object.roads);
+    draw_roads(renderer.map_object.roads);
 
     //---- draw junctions
-    draw_junctions(renderer.context, renderer.map_object.junctions);
+    draw_junctions(renderer.map_object.junctions);
 
     //---- draw junctions
-    draw_turns(renderer.context, renderer.map_object.turns);
+    draw_turns(renderer.map_object.turns);
 
     //---- draw junctions
-    draw_onramps(renderer.context, renderer.map_object.onramps);
+    draw_onramps(renderer.map_object.onramps);
 
     //---- draw junctions
-    draw_offramps(renderer.context, renderer.map_object.offramps);
+    draw_offramps(renderer.map_object.offramps);
 
     print_function_end(render_map.name);
 }
 
-function draw_map(canvas,context) {
+function draw_map() {
     canvas.style.backgroundColor = "lightyellow";
 
     draw_trees(context,53, 1, 91, 11);
@@ -54,39 +54,39 @@ function draw_map(canvas,context) {
 
 }
 
-function draw_roads(context, roads) {
+function draw_roads(roads) {
 
     for (let i = 0; i < roads.length; i++) {
-        draw_road(context, roads[i]);
+        draw_road(roads[i]);
     }
 
 }
 
-function draw_junctions(context, junctions) {
+function draw_junctions( junctions) {
     for (let i = 0; i < junctions.length; i++) {
-        draw_junction(context, junctions[i]);
+        draw_junction( junctions[i]);
     }
 }
 
-function draw_turns(context, turns) {
+function draw_turns( turns) {
     for (let i = 0; i < turns.length; i++) {
-        draw_turn(context, turns[i]);
+        draw_turn( turns[i]);
     }
 }
 
-function draw_onramps(context, onramps) {
+function draw_onramps( onramps) {
     for (let i = 0; i < onramps.length; i++) {
-        draw_onramp(context, onramps[i]);
+        draw_onramp(onramps[i]);
     }
 }
 
-function draw_offramps(context, offramps) {
+function draw_offramps( offramps) {
     for (let i = 0; i < offramps.length; i++) {
-        draw_offramp(context, offramps[i]);
+        draw_offramp(offramps[i]);
     }
 }
 
-function draw_trees(context, startX, startY, finishX, finishY) {
+function draw_trees(startX, startY, finishX, finishY) {
     let object_number = Math.floor((Math.random() * 10) + 1);
 
     for (let i = 0; i < object_number; i++) {

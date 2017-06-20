@@ -3,25 +3,25 @@
  */
 
 
-function draw_dotted_line(canvasContext, startX, startY, endX, endY, lineType) {
+function draw_dotted_line(startX, startY, endX, endY, lineType) {
     startX *= logic_to_canvas_multiplier;
     startY *= logic_to_canvas_multiplier;
     endX *= logic_to_canvas_multiplier;
     endY *= logic_to_canvas_multiplier;
 
-    canvasContext.beginPath();
+    context.beginPath();
 
     switch (lineType) {
         case "solid":
 
-            canvasContext.setLineDash([60, 4]);
-            canvasContext.strokeStyle = "#FF0000";
-            canvasContext.lineWidth = 1.5;
+            context.setLineDash([60, 4]);
+            context.strokeStyle = "#FF0000";
+            context.lineWidth = 1.5;
             break;
         case "dotted":
 
-            canvasContext.strokeStyle = '#256222';
-            canvasContext.setLineDash([3, 4]);
+            context.strokeStyle = '#256222';
+            context.setLineDash([3, 4]);
             break;
         case "roadside":
 
@@ -30,13 +30,13 @@ function draw_dotted_line(canvasContext, startX, startY, endX, endY, lineType) {
             break;
     }
 
-    canvasContext.moveTo(startX, startY);
-    canvasContext.lineTo(endX, endY);
-    canvasContext.closePath();
-    canvasContext.stroke();
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.closePath();
+    context.stroke();
 }
 
-function draw_road(context, road) {
+function draw_road(road) {
     let is_vertical = is_vertical_road(road.direction);
 
     let startX = 0;
@@ -67,10 +67,10 @@ function draw_road(context, road) {
     context.fillRect(startX, startY, width, height);
     context.closePath();
     context.stroke();
-    draw_road_lines(context, road, is_vertical);
+    draw_road_lines(road, is_vertical);
 }
 
-function draw_junction(context, junction) {
+function draw_junction(junction) {
 
     let startX = (junction.centralPosition[0] - logic_junction_length / 2) * logic_to_canvas_multiplier;
     let startY = (junction.centralPosition[1] - logic_junction_length / 2) * logic_to_canvas_multiplier;
@@ -89,7 +89,7 @@ function draw_junction(context, junction) {
 
 }
 
-function draw_turn(context, turn) {
+function draw_turn(turn) {
     let is_source_vertical = is_vertical_road(turn.source.direction);
     let is_destination_vertical = is_vertical_road(turn.destination.direction);
 
@@ -211,12 +211,13 @@ function draw_turn(context, turn) {
             turn.destination.startX * logic_to_canvas_multiplier,
             turn.destination.startY * logic_to_canvas_multiplier);
     }
-    context.stroke();
 
+    context.stroke();
+    context.closePath();
 }
 
 
-function draw_onramp(context, onramp) {
+function draw_onramp(onramp) {
     let onramp_width = logic_lane_width * onramp.source.getForwardLanesAmount();
     let onramp_height = logic_lane_width * onramp.inflow.getLanesAmount();
     let startX = 0;
@@ -241,7 +242,7 @@ function draw_onramp(context, onramp) {
     context.stroke();
 }
 
-function draw_offramp(context, offramp) {
+function draw_offramp(offramp) {
 
     let startX = 0;
     let startY = 0;
@@ -249,19 +250,19 @@ function draw_offramp(context, offramp) {
     let offramp_height = 0;
 
     if (is_vertical_road(offramp.source.direction)) {
-        startX = offramp.source.finishX - offramp.source.getForwardLanesAmount()*logic_lane_width/2;
+        startX = offramp.source.finishX - offramp.source.getForwardLanesAmount() * logic_lane_width / 2;
         startY = offramp.source.finishY;
 
-        offramp_width = offramp.source.getForwardLanesAmount()*logic_lane_width;
-        offramp_height = offramp.outflow.getForwardLanesAmount()*logic_lane_width;
+        offramp_width = offramp.source.getForwardLanesAmount() * logic_lane_width;
+        offramp_height = offramp.outflow.getForwardLanesAmount() * logic_lane_width;
 
     }
     else {
-        startX = offramp.source.finishX ;
-        startY = offramp.source.finishY - offramp.source.getLanesAmount()*logic_lane_width/2;
+        startX = offramp.source.finishX;
+        startY = offramp.source.finishY - offramp.source.getLanesAmount() * logic_lane_width / 2;
 
-        offramp_width = offramp.source.getLanesAmount()*logic_lane_width/2;
-        offramp_height = offramp.outflow.getLanesAmount()*logic_lane_width;
+        offramp_width = offramp.source.getLanesAmount() * logic_lane_width / 2;
+        offramp_height = offramp.outflow.getLanesAmount() * logic_lane_width;
 
 
     }
@@ -277,12 +278,13 @@ function draw_offramp(context, offramp) {
     context.moveTo(startX, startY);
     context.fillStyle = "#8ED6FF";
     context.fillRect(startX, startY, offramp_width, offramp_height);
+
     context.closePath();
     context.stroke();
 
 }
 
-function draw_road_lines(context, rdCnfg, is_vertical) {
+function draw_road_lines(rdCnfg, is_vertical) {
 
     is_one_way = (rdCnfg.backwardLanesAmount == 0);
 
@@ -295,7 +297,6 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
         if (is_vertical) {
 
             draw_dotted_line(
-                context,
                 rdCnfg.startX + i * logic_lane_width,
                 rdCnfg.startY,
                 rdCnfg.finishX + i * logic_lane_width,
@@ -303,7 +304,6 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
                 line_type);
 
             draw_dotted_line(
-                context,
                 rdCnfg.startX - i * logic_lane_width,
                 rdCnfg.startY,
                 rdCnfg.finishX - i * logic_lane_width,
@@ -312,7 +312,6 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
         }
         else {
             draw_dotted_line(
-                context,
                 rdCnfg.startX,
                 rdCnfg.startY + i * logic_lane_width,
                 rdCnfg.finishX,
@@ -320,7 +319,6 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
                 line_type);
 
             draw_dotted_line(
-                context,
                 rdCnfg.startX,
                 rdCnfg.startY - i * logic_lane_width,
                 rdCnfg.finishX,
@@ -331,7 +329,7 @@ function draw_road_lines(context, rdCnfg, is_vertical) {
     }
 }
 
-function draw_tree(context, startX, startY, finishX, finishY){
+function draw_tree(startX, startY, finishX, finishY) {
     let windowX = finishX - startX;
     let windowY = finishY - startY;
 
@@ -340,17 +338,35 @@ function draw_tree(context, startX, startY, finishX, finishY){
 
     let image_source = 'sources/top.png';
 
+    console.log("test");
     var img = new Image();
-    img.onload = function() {
-        ctx.drawImage(img,
-            X*logic_to_canvas_multiplier,
-            Y*logic_to_canvas_multiplier,
-            2*logic_to_canvas_multiplier,
-            4*logic_to_canvas_multiplier
+    img.onload = function () {
+        context.drawImage(img,
+            X * logic_to_canvas_multiplier,
+            Y * logic_to_canvas_multiplier,
+            2 * logic_to_canvas_multiplier,
+            4 * logic_to_canvas_multiplier
         );
     };
     img.src = image_source;//'https://mdn.mozillademos.org/files/5395/backdrop.png';
+}
 
+function draw_car(canvas_object) {
+
+    context.save();
+    context.translate(canvas_object.X, canvas_object.Y);
+    context.rotate(canvas_object.angle * Math.PI / 180);
+
+    console.log(canvas_object.X * logic_to_canvas_multiplier);
+    console.log(canvas_object.Y * logic_to_canvas_multiplier);
+
+
+    context.drawImage(canvas_object,
+        canvas_object.X * logic_to_canvas_multiplier,
+        canvas_object.Y * logic_to_canvas_multiplier,
+        canvas_object.width * logic_to_canvas_multiplier,
+        canvas_object.height * logic_to_canvas_multiplier);
+    //context.restore();
 }
 
 

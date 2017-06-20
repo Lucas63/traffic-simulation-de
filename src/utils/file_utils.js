@@ -13,7 +13,9 @@ function load_spawn_points() {
 			spawn_point_string.min_period,
 			spawn_point_string.max_period,
 			spawn_point_string.truck_variability,
-			spawn_point_string.route_id
+			spawn_point_string.route_id,
+			spawn_point_string.lane_id,
+			spawn_point_string.lane_type
 		));
 	}
 	return array;
