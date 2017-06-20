@@ -41,7 +41,7 @@ var roads_json = {
 			"finishY": 38,
 			"forwardLanes":2,
 			"forwardLanesSpawnPoints": [
-				null,
+				1,
 				null
 			],
 			"backwardLanes":2,

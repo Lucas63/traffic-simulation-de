@@ -35,6 +35,7 @@ function Lane( _length, _type, _spawnPoint, _bases, _angle,
 
 	this.bases = _bases;
 	this.angle = _angle;
+
 }
 
 // true if lane has no vehicles

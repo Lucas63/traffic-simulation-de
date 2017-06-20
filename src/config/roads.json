@@ -15,8 +15,8 @@
       ],
       "backwardLanes": 2,
       "backwardLanesSpawnPoints": [
-        1,
-        null
+        0,
+        1
       ],
       "startConnection": {
         "type": "junction",
@@ -38,7 +38,7 @@
       "finishY": 38,
       "forwardLanes":2,
       "forwardLanesSpawnPoints": [
-        2,
+        null,
         null
       ],
       "backwardLanes":2,

@@ -22,7 +22,7 @@ var requestId = null;
 
 function step(timestamp)
 {
-	if (counter > 400)
+	if (counter > 600)
 		window.cancelAnimationFrame(requestId);
 
 	++counter;
@@ -77,20 +77,11 @@ function load_objects() {
 	print_function_end(load_objects.name);
 }
 
-
-
-/*
-Function that activating simulation by sequence of actions
- 1. Load objects
- 2. Create Map object
- 3. Render map objects
- */
 function main() {
 	print_function_start(main.name);
 
 	load_objects();
 
-	renderer.draw_map();
 	renderer.draw_map();
 
 
@@ -98,16 +89,3 @@ function main() {
 
 	print_function_end(main.name);
 }
-
-/*
- tasks
- 1)create render object
- 2)insert map
- 3)render.render_map
-
-
- create road_engine(map)
- create update function(request_animation) по примеру Леши window request animation frame
-
- road_engine_update(delta)
- */

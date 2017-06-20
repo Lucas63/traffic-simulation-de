@@ -1,4 +1,5 @@
 // type affects length, max and desired speed, etc.
+car_width = 1;
 VehicleType =
 	{
 		CAR: 0,
