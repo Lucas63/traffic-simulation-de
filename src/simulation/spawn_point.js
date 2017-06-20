@@ -1,5 +1,5 @@
 function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction,
-					_routeId, _laneId, _lane_type)
+					_routeId, _laneId, _lane_type, _startX, _startY)
 {
 	this.id = _id;
 	this.minPeriod = _minPeriod;
@@ -12,6 +12,10 @@ function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction,
 
 	this.difference = _maxPeriod - _minPeriod;
 	this.elapsedTime = 0;
+
+	this.startX = _startX;
+    this.startY = _startY;
+
 }
 
 SpawnPoint.prototype.update = function( dt )

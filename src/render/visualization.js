@@ -90,6 +90,6 @@ function draw_trees(startX, startY, finishX, finishY) {
     let object_number = Math.floor((Math.random() * 10) + 1);
 
     for (let i = 0; i < object_number; i++) {
-        draw_tree(context, startX, startY, finishX, finishY);
+        draw_tree(startX, startY, finishX, finishY);
     }
 }
