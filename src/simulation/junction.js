@@ -8,7 +8,7 @@ var JunctionSides =
 	"right" : 1,
 	"bottom": 2,
 	"left"  : 3
-}
+};
 
 // _id - junction's identifier
 // _pos - coordinates of center (TBD)
@@ -219,11 +219,11 @@ Junction.prototype.getTrafficLight = function( roadId )
 	{
 		case JunctionSides["top"]:
 		case JunctionSides["bottom"]:
-			return this.verticalTrafficLight.light;
+			return this.verticalTrafficLight.color;
 
 		case JunctionSides["left"]:
 		case JunctionSides["right"]:
-			return this.horizontalTrafficLight.light;
+			return this.horizontalTrafficLight.color;
 	}
 };
 
@@ -430,8 +430,8 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 			return false;
 	}
 
-	let destSide = getRightSide( sourceSide );
-	let destRoad = this.getJunctionRoadFromSide( destSide );
+	// let destSide = getRightSide( sourceSide );
+	// let destRoad = this.getJunctionRoadFromSide( destSide );
 
 	// points to appropriate lanes array of destination road
 	turnLanes = sourceRoad.turnRightDestLanes;
@@ -460,7 +460,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 	if (passLanes.length == 0)
 		return false;
 
-	var lastVehicle = passLanes[laneIndex].vehicles.last();
+	let lastVehicle = passLanes[laneIndex].vehicles.last();
 
 	// there is no enough space before last vehicle
 	if( lastVehicle.farFrom(vehicleRequiredSpace) == false)
@@ -484,7 +484,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 			return false;
 	}
 
-	vehicles = turnRightLanes.vehicles;
+	let vehicles = turnRightLanes.vehicles;
 	if (vehicles.empty() == false)
 	{
 		lastVehicle = turnRightLanes[laneIndex].vehicles.last();
@@ -500,7 +500,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 	// check vehicles turning left from lanes at right
 	for (let i = laneIndex;i < turnLeftLanes.length; ++i)
 	{
-		vehicles = turnRightLanes[i].vehicles;
+		vehicles = turnLeftLanes[i].vehicles;
 		if (vehicles.empty())
 			continue;
 
@@ -515,7 +515,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 	let oppositeSide = getOppositeSide( sourceSide );
 	let oppositeRoad = this.getJunctionRoadFromSide( oppositeSide );
 
-	let turnLeftLanes = oppositeRoad.turnLeftLanes;
+	turnLeftLanes = oppositeRoad.turnLeftLanes;
 	let turnLeftLanesAmount = turnLeftLanes.length;
 
 	for (let i = 0;i < turnLeftLanesAmount; ++i)
@@ -554,7 +554,7 @@ Junction.prototype.canTurnLeft = function( roadId, laneIndex,
 
 	let turnLanes = sourceRoad.turnLeftLanes;
 	let vehicles = turnLanes[laneIndex].vehicles;
-	var vehicle = null;
+	let vehicle = null;
 
 	if ( vehicles.empty() == false )
 	{
@@ -660,8 +660,8 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 	let sourceSide = this.getSideForRoad( roadId );
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	let leftSide = getLeftSide( sourceSide );
-	let destinationLane = this.getJunctionRoadFromSide( leftSide )
+	// let leftSide = getLeftSide( sourceSide );
+	// let destinationLane = this.getJunctionRoadFromSide( leftSide );
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
 

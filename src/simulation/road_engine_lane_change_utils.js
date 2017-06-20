@@ -107,14 +107,14 @@ function assesLaneChange(currentVehicle, atLeft, result)
 	// actual gap between prospective leader and current vehicle
 	let gapBeforeLeader = currentVehicle.getSafeSpace();
     if (adjacentLeader != null)
-		adjacentLeader.getSafeDistance() - currentVehicle.uCoord;
+		gapBeforeLeader = adjacentLeader.getSafeDistance() - currentVehicle.uCoord;
 
 	// there is not enough space before neighbour leader to change lane
 	if (gapBeforeLeader < 0)
 		return false;
 
 	// actual gap between current vehicle and prospective follower
-	gapAfterFollower = currentVehicle.uCoord - currentVehicle.getSafeSpace();
+	let gapAfterFollower = currentVehicle.uCoord - currentVehicle.getSafeSpace();
     if (adjacentFollower != null)
     {
 		gapAfterFollower =

@@ -85,10 +85,10 @@ Onramp.prototype.inflowRoadIsFree = function( requiredSpace )
 	// at first check first vehicle at inflow road
 	if (this.inflowLane.vehicles.empty() == false)
 	{
-		let firstVehicle = inflowLane.vehicles.first();
+		let firstVehicle = this.inflowLane.vehicles.first();
 
 		// distance between vehicle's bumper and road's end
-		let requiredSpace = inflowLane.length - 2*firstVehicle.getMinimalGap();
+		let requiredSpace = this.inflowLane.length - 2*firstVehicle.getMinimalGap();
 
 		// if vehicle too close for road's end
 		if (firstVehicle.uCoord >= requiredSpace)
@@ -176,10 +176,10 @@ Onramp.prototype.isConnectedLane = function( laneType, laneIndex )
 Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 {
 	let vehicles = this.turnLanes;
-	var vehicles = null;
-	var lastVehicle = null;
+	let vehicles = null;
+	let lastVehicle = null;
 
-	for (let i = 0; i < lanesAmount; ++i)
+	for (let i = 0; i < this.turnLanes.length; ++i)
 	{
 		vehicles = this.turnLanes[i].vehicles.
 		if (vehicles.empty())
@@ -200,7 +200,7 @@ Onramp.prototype.canPassThroughConnectedLane = function( vehicle )
 	if (vehicles.empty())
 		return true;
 
-	let lastVehicle = vehicles.last();
+	lastVehicle = vehicles.last();
 
 	return lastVehicle.farFrom( vehicle.getMinimalGap() );
 };

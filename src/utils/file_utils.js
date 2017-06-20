@@ -470,7 +470,7 @@ function get_specific_lanes(road_id,
         if (is_forward) {
             direction = RoadDirection.BOTTOM_TO_UP;
 
-            shiftX =  -car_width / 2;
+            shiftX =  + car_width / 2;
             shiftY =   0;
 
             for (let i = 0; i < lines_number; i++) {
@@ -524,7 +524,7 @@ function get_specific_lanes(road_id,
             direction = RoadDirection.LEFT_TO_RIGHT;
 
             shiftX = car_width;
-            shiftY = car_width / 2;
+            shiftY = -car_width/2;
 
 
             for (let i = 0; i < lines_number; i++) {
@@ -539,10 +539,10 @@ function get_specific_lanes(road_id,
                         rightLC_bases[direction].dy),
 
                     Math.PI / 2,
-                    startX,
-                    startY + shift + way_multiplier * (  i * logic_lane_width),
-                    finishX,
-                    finishY + shift + way_multiplier * (  i * logic_lane_width)
+                    startX + shiftX,
+                    startY + shift + way_multiplier * (  i * logic_lane_width) + shiftY,
+                    finishX + shiftX,
+                    finishY + shift + way_multiplier * (  i * logic_lane_width) + shiftY
                 ));
             }
         }

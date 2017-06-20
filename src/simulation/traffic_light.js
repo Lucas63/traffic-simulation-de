@@ -45,7 +45,7 @@ function TrafficLight( _x_coord, _y_coord, _initialColor )
 
 TrafficLight.prototype.update =function( dt )
 {
-	elapsed = this.elapsedTime + dt;
+	let elapsed = this.elapsedTime + dt;
 
 	// wrap up time from the last update
 	elapsed = elapsed % this.allPeriodsTime;

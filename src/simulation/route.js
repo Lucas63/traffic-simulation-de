@@ -3,7 +3,7 @@ const MovementType =
 	"pass": 0,
 	"turnLeft": 1,
 	"turnRight": 2
-}
+};
 
 const RouteItemType =
 {
@@ -12,7 +12,7 @@ const RouteItemType =
 	"OFFRAMP": "offramp",
 	"ONRAMP": "onramp",
 	"JUNCTION": "junction"
-}
+};
 
 
 // route items listed in route.json configuration file and structure of item:

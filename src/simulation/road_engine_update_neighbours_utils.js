@@ -33,6 +33,7 @@ function updateNeighbours(current, adjacent, atLeft)
 	let adjacentVehicles = adjacent.vehicles;
 
 	let currentCoord = 0;
+	let currentLength = 0;
 
 	// place on lane that vehicle takes plus
 	// required minimal gap between vehicles
