@@ -84,7 +84,7 @@ function main() {
 	renderer.draw_map();
 
 
-	//window.requestAnimationFrame(step);
+	window.requestAnimationFrame(step);
 
 	print_function_end(main.name);
 }
