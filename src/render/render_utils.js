@@ -64,6 +64,7 @@ function draw_road(road) {
 
 
 	context.beginPath();
+    context.fillStyle = '#000000';
 	context.fillRect(startX, startY, width, height);
 	context.closePath();
 	context.stroke();
@@ -79,9 +80,9 @@ function draw_junction(junction)
 	let height = logic_junction_length * logic_to_canvas_multiplier;
 	let width = logic_junction_length * logic_to_canvas_multiplier;
 
-	context.beginPath();
-	context.fillStyle = '#e0840b';
-	context.fillRect(
+    context.beginPath();
+    context.fillStyle = '#e0840b';
+    context.fillRect(
 		startX,
 		startY,
 		height,
