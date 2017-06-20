@@ -29,7 +29,7 @@ Map.prototype.get_road_lanes_with_car = function () {
 
     for (let i = 0; i < this.roads.length; i++) {
         for( let j = 0; j < this.roads[i].forwardLanesAmount; j++){
-            if(!this.roads[i].forwardLanes[j].vehicles.empty()){
+            if(!this.roads[i].forwardLanes[j].vehicles == null){
                 array.push(
                     [this.roads[i].forwardLanes[j].vehicles,
                         this.roads[i].forwardLanes[j]]);
@@ -41,8 +41,8 @@ Map.prototype.get_road_lanes_with_car = function () {
         for( let j = 0; j < this.roads[i].backwardLanesAmount; j++){
             if(!this.roads[i].backwardLanes[j].vehicles.empty()){
                 array.push(
-                    [this.roads[i].forwardLanes[j].vehicles,
-                        this.roads[i].forwardLanes[j]]);
+                    [this.roads[i].backwardLanes[j].vehicles,
+                        this.roads[i].backwardLanes[j]]);
             }
         }
     }

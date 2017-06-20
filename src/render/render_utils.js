@@ -9,7 +9,7 @@ function draw_dotted_line(startX, startY, endX, endY, lineType) {
 	endX *= logic_to_canvas_multiplier;
 	endY *= logic_to_canvas_multiplier;
 
-	context.beginPath();
+	//context.beginPath();
 
 	switch (lineType) {
 		case "solid":
@@ -32,7 +32,7 @@ function draw_dotted_line(startX, startY, endX, endY, lineType) {
 
 	context.moveTo(startX, startY);
 	context.lineTo(endX, endY);
-	context.closePath();
+	//context.closePath();
 	context.stroke();
 }
 
@@ -77,15 +77,15 @@ function draw_junction(junction) {
 	let height = logic_junction_length * logic_to_canvas_multiplier;
 	let width = logic_junction_length * logic_to_canvas_multiplier;
 	context.beginPath();
-	context.fillRect(
+    context.fillStyle = '#8ED6FF';
+    context.fillRect(
 		startX,
 		startY,
 		height,
 		width
 	);
-	context.fillStyle = '#8ED6FF';
 	context.closePath();
-	context.stroke();
+
 
 }
 
@@ -276,7 +276,7 @@ function draw_offramp(offramp) {
 
 	context.beginPath();
 	context.moveTo(startX, startY);
-	context.fillStyle = "#8ED6FF";
+	//context.fillStyle = "#8ED6FF";
 	context.fillRect(startX, startY, offramp_width, offramp_height);
 
 	context.closePath();
@@ -354,20 +354,21 @@ function draw_tree(startX, startY, finishX, finishY) {
 function draw_car(canvas_object) {
 
 	context.save();
-	context.translate(canvas_object.X, canvas_object.Y);
+	context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
 	// context.rotate(canvas_object.angle * Math.PI / 180);
-	context.rotate(canvas_object.angle);
+	context.rotate(Math.PI);//canvas_object.angle);
 
-	console.log(canvas_object.X * logic_to_canvas_multiplier);
+	console.log(canvas_object.X );
 	console.log(canvas_object.Y * logic_to_canvas_multiplier);
 
 
 	context.drawImage(canvas_object,
-		canvas_object.X * logic_to_canvas_multiplier,
-		canvas_object.Y * logic_to_canvas_multiplier,
+        (canvas_object.X -1)* logic_to_canvas_multiplier,
+        (canvas_object.Y - 1.5) * logic_to_canvas_multiplier,
 		canvas_object.width * logic_to_canvas_multiplier,
 		canvas_object.height * logic_to_canvas_multiplier);
-	//context.restore();
+    //context.restore();
+
 }
 
 

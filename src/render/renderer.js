@@ -26,10 +26,14 @@ Renderer.prototype.draw_map = function(){
 x = 10;
 y = 10;
 
-
+var x = 2;
 Renderer.prototype.update_map = function () {
 
-	//context.clearRect(0, 0, canvas.width, canvas.height);
+
+	context.clearRect(0, 0, canvas.width, canvas.height);
+
+	//сontext.moveTo(0,0);
+	this.draw_map();
 	//context.restore();
 
 
@@ -38,10 +42,32 @@ Renderer.prototype.update_map = function () {
 	let on_offramps = this.map_object.get_offramp_lanes_with_car();
 	let on_turns = this.map_object.get_turn_lanes_with_car();
 
+	console.log(on_roads);
+	// each road
+	if(on_roads == null)
+		return;
 	for( let i = 0; i < on_roads.length; i++){
-		for( let i = 0; i < on_roads[i][1]; i++){
-			//draw_car();
+		let road = on_roads[i][1];
+		// each lane
+		console.log(road);
+		if(road.backwardLanes == null)
+			break;
+		for( let j = 0; j < road.backwardLanes.length; j++){
+
+			let lane = road.backwardLanes[j];
+            console.log(lane);
+			// each vehicle
+			for( let k = 0; k < lane.vehicles.length; k++){
+
+				let vehicle = lane.vehicles[k];
+				console.log(vehicle);
+				x +=2;
+				console.log(x);
+				let canvas_object = get_canvas_object(vehicle.type,x,10,45);
+				//draw_car(canvas_object);
+			}
 		}
+
 
 	}
 
@@ -56,10 +82,6 @@ Renderer.prototype.update_map = function () {
 	for( let i = 0; i < on_turns.length; i++){
 
 	}
-
-
-
-
 };
 
 
@@ -87,16 +109,6 @@ function get_canvas_object(type, spawnX, spawnY, angle)
 	canvas_object.width = 1;
 	canvas_object.height = 1.5;
 	canvas_object.angle = angle;
-
-	//TODO : add parameter for angle or/and direction.
-
-	/* TODO :
-	 1. Get size from object
-	 2. Get coordinates
-	 3. Get direction of image
-	 */
-
-	draw_car(canvas_object);
 
 	return canvas_object;
 }
