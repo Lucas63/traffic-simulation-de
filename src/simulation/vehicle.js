@@ -88,7 +88,7 @@ function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed, _laneId, _lane_t
 			roads[_routeId].backwardLanes[_laneId].startY,
 			angle);
 
-    draw_car(this.canvas_object);
+	draw_car(this.canvas_object);
 }
 
 
@@ -101,6 +101,7 @@ function Vehicle(config) {
 
 	this.speed = config.speed;
 	this.acceleration = 0;
+	this.canvas_object = config.canvas_object;
 
 	// position along lane and it is independent of lane orientation
 	// each vehicle just move alone lane and only renderer know how to present

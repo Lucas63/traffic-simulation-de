@@ -354,12 +354,12 @@ function draw_tree(startX, startY, finishX, finishY) {
 
 function draw_car(canvas_object) {
 
-	context.save();
-	context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
+	//context.save();
+	//context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
 	// context.rotate(canvas_object.angle * Math.PI / 180);
-	context.rotate(Math.PI);//canvas_object.angle);
+	//context.rotate(Math.PI);//canvas_object.angle);
 
-	console.log(canvas_object.X );
+	console.log(canvas_object.X * logic_to_canvas_multiplier);
 	console.log(canvas_object.Y * logic_to_canvas_multiplier);
 
 
