@@ -43,6 +43,7 @@ function Junction( _id, _pos, _side,
 	// forward and backward lanes
 	this.topRoad.passLanes = new Array(_bottomRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.topRoad.passLanes);
+	this.topRoad.bases = _bottomRoad.backwardBases;
 
 	let lanes = this.topRoad.passLanes;
 	for (let i = 0; i < lanes.length; ++i)
@@ -79,6 +80,8 @@ function Junction( _id, _pos, _side,
 	for (let i = 0; i < lanes.length; ++i)
 		lanes[i].angle = _leftRoad.backwardLanes[i].length;
 
+	this.rightRoad.bases = _leftRoad.backwardBases;
+
 	this.rightRoad.turnLeftLanes =
 			new Array(_bottomRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.rightRoad.turnLeftLanes);
@@ -105,6 +108,8 @@ function Junction( _id, _pos, _side,
 
 	this.bottomRoad.passLanes = new Array(_topRoad.getForwardLanesAmount());
 	initJunctionLanes(this.bottomRoad.passLanes);
+
+	this.bottomRoad.bases = _topRoad.forwardBases;
 
 	lanes = this.bottomRoad.passLanes;
 	for (let i = 0; i < lanes.length; ++i)
@@ -137,6 +142,8 @@ function Junction( _id, _pos, _side,
 
 	this.leftRoad.passLanes = new Array(_rightRoad.getForwardLanesAmount());
 	initJunctionLanes(this.leftRoad.passLanes);
+
+	this.leftRoad.bases = _rightRoad.forwardBases;
 
 	lanes = this.leftRoad.passLanes;
 	for (let i = 0; i < lanes.length; ++i)
@@ -330,6 +337,7 @@ Junction.prototype.getDestinationLanesForPass = function(_source, _destination)
 Junction.prototype.trafficLightAllowToMove = function( side )
 {
 	let trafficLight = this.getTrafficLightForSide(side);
+	console.log(trafficLight.color);
 	return trafficLight.color == TrafficLightColor["GREEN"];
 }
 
@@ -394,7 +402,7 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 
 	// check vehicles turning left from the opposite road
 	//////////////////////////////////////////////////////////////////////
-	let oppositeSide = this.getOppositeSide( sourceSide );
+	let oppositeSide = getOppositeSide( sourceSide );
 	let oppositeRoad = this.getJunctionRoadFromSide( oppositeSide );
 
 	let turnLeftLanes = oppositeRoad.turnLeftLanes;
@@ -405,7 +413,7 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 	// lane with *laneIndex*, turn is possible and no conflicts
 	for (let i = laneIndex;i < turnLeftLanesAmount; ++i)
 	{
-		vehicles = turnLeftLanes[i];
+		vehicles = turnLeftLanes[i].vehicles;
 		if (vehicles.empty())
 			continue;
 
@@ -420,7 +428,7 @@ Junction.prototype.canTurnRight = function( roadId, laneIndex,
 			return false;
 	}
 
-	let destSide = this.getRightSide( sourceSide );
+	let destSide = getRightSide( sourceSide );
 	let destRoad = this.getJunctionRoadFromSide( destSide );
 
 	// points to appropriate lanes array of destination road
@@ -502,7 +510,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 
 	// check vehicles on opposite road that turning left
 	//////////////////////////////////////////////////////////////////////
-	let oppositeSide = this.getOppositeSide( sourceSide );
+	let oppositeSide = getOppositeSide( sourceSide );
 	let oppositeRoad = this.getJunctionRoadFromSide( oppositeSide );
 
 	let turnLeftLanes = oppositeRoad.turnLeftLanes;
@@ -510,7 +518,7 @@ Junction.prototype.canPassThrough = function( roadId, laneIndex,
 
 	for (let i = 0;i < turnLeftLanesAmount; ++i)
 	{
-		vehicles = turnLeftLanes[i];
+		vehicles = turnLeftLanes[i].vehicles;
 		if (vehicles.empty())
 			continue;
 
@@ -578,7 +586,7 @@ Junction.prototype.canTurnLeft = function( roadId, laneIndex,
 
 	// check vehicles from opposite road
 	//////////////////////////////////////////////////////////////////////////
-	let oppositeSide = this.getOppositeSide( sourceSide );
+	let oppositeSide = getOppositeSide( sourceSide );
 	let oppositeRoad = this.getJunctionRoadFromSide( oppositeSide );
 
 	passLanes = oppositeRoad.passLanes;
@@ -599,7 +607,7 @@ Junction.prototype.canTurnLeft = function( roadId, laneIndex,
 
 	// check whether lane on destination road has enough space for vehicle
 	//////////////////////////////////////////////////////////////////////
-	let destSide = this.getLeftSide( sourceSide );
+	let destSide = getLeftSide( sourceSide );
 	let destRoad = this.getJunctionRoadFromSide( destSide );
 
 	turnLanes = sourceRoad.turnLeftDestLanes;
@@ -613,7 +621,7 @@ Junction.prototype.startTurnRight = function( roadId, laneIndex, vehicle )
 	let sourceSide = this.getSideForRoad( roadId );
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	let rightSide = this.getRightSide( sourceSide );
+	let rightSide = getRightSide( sourceSide );
 	let destinationRoad = this.getJunctionRoadFromSide( rightSide );
 
 	vehicle.movementState = MovementState.ON_JUNCTION;
@@ -650,7 +658,7 @@ Junction.prototype.startTurnLeft = function( roadId, laneIndex, vehicle )
 	let sourceSide = this.getSideForRoad( roadId );
 	let sourceRoad = this.getJunctionRoadFromSide( sourceSide );
 
-	let leftSide = this.getLeftSide( sourceSide );
+	let leftSide = getLeftSide( sourceSide );
 	let destinationLane = this.getJunctionRoadFromSide( leftSide )
 
 	vehicle.movementState = MovementState.ON_JUNCTION;

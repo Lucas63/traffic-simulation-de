@@ -339,7 +339,7 @@ function get_roads_connected_to_junction(id_junction, roads) {
 	let related_roads = [null, null, null, null];
 	for (let i = 0; i < roads.length; i++) {
 
-		if (roads[i].startConnection.type == "junction" &&
+		if (roads[i].startConnection.type == RoadObject.JUNCTION &&
 			roads[i].startConnection.id == id_junction) {
 			switch (roads[i].direction) {
 				case RoadDirection["UP_TO_BOTTOM"]:
@@ -356,7 +356,7 @@ function get_roads_connected_to_junction(id_junction, roads) {
 					break;
 			}
 		}
-		else if (roads[i].finishConnection.type == "junction" &&
+		else if (roads[i].finishConnection.type == RoadObject.JUNCTION &&
 			roads[i].finishConnection.id == id_junction) {
 			switch (roads[i].direction) {
 				case RoadDirection["UP_TO_BOTTOM"]:
@@ -471,12 +471,14 @@ function get_specific_lanes(road_id,
 				lanes.push(new Lane(
 					length,
 					type,
-					get_spawn_point_by_id(spawn_points[i],road_id),
+					get_spawn_point_by_id(spawn_points[0],road_id),
 
 					new LaneBases(leftLC_bases[direction].dx,
 								  leftLC_bases[direction].dy,
 								  rightLC_bases[direction].dx,
 								  rightLC_bases[direction].dy),
+
+					0,
 
 					startX + shift + way_multiplier * (  i * logic_lane_width),
 					startY,
@@ -499,6 +501,8 @@ function get_specific_lanes(road_id,
 								  leftLC_bases[direction].dy,
 								  rightLC_bases[direction].dx,
 								  rightLC_bases[direction].dy),
+
+								  0,
 
 					startX - shift - way_multiplier * (i * logic_lane_width),
 					startY,
@@ -524,6 +528,8 @@ function get_specific_lanes(road_id,
 								  rightLC_bases[direction].dx,
 								  rightLC_bases[direction].dy),
 
+								  0,
+
 					startX,
 					startY + shift + way_multiplier * (  i * logic_lane_width),
 					finishX,
@@ -546,6 +552,8 @@ function get_specific_lanes(road_id,
 								  rightLC_bases[direction].dx,
 								  rightLC_bases[direction].dy),
 
+								  0,
+
 					startX,
 					startY - way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
 					finishX,
@@ -556,6 +564,37 @@ function get_specific_lanes(road_id,
 	}
 
 	return lanes;
+}
+
+function update_road_connections( roads )
+{
+	for (let i = 0; i < roads.length; ++i)
+	{
+		update_connection(roads[i].startConnection);
+		update_connection(roads[i].finishConnection);
+	}
+}
+
+function update_connection( conn )
+{
+	switch (conn.type)
+	{
+		case RoadObject.TURN:
+			conn.object = turns[conn.id];
+			break;
+
+		case RoadObject.ONRAMP:
+			conn.object = onramps[conn.id];
+			break;
+
+		case RoadObject.OFFRAMP:
+			conn.object = offramps[conn.id];
+			break;
+
+		case RoadObject.JUNCTION:
+			conn.object = junctions[conn.id];
+			break;
+	}
 }
 
 function get_spawn_point_by_id(id, route_id) {

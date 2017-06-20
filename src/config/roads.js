@@ -22,11 +22,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 0
 			},
 			"finishConnection": {
-				"type": "void",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -50,11 +50,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "void",
+				"type": RoadObject.VOID,
 				"id": null
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 0
 			}
 		},
@@ -78,11 +78,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 1
 			}
 		},
@@ -106,11 +106,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 0
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 1
 			}
 		},
@@ -133,11 +133,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -160,11 +160,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 0
 			},
 			"finishConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 1
 			}
 		},
@@ -187,11 +187,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -214,11 +214,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 2
 			},
 			"finishConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 1
 			}
 		},
@@ -242,11 +242,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 2
 			}
 		},
@@ -270,11 +270,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 2
 			}
 		},
@@ -298,11 +298,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 3
 			}
 		},
@@ -326,11 +326,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -354,11 +354,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 2
 			}
 		},
@@ -382,11 +382,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 2
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -410,11 +410,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "offroad",
+				"type": RoadObject.OFFRAMP,
 				"id": 1
 			}
 		},
@@ -438,11 +438,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "offramp",
+				"type": RoadObject.OFFRAMP,
 				"id": 1
 			}
 		},
@@ -466,11 +466,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 2
 			},
 			"finishConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 3
 			}
 		},
@@ -494,11 +494,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "offramp",
+				"type": RoadObject.OFFRAMP,
 				"id": 1
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 4
 			}
 		},
@@ -522,11 +522,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 2
 			},
 			"finishConnection": {
-				"type": "turn",
+				"type": RoadObject.TURN,
 				"id": 3
 			}
 		},
@@ -550,11 +550,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 4
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -578,11 +578,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 2
 			},
 			"finishConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 4
 			}
 		},
@@ -606,11 +606,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 2
 			}
 		},
@@ -634,11 +634,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "junction",
+				"type": RoadObject.JUNCTION,
 				"id": 4
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		},
@@ -662,11 +662,11 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": "onramp",
+				"type": RoadObject.ONRAMP,
 				"id": 3
 			},
 			"finishConnection": {
-				"type": "null",
+				"type": RoadObject.VOID,
 				"id": null
 			}
 		}

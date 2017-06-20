@@ -220,7 +220,7 @@ Vehicle.prototype.prepareForTurn = function (turnFullTime, _turnLane) {
 
 Vehicle.prototype.prepareForMove = function () {
 	// TODO think about is free road state actual one?
-	this.trafficState = trafficState.FREE_ROAD;
+	this.trafficState = TrafficState.FREE_ROAD;
 	this.vehicleState = VehicleState.MOVING;
 
 	this.uCoord = 0;

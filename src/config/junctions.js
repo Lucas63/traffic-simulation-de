@@ -12,55 +12,55 @@ var junctions_json = {
 				"id": 0,
 				"verticalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "green"
+						"exists": "yes", "initialLight": TrafficLightColor.GREEN
 					},
 				"horizontalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "red"
+						"exists": "yes", "initialLight": TrafficLightColor.RED
 					}
 			},
 			{
 				"id": 1,
 				"verticalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "red"
+						"exists": "yes", "initialLight": TrafficLightColor.RED
 					},
 				"horizontalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "green"
+						"exists": "yes", "initialLight": TrafficLightColor.GREEN
 					}
 			},
 			{
 				"id": 2,
 				"verticalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "red"
+						"exists": "yes", "initialLight": TrafficLightColor.RED
 					},
 				"horizontalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "green"
+						"exists": "yes", "initialLight": TrafficLightColor.GREEN
 					}
 			},
 			{
 				"id": 3,
 				"verticalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "red"
+						"exists": "yes", "initialLight": TrafficLightColor.RED
 					},
 				"horizontalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "green"
+						"exists": "yes", "initialLight": TrafficLightColor.GREEN
 					}
 			},
 			{
 				"id": 4,
 				"verticalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "green"
+						"exists": "yes", "initialLight": TrafficLightColor.GREEN
 					},
 				"horizontalTrafficLight":
 					{
-						"exists": "yes", "initialLight": "red"
+						"exists": "yes", "initialLight": TrafficLightColor.RED
 					}
 			}
 		]

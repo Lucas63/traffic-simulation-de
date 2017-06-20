@@ -17,8 +17,16 @@ road_engine = null;
 
 var start = 0;
 
+var counter = 0;
+var requestId = null;
+
 function step(timestamp)
 {
+	if (counter > 400)
+		window.cancelAnimationFrame(requestId);
+
+	++counter;
+
 	let progress = timestamp - start;
 	// progress = Math.round(progress);
 	// progress /= 1000;
@@ -56,6 +64,8 @@ function load_objects() {
 	offramps = load_offramps(roads);
 	console.log(offramps);
 
+	update_road_connections( roads );
+
 	routes = load_routes();
 	console.log(routes);
 
@@ -81,10 +91,10 @@ function main() {
 	load_objects();
 
 	renderer.draw_map();
-	//renderer.draw_map();
+	renderer.draw_map();
 
 
-	window.requestAnimationFrame(step);
+	requestId = window.requestAnimationFrame(step);
 
 	print_function_end(main.name);
 }

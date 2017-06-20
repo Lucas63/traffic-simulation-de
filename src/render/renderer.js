@@ -45,11 +45,11 @@ Renderer.prototype.update_map = function () {
 	{
 		lanes = roads[i].forwardLanes;
 		for (let j = 0; j < lanes.length; ++j)
-			drawVehiclesOnLane(roads[i], roads[i].forwardBases, lanes[j]);
+			drawVehiclesOnLane( roads[i].forwardBases, lanes[j]);
 
 		lanes = roads[i].backwardLanes;
 		for (let j = 0; j < lanes.length; ++j)
-			drawVehiclesOnLane(roads[i], roads[i].backwardBases, lanes[j]);
+			drawVehiclesOnLane( roads[i].backwardBases, lanes[j]);
 
 	}
 
@@ -60,7 +60,7 @@ Renderer.prototype.update_map = function () {
 	}
 };
 
-function drawVehiclesOnLane( road, bases, lane )
+function drawVehiclesOnLane( bases, lane )
 {
 	let canvas_object = null;
 
@@ -91,9 +91,50 @@ function drawVehiclesOnLane( road, bases, lane )
 	}
 }
 
+function drawTurningVehicles( lane )
+{
+	let canvas_object = null;
+	let vehicle = null;
+	for (let i = 0; i < lane.vehicles.length; ++i)
+	{
+		vehicle = lane.vehicles[i];
+
+		vehicle.canvas_object.angle = vehicle.turnAngle;
+		update_canvas_object(vehicle.canvas_object,
+							 vehicle.turnX, vehicle.turnY);
+
+		draw_car(vehicle.canvas_object);
+	}
+}
+
 function drawVehiclesOnJunction( junction )
 {
+	let road = junction.topRoad;
+	drawVehiclesOnJunctionRoad(road);
 
+	road = junction.rightRoad;
+	drawVehiclesOnJunctionRoad(road);
+
+	road = junction.bottomRoad;
+	drawVehiclesOnJunctionRoad(road);
+
+	road = junction.leftRoad;
+	drawVehiclesOnJunctionRoad(road);
+}
+
+function drawVehiclesOnJunctionRoad( road )
+{
+	let lanes = road.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		drawVehiclesOnLane( road.bases, lanes[i]);
+
+	lanes = road.turnRightLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		drawTurningVehicles( lanes[i] );
+
+	lanes = road.turnLeftLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		drawTurningVehicles( lanes[i] );
 }
 
 // for (let i = 0; i < on_onramps.length; i++) {

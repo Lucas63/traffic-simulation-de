@@ -64,7 +64,7 @@ function draw_road(road) {
 
 
 	context.beginPath();
-    context.fillStyle = '#000000';
+	context.fillStyle = '#000000';
 	context.fillRect(startX, startY, width, height);
 	context.closePath();
 	context.stroke();
@@ -80,9 +80,9 @@ function draw_junction(junction)
 	let height = logic_junction_length * logic_to_canvas_multiplier;
 	let width = logic_junction_length * logic_to_canvas_multiplier;
 
-    context.beginPath();
-    context.fillStyle = '#e0840b';
-    context.fillRect(
+	context.beginPath();
+	context.fillStyle = '#e0840b';
+	context.fillRect(
 		startX,
 		startY,
 		height,
@@ -358,20 +358,21 @@ function draw_car(canvas_object) {
 	//context.save();
 	//context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
 	// context.rotate(canvas_object.angle * Math.PI / 180);
-	//context.rotate(Math.PI);//canvas_object.angle);
+	//context.rotate(canvas_object.angle);
 
-	console.log(canvas_object.X * logic_to_canvas_multiplier);
-	console.log(canvas_object.Y * logic_to_canvas_multiplier);
+	// console.log(canvas_object.X * logic_to_canvas_multiplier);
+	// console.log(canvas_object.Y * logic_to_canvas_multiplier);
 
 
 	context.drawImage(canvas_object,
-		(canvas_object.X -1)* logic_to_canvas_multiplier,
-		(canvas_object.Y - 1.5) * logic_to_canvas_multiplier,
+		(canvas_object.X)* logic_to_canvas_multiplier,
+		(canvas_object.Y) * logic_to_canvas_multiplier,
 		canvas_object.width * logic_to_canvas_multiplier,
 		canvas_object.height * logic_to_canvas_multiplier);
 	//context.restore();
 
 }
+
 
 
 // -------------- UTILS --------------

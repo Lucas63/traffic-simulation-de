@@ -10,7 +10,7 @@ var vehicles_json = {
 
 		"FreeMoveIDMModel":
 		{
-			"desiredSpeed": 0.8,
+			"desiredSpeed": 1.6,
 			"timeHeadway": 1.5,
 			"acceleration": 0.5,
 			"deceleration": 0.5,
@@ -26,7 +26,7 @@ var vehicles_json = {
 
 		"UpstreamIDMModel":
 		{
-			"desiredSpeed": 0.3,
+			"desiredSpeed": 0.6,
 			"timeHeadway": 1.5,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -42,7 +42,7 @@ var vehicles_json = {
 
 		"DownstreamIDMModel":
 		{
-			"desiredSpeed": 0.75,
+			"desiredSpeed": 1.5,
 			"timeHeadway": 1.5,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -58,7 +58,7 @@ var vehicles_json = {
 
 		"JamIDMModel":
 		{
-			"desiredSpeed": 0.1,
+			"desiredSpeed": 0.2,
 			"timeHeadway": 1.5,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -76,7 +76,7 @@ var vehicles_json = {
 
 		"FreeMoveIDMModel":
 		{
-			"desiredSpeed": 0.6,
+			"desiredSpeed": 1.2,
 			"timeHeadway": 1.8,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -92,7 +92,7 @@ var vehicles_json = {
 
 		"UpstreamIDMModel":
 		{
-			"desiredSpeed": 0.25,
+			"desiredSpeed": 0.5,
 			"timeHeadway": 1.8,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -108,7 +108,7 @@ var vehicles_json = {
 
 		"DownstreamIDMModel":
 		{
-			"desiredSpeed": 0.5,
+			"desiredSpeed": 1,
 			"timeHeadway": 1.5,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
@@ -124,7 +124,7 @@ var vehicles_json = {
 
 		"JamIDMModel":
 		{
-			"desiredSpeed": 0.1,
+			"desiredSpeed": 0.2,
 			"timeHeadway": 2,
 			"acceleration": 0.25,
 			"deceleration": 0.25,
