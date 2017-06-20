@@ -77,13 +77,13 @@ function draw_junction(junction) {
 	let height = logic_junction_length * logic_to_canvas_multiplier;
 	let width = logic_junction_length * logic_to_canvas_multiplier;
 	context.beginPath();
+	context.fillStyle = '#e0840b';
 	context.fillRect(
 		startX,
 		startY,
 		height,
 		width
 	);
-	context.fillStyle = '#8ED6FF';
 	context.closePath();
 	context.stroke();
 
@@ -276,7 +276,8 @@ function draw_offramp(offramp) {
 
 	context.beginPath();
 	context.moveTo(startX, startY);
-	context.fillStyle = "#8ED6FF";
+	// context.fillStyle = "#8ED6FF";
+	context.fillStyle = "#0da00b";
 	context.fillRect(startX, startY, offramp_width, offramp_height);
 
 	context.closePath();
