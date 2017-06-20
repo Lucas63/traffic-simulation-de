@@ -59,7 +59,42 @@ Renderer.prototype.update_map = function () {
     for (let i = 0; i < offramps.length; ++i) {
         drawVehiclesOnOfframp(offramps[i]);
     }
+
+    let onramps = this.map_object.onramps;
+    for (let i = 0; i < onramps.length; ++i) {
+        drawVehiclesOnOnramp(onramps[i]);
+    }
+
+    let turns = this.map_object.turns;
+    for (let i = 0; i < onramps.length; ++i) {
+        drawVehiclesOnTurn(turns[i]);
+    }
 };
+
+function drawVehiclesOnTurn(turn){
+    let lanes = turn.lanes;
+
+    for ( let i = 0; i < lanes.length; i++){
+        drawTurningVehicles(lanes[i]);
+    }
+
+}
+
+function drawVehiclesOnOnramp(onramp) {
+
+    let lanes = onramp.forwardLanes;
+    for (let i = 0; i < lanes.length; ++i)
+        drawVehiclesOnLane(onramp.forwardBases, lanes[i]);
+
+    lanes = onramp.backwardLanes;
+    for (let i = 0; i < lanes.length; ++i)
+        drawVehiclesOnLane(onramp.backwardBases, lanes[i]);
+
+    lanes = onramp.turnLanes;
+    for (let i = 0; i < lanes.length; ++i)
+        drawTurningVehicles(lanes[i]);
+}
+
 
 
 function drawVehiclesOnOfframp(offramp) {
@@ -90,16 +125,8 @@ function drawVehiclesOnLane(bases, lane) {
     for (let k = 0; k < lane.vehicles.length; k++) {
         let vehicle = lane.vehicles[k];
 
-        console.log("start X " + lane.startX);
-        console.log("start Y " + lane.startY);
-
-        console.log("u coord " + vehicle.uCoord);
-
         x = lane.startX + dx * vehicle.uCoord;
         y = lane.startY + dy * vehicle.uCoord;
-
-        console.log("x = " + x);
-        console.log("y = " + y);
 
         update_canvas_object(vehicle.canvas_object, x, y, vehicle.angle);
 
@@ -176,7 +203,6 @@ function get_canvas_object(type, spawnX, spawnY, angle) {
 }
 
 function update_canvas_object(canvas_object, X, Y, angle) {
-    console.log(canvas_object);
     canvas_object.X = X;
     canvas_object.Y = Y;
     canvas_object.angle = angle;

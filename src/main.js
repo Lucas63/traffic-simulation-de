@@ -42,7 +42,7 @@ function step(timestamp)
 }
 
 function load_objects() {
-	print_function_start(load_objects.name);
+	//print_function_start(load_objects.name);
 
 	load_vehicle_configuration();
 
@@ -74,11 +74,11 @@ function load_objects() {
 	renderer = new Renderer(map);
 	road_engine = new RoadEngine(map);
 
-	print_function_end(load_objects.name);
+	//print_function_end(load_objects.name);
 }
 
 function main() {
-	print_function_start(main.name);
+	//print_function_start(main.name);
 
 	load_objects();
 
@@ -87,5 +87,5 @@ function main() {
 
 	requestId = window.requestAnimationFrame(step);
 
-	print_function_end(main.name);
+	//print_function_end(main.name);
 }

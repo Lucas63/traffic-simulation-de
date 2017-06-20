@@ -22,7 +22,7 @@
 //var lane_width = 1;
 
 function render_map(renderer) {
-    print_function_start(render_map.name);
+    //print_function_start(render_map.name);
 
     //---- map properties
     draw_map();
@@ -42,7 +42,7 @@ function render_map(renderer) {
     //---- draw junctions
     draw_offramps(renderer.map_object.offramps);
 
-    print_function_end(render_map.name);
+    //print_function_end(render_map.name);
 }
 
 function draw_map() {
