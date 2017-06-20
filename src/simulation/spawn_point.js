@@ -36,10 +36,7 @@ SpawnPoint.prototype.ready = function()
 	let probability = (this.elapsedTime - this.minPeriod) / this.difference;
 	let random =  Math.random();
 
-	if (probability < random)
-		return false;
-
-	return true;
+	return probability >= random;
 };
 
 SpawnPoint.prototype.spawn = function()
@@ -47,7 +44,7 @@ SpawnPoint.prototype.spawn = function()
 	let truckCreationProbability = Math.random();
 
 	// create empty config
-	var vehicleConfig = new VehicleConfig( VehicleType.CAR, this.routeId,
+	let vehicleConfig = new VehicleConfig( VehicleType.CAR, this.routeId,
 										   0, CAR_INITIAL_SPEED,
 										   this.startX,this.startY);
 
