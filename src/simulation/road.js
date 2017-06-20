@@ -1,10 +1,10 @@
 // also used by map for rendering
 var RoadDirection =
 {
-	BOTTOM_TO_UP  : { value: 0, name: "BOTTOM_TO_UP"  },
-	LEFT_TO_RIGHT : { value: 1, name: "LEFT_TO_RIGHT" },
-	UP_TO_BOTTOM  : { value: 2, name: "UP_TO_BOTTOM"  },
-	RIGHT_TO_LEFT : { value: 3, name: "RIGHT_TO_LEFT" }
+	BOTTOM_TO_UP  : 0,
+	LEFT_TO_RIGHT : 1,
+	UP_TO_BOTTOM  : 2,
+	RIGHT_TO_LEFT : 3
 };
 
 var RoadObject =

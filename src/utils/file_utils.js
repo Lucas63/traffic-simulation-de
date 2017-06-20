@@ -32,20 +32,22 @@ function load_road_configs() {
 	let roadConfigs = [];
 
 	let opposite_bases = null;
+	let direction = null;
 
 	for (let i = 0; i < road_configs.length; i++) {
 		let road_string = road_configs[i];
 
 		let is_one_way = (road_string.backwardLanes == 0);
 
-		opposite_bases = getOppositeBases( road_string.direction );
+		direction = RoadDirection[road_string.direction];
+		opposite_bases = getOppositeBases( direction );
 
 		let new_road = new RoadConfig (
 			road_string.id,
-			RoadDirection[road_string.direction],
+			direction,
 
-			new RoadBases( road_bases[road_string.direction].dx,
-						   road_bases[road_string.direction].dx),
+			new RoadBases( road_bases[ direction ].dx,
+						   road_bases[ direction ].dy),
 
 			new RoadBases(opposite_bases.dx, opposite_bases.dy),
 
