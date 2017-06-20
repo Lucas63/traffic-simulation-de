@@ -31,15 +31,24 @@ function load_road_configs() {
 	let road_configs = roads_json.roads;
 	let roadConfigs = [];
 
+	let opposite_bases = null;
 
 	for (let i = 0; i < road_configs.length; i++) {
 		let road_string = road_configs[i];
 
 		let is_one_way = (road_string.backwardLanes == 0);
 
-		let new_road = new RoadConfig(
+		opposite_bases = getOppositeBases( road_string.direction );
+
+		let new_road = new RoadConfig (
 			road_string.id,
 			RoadDirection[road_string.direction],
+
+			new RoadBases( road_bases[road_string.direction].dx,
+						   road_bases[road_string.direction].dx),
+
+			new RoadBases(opposite_bases.dx, opposite_bases.dy),
+
 			road_string.length,
 			logic_lane_width,
 			road_string.startX,
@@ -385,11 +394,10 @@ function get_center_coordinates(roads, id) {
 	return [X / 4, Y / 4];
 }
 
-/*
 
- */
 function get_lanes(road_id,sX, sY, fX, fY, length, lines_number,
-				   spawn_points, lines_type, is_one_way, direction) {
+				   spawn_points, lines_type, is_one_way, direction)
+{
 
 	if (lines_number == 0)
 		return [];
@@ -448,14 +456,26 @@ function get_specific_lanes(road_id,
 
 	let lanes = [];
 
+	let left_lc_bases = null;
+	let right_lc_bases = null;
+	let direction = null;
+
 	if (is_vertical) {
 		if (is_forward) {
+			direction = RoadDirection.BOTTOM_TO_UP;
+
 			for (let i = 0; i < lines_number; i++) {
 
 				lanes.push(new Lane(
 					length,
 					type,
 					get_spawn_point_by_id(spawn_points[i],road_id),
+
+					new LaneBases(leftLC_bases[direction].dx,
+								  leftLC_bases[direction].dy,
+								  rightLC_bases[direction].dx,
+								  rightLC_bases[direction].dy),
+
 					startX + shift + way_multiplier * (  i * logic_lane_width),
 					startY,
 					finishX + shift + way_multiplier * ( i * logic_lane_width),
@@ -464,12 +484,20 @@ function get_specific_lanes(road_id,
 			}
 		}
 		else {
-			for (let i = 0; i < lines_number; i++) {
+			direction = RoadDirection.UP_TO_BOTTOM;
 
+			for (let i = 0; i < lines_number; i++)
+			{
 				lanes.push(new Lane(
 					length,
 					type,
 					get_spawn_point_by_id(spawn_points[i],road_id),
+
+					new LaneBases(leftLC_bases[direction].dx,
+								  leftLC_bases[direction].dy,
+								  rightLC_bases[direction].dx,
+								  rightLC_bases[direction].dy),
+
 					startX - shift - way_multiplier * (i * logic_lane_width),
 					startY,
 					finishX - shift - way_multiplier * (i * logic_lane_width),
@@ -479,24 +507,43 @@ function get_specific_lanes(road_id,
 		}
 	}
 	else {
-		if (is_forward) {
+		if (is_forward)
+		{
+			direction = RoadDirection.LEFT_TO_RIGHT;
+
 			for (let i = 0; i < lines_number; i++) {
 				lanes.push(new Lane(
 					length,
 					type,
 					get_spawn_point_by_id(spawn_points[i],road_id),
+
+					new LaneBases(leftLC_bases[direction].dx,
+								  leftLC_bases[direction].dy,
+								  rightLC_bases[direction].dx,
+								  rightLC_bases[direction].dy),
+
 					startX,
 					startY + shift + way_multiplier * (  i * logic_lane_width),
 					finishX,
 					finishY + shift + way_multiplier * (  i * logic_lane_width)
 				));
 			}
-		} else {
+		}
+		else
+		{
+			direction = RoadDirection.RIGHT_TO_LEFT;
+
 			for (let i = 0; i < lines_number; i++) {
 				lanes.push(new Lane(
 					length,
 					type,
 					get_spawn_point_by_id(spawn_points[i],road_id),
+
+					new LaneBases(leftLC_bases[direction].dx,
+								  leftLC_bases[direction].dy,
+								  rightLC_bases[direction].dx,
+								  rightLC_bases[direction].dy),
+
 					startX,
 					startY - way_multiplier * (i * logic_lane_width + logic_lane_width / 2),
 					finishX,

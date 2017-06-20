@@ -84,13 +84,17 @@ var RoadObject =
  * \param _forwardLanes - list with forward lanes
  * \param _backwardLanes - list with backward lanes
  */
-function RoadConfig( _id, _direction, _roadLength, _laneWidth,
+function RoadConfig( _id, _direction, _forwardbases, _backwardBases,
+					 _roadLength, _laneWidth,
 					 _startX, _startY, _finishX, _finishY,
 					 _startConnection, _finishConnection,
 					 _forwardLanes, _backwardLanes)
 {
 	this.id = _id;
 	this.direction = _direction;
+
+	this.forwardBases = _forwardbases;
+	this.backwardBases = _backwardBases;
 
 	// Lane length is equal to road length
 	this.roadLength = _roadLength;
@@ -155,15 +159,18 @@ function Road( roadConfig )
 	this.finishConnection = roadConfig.finishConnection;
 
 
-	this.forwardLanesAmount = (roadConfig.forwardLanes)? roadConfig.forwardLanes.length : 0;
-	this.backwardLanesAmount = (roadConfig.backwardLanes)? roadConfig.backwardLanes.length : 0;
+	this.forwardLanesAmount = (roadConfig.forwardLanes) ?
+		roadConfig.forwardLanes.length : 0;
+
+	this.backwardLanesAmount = (roadConfig.backwardLanes) ?
+		roadConfig.backwardLanes.length : 0;
 
 
 	this.lanesAmount = this.forwardLanesAmount + this.backwardLanesAmount;
 	this.roadWidth = logic_lane_width * this.lanesAmount;
 
-	this.forwardBases = new RoadBases(0, 0);
-	this.backwardBases = new RoadBases(0, 0);
+	this.forwardBases = roadConfig.forwardBases;
+	this.backwardBases = roadConfig.backwardBases;
 }
 
 Road.prototype.getId = function()

@@ -65,7 +65,9 @@ var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
 
-function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed, _laneId, _lane_type) {
+function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed,
+					   _laneId, _lane_type)
+{
 	this.type = _type;
 	this.routeId = _routeId;
 	this.uCoord = _uCoord;

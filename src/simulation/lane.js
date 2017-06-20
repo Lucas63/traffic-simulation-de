@@ -7,16 +7,17 @@ var LaneType =
 };
 
 function LaneBases( _leftLC_dx, _leftLC_dy,
-                   _rightLC_dx, _rightLC_dy)
+				   _rightLC_dx, _rightLC_dy)
 {
-    this.leftLC_dx = _leftLC_dx;
-    this.leftLC_dy = _leftLC_dy;
+	this.leftLC_dx = _leftLC_dx;
+	this.leftLC_dy = _leftLC_dy;
 
-    this.rightLC_dx = _rightLC_dx;
-    this.rightLC_dy = _rightLC_dy;
+	this.rightLC_dx = _rightLC_dx;
+	this.rightLC_dy = _rightLC_dy;
 }
 
-function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
+function Lane( _length, _type, _spawnPoint, _bases,
+			   _startX, _startY, _finishX, _finishY )
 {
 	this.length = _length;
 	this.type = _type;
@@ -26,14 +27,14 @@ function Lane( _length, _type, _spawnPoint, startX, startY, finishX, finishY )
 	// each lane can have only one spawn point!
 	this.spawnPoint = _spawnPoint;
 
-	this.startX = startX;
-	this.startY = startY;
+	this.startX = _startX;
+	this.startY = _startY;
 
-	this.finishX = finishX;
-	this.finishY = finishY;
+	this.finishX = _finishX;
+	this.finishY = _finishY;
 
-    // TODO actual *LaneBases* object must be passed
-    this.bases = new LaneBases(0,0,0,0,0,0);
+	// TODO actual *LaneBases* object must be passed
+	this.bases = _bases;
 }
 
 // true if lane has no vehicles
