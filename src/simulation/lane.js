@@ -16,7 +16,7 @@ function LaneBases( _leftLC_dx, _leftLC_dy,
 	this.rightLC_dy = _rightLC_dy;
 }
 
-function Lane( _length, _type, _spawnPoint, _bases,
+function Lane( _length, _type, _spawnPoint, _bases, _angle,
 			   _startX, _startY, _finishX, _finishY )
 {
 	this.length = _length;
@@ -33,8 +33,8 @@ function Lane( _length, _type, _spawnPoint, _bases,
 	this.finishX = _finishX;
 	this.finishY = _finishY;
 
-	// TODO actual *LaneBases* object must be passed
 	this.bases = _bases;
+	this.angle = _angle;
 }
 
 // true if lane has no vehicles

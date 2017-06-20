@@ -20,9 +20,15 @@ function Onramp( _source, _destination, _inflow,
 	initJunctionLanes(this.forwardLanes);
 	setupPassLanes(this.forwardLanes, _length);
 
+	for (let i = 0; i < this.forwardLanes.length; ++i)
+		this.forwardLanes[i].angle = _destination.forwardLanes[i].angle;
+
 	this.backwardLanes = new Array( this.destination.getBackwardLanesAmount() );
 	initJunctionLanes(this.backwardLanes);
 	setupPassLanes(this.backwardLanes, _length);
+
+	for (let i = 0; i < this.backwardLanes.length; ++i)
+		this.backwardLanes[i].angle = _destination.backwardLanes[i].angle;
 
 	let turnDestinationLane = null;
 
@@ -53,19 +59,19 @@ function Onramp( _source, _destination, _inflow,
 	setOnrampTurnData(this.turnLanes, _source, _source.forwardLanes,
 					  turnDestinationLane)
 
-    let sourceBases = _source.forwardBases;
+	let sourceBases = _source.forwardBases;
 
-    let destBases = null;
-    if (_destination.startConnection.type == RoadObject.ONRAMP)
-        destBases = _destination.forwardBases;
-    else
-        destBases = _destination.backwardBases;
+	let destBases = null;
+	if (_destination.startConnection.type == RoadObject.ONRAMP)
+		destBases = _destination.forwardBases;
+	else
+		destBases = _destination.backwardBases;
 
-    this.dx = sourceBases.move_dx == 0 ?
-        destBases.move_dx : sourceBases.move_dx;
+	this.dx = sourceBases.move_dx == 0 ?
+		destBases.move_dx : sourceBases.move_dx;
 
-    this.dy = sourceBases.move_dy == 0 ?
-        destBases.move_dy : sourceBases.move_dy;
+	this.dy = sourceBases.move_dy == 0 ?
+		destBases.move_dy : sourceBases.move_dy;
 
 	this.turnDuration = new Array( sourceLanesAmount );
 	for (let i = 0;i < sourceLanesAmount; ++i)

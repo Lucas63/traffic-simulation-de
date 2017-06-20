@@ -13,13 +13,15 @@ function Renderer(_map){
 	this.dotted_line_color = "";
 	this.boiled_line_color = "";
 	this.road_side_line_color = "";
+	//this.draw_map();
+	//context.save();
 }
 
 
 
 Renderer.prototype.draw_map = function(){
 	render_map(this);
-	context.save();
+
 };
 
 
@@ -42,29 +44,53 @@ Renderer.prototype.update_map = function () {
 	let on_offramps = this.map_object.get_offramp_lanes_with_car();
 	let on_turns = this.map_object.get_turn_lanes_with_car();
 
-	console.log(on_roads);
+	let canvas_object = null;
+
+	// console.log(on_roads);
 	// each road
 	if(on_roads == null)
 		return;
-	for( let i = 0; i < on_roads.length; i++){
+
+	let x =0;
+	let y = 0;
+
+	let dx = 0;
+	let dy = 0;
+
+	for( let i = 0; i < on_roads.length; i++)
+	{
 		let road = on_roads[i][1];
 		// each lane
+		// console.log(road);
 		console.log(road);
 		if(road.backwardLanes == null)
 			break;
-		for( let j = 0; j < road.backwardLanes.length; j++){
 
+		dx = road.backwardBases.move_dx;
+		dy = road.backwardBases.move_dy;
+		for( let j = 0; j < road.backwardLanes.length; j++)
+		{
 			let lane = road.backwardLanes[j];
-            console.log(lane);
+			console.log(lane);
+
 			// each vehicle
-			for( let k = 0; k < lane.vehicles.length; k++){
+			for( let k = 0; k < lane.vehicles.length; k++)
+			{
+				x = lane.startX + dx * lane.bases. vehicle.uCoord * lane.length;
+				y = lane.startY + dy * lane.bases. vehicle.uCoord * lane.length;
+
+				console.log("start X " + lane.startX);
+				console.log("start Y " + lane.startY);
+
+				console.log("x = " + x);
+				console.log("y = " + y);
 
 				let vehicle = lane.vehicles[k];
-				console.log(vehicle);
-				x +=2;
-				console.log(x);
-				let canvas_object = get_canvas_object(vehicle.type,x,10,45);
-				//draw_car(canvas_object);
+
+				canvas_object =
+					get_canvas_object(vehicle.type, x, y, lane.angle);
+
+				draw_car(canvas_object);
 			}
 		}
 

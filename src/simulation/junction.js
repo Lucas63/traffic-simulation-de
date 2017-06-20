@@ -1,19 +1,6 @@
 
-// Each junction has 4 sides identified by numbers
+// Each junction has 4 virtual junction roads
 // and 2 traffic lights: vertical and horizontal.
-
-/*
-Number represents each side of the junction
-		 0
-	 ――――――――――
-	|          |
-	|          |
-  3 |          | 1
-	|          |
-	|          |
-	 ――――――――――
-		 2
-*/
 
 var JunctionSides =
 {
@@ -57,6 +44,10 @@ function Junction( _id, _pos, _side,
 	this.topRoad.passLanes = new Array(_bottomRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.topRoad.passLanes);
 
+	let lanes = this.topRoad.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i].angle = _bottomRoad.backwardLanes[i].length;
+
 	this.topRoad.turnLeftLanes = new Array(_rightRoad.getForwardLanesAmount());
 	initJunctionLanes(this.topRoad.turnLeftLanes);
 
@@ -83,6 +74,10 @@ function Junction( _id, _pos, _side,
 
 	this.rightRoad.passLanes = new Array(_leftRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.rightRoad.passLanes);
+
+	lanes = this.rightRoad.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i].angle = _leftRoad.backwardLanes[i].length;
 
 	this.rightRoad.turnLeftLanes =
 			new Array(_bottomRoad.getBackwardLanesAmount());
@@ -111,6 +106,10 @@ function Junction( _id, _pos, _side,
 	this.bottomRoad.passLanes = new Array(_topRoad.getForwardLanesAmount());
 	initJunctionLanes(this.bottomRoad.passLanes);
 
+	lanes = this.bottomRoad.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i].angle = _topRoad.forwardLanes[i].length;
+
 	this.bottomRoad.turnLeftLanes =
 			new Array(_leftRoad.getBackwardLanesAmount());
 	initJunctionLanes(this.bottomRoad.turnLeftLanes);
@@ -138,6 +137,10 @@ function Junction( _id, _pos, _side,
 
 	this.leftRoad.passLanes = new Array(_rightRoad.getForwardLanesAmount());
 	initJunctionLanes(this.leftRoad.passLanes);
+
+	lanes = this.leftRoad.passLanes;
+	for (let i = 0; i < lanes.length; ++i)
+		lanes[i].angle = _rightRoad.forwardLanes[i].length;
 
 	this.leftRoad.turnLeftLanes = new Array(_topRoad.getForwardLanesAmount());
 	initJunctionLanes(this.leftRoad.turnLeftLanes);

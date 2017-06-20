@@ -40,7 +40,7 @@ function load_road_configs() {
 		let is_one_way = (road_string.backwardLanes == 0);
 
 		direction = RoadDirection[road_string.direction];
-		opposite_bases = getOppositeBases( direction );
+		opposite_bases = road_bases[ getOppositeDirection( direction ) ];
 
 		let new_road = new RoadConfig (
 			road_string.id,

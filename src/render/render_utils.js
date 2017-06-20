@@ -70,12 +70,15 @@ function draw_road(road) {
 	draw_road_lines(road, is_vertical);
 }
 
-function draw_junction(junction) {
-
+function draw_junction(junction)
+{
 	let startX = (junction.centralPosition[0] - logic_junction_length / 2) * logic_to_canvas_multiplier;
+
 	let startY = (junction.centralPosition[1] - logic_junction_length / 2) * logic_to_canvas_multiplier;
+
 	let height = logic_junction_length * logic_to_canvas_multiplier;
 	let width = logic_junction_length * logic_to_canvas_multiplier;
+
 	context.beginPath();
 	context.fillStyle = '#e0840b';
 	context.fillRect(
@@ -85,8 +88,6 @@ function draw_junction(junction) {
 		width
 	);
 	context.closePath();
-
-
 }
 
 function draw_turn(turn) {
@@ -363,11 +364,11 @@ function draw_car(canvas_object) {
 
 
 	context.drawImage(canvas_object,
-        (canvas_object.X -1)* logic_to_canvas_multiplier,
-        (canvas_object.Y - 1.5) * logic_to_canvas_multiplier,
+		(canvas_object.X -1)* logic_to_canvas_multiplier,
+		(canvas_object.Y - 1.5) * logic_to_canvas_multiplier,
 		canvas_object.width * logic_to_canvas_multiplier,
 		canvas_object.height * logic_to_canvas_multiplier);
-    //context.restore();
+	//context.restore();
 
 }
 

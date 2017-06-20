@@ -8,7 +8,13 @@ const RADIANS_TO_DEGREES_CONVERTION = 180 / Math.PI;
 const TURN_DURATION_BASE = 0.5;
 const TURN_DURATION_FOR_LANE = 0.5;
 
-angles = new Array( 4 );
+angles = [{}, {}, {}, {}];
+
+angles[ RoadDirection.BOTTOM_TO_UP ] = 90;
+angles[ RoadDirection.LEFT_TO_RIGHT ] = 0;
+angles[ RoadDirection.UP_TO_BOTTOM ]  = 270;
+angles[ RoadDirection.RIGHT_TO_LEFT ] = 180;
+
 
 road_bases = [{}, {}, {}, {}];
 
@@ -53,21 +59,21 @@ rightLC_bases[ RoadDirection.RIGHT_TO_LEFT ].dx = -1;
 rightLC_bases[ RoadDirection.RIGHT_TO_LEFT ].dy = -1;
 
 
-function getOppositeBases( direction )
+function getOppositeDirection( direction )
 {
 	switch (direction)
 	{
 		case RoadDirection.BOTTOM_TO_UP:
-			return road_bases[ RoadDirection.UP_TO_BOTTOM ];
+			return RoadDirection.UP_TO_BOTTOM;
 
 		case RoadDirection.LEFT_TO_RIGHT:
-			return road_bases[ RoadDirection.RIGHT_TO_LEFT ];
+			return RoadDirection.RIGHT_TO_LEFT;
 
 		case RoadDirection.UP_TO_BOTTOM:
-			return road_bases[ RoadDirection.BOTTOM_TO_UP ];
+			return RoadDirection.BOTTOM_TO_UP;
 
 		case RoadDirection.RIGHT_TO_LEFT:
-			return road_bases[ RoadDirection.LEFT_TO_RIGHT ];
+			return RoadDirection.LEFT_TO_RIGHT;
 	}
 }
 

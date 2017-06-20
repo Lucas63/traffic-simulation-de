@@ -22,10 +22,15 @@ function Offramp( _source, _destination, _outflow,
 	initJunctionLanes(this.forwardLanes);
 	setupPassLanes(this.forwardLanes);
 
+	for (let i = 0; i < this.forwardLanes.length; ++i)
+		this.forwardLanes[i].angle = _source.forwardLanes[i].angle;
+
 	this.backwardLanes = new Array( this.source.getBackwardLanesAmount() );
 	initJunctionLanes(this.backwardLanes);
 	setupPassLanes(this.backwardLanes);
 
+	for (let i = 0; i < this.backwardLanes.length; ++i)
+		this.backwardLanes[i].angle = _source.backwardLanes[i].angle;
 
 	let turnSourceLane = {};
 	if ( _connectedLaneType == LaneType["forward"] )
