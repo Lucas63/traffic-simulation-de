@@ -135,7 +135,7 @@ function updateTurn( vehicle, lane, mapObject, dt )
 	}
 
 	// turn has been completed
-	if (turnCompletion == 1)
+	if (vehicle.turnCompletion == 1)
 		vehicle.arrived = true;
 
 	vehicle.uCoord = newPosition;
@@ -143,7 +143,7 @@ function updateTurn( vehicle, lane, mapObject, dt )
 
 function vehicleCanMoveOnTurn(newPosition, leader)
 {
-	return leader.getSafeDistance() > newPosition;
+	return leader.getSafeDistance() >= newPosition;
 }
 
 function updateLaneChange( vehicle, dt )

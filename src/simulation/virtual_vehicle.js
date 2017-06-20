@@ -27,5 +27,5 @@ VirtualVehicle.prototype.setFreeMovementValues = function()
 
 VirtualVehicle.prototype.getSafeDistance = function()
 {
-	return this.uCoord - MINIMAL_GAP;
+	return this.uCoord;
 }

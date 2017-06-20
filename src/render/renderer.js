@@ -96,7 +96,7 @@ function drawTurningVehicles( lane )
 	for (let i = 0; i < lane.vehicles.length; ++i)
 	{
 		vehicle = lane.vehicles[i];
-		console.log("vehicle on junction" + vehicle);
+		// console.log("vehicle on junction" + vehicle);
 
 		vehicle.canvas_object.angle = vehicle.turnAngle;
 		update_canvas_object(vehicle.canvas_object,
@@ -179,7 +179,7 @@ function get_canvas_object(type, spawnX, spawnY, angle) {
 }
 
 function update_canvas_object(canvas_object,X,Y){
-	console.log(canvas_object);
+	// console.log(canvas_object);
 	canvas_object.X = X;
 	canvas_object.Y = Y;
 }

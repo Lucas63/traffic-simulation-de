@@ -142,13 +142,13 @@ Offramp.prototype.isConnectedLane = function( roadId, laneType, laneIndex )
 
 Offramp.prototype.canPassThroughConnectedLane = function( vehicle )
 {
-	var lanesAmount = this.turnlanes.length;
+	var lanesAmount = this.turnLanes.length;
 	var vehicles = null;
 	var lastVehicle = null;
 
 	for (var i = 0; i < lanesAmount; ++i)
 	{
-		vehicles = this.turnlanes[i].vehicles.
+		vehicles = this.turnlanes[i].vehicles;
 		if (vehicles.empty())
 			continue;
 

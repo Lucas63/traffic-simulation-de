@@ -5,29 +5,29 @@ var roads_json = {
 	"roads": [
 		{
 			"id": 0,
-			"direction": "UP_TO_BOTTOM",
+			"direction": "BOTTOM_TO_UP",
 			"length": 20,
 			"startX": 14,
-			"startY": 40,
+			"startY": 60,
 			"finishX": 14,
-			"finishY": 60,
+			"finishY": 40,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
-				null,
+				0,
 				null
 			],
 			"backwardLanes": 2,
 			"backwardLanesSpawnPoints": [
-				0,
+				null,
 				null
 			],
 			"startConnection": {
-				"type": RoadObject.JUNCTION,
-				"id": 0
-			},
-			"finishConnection": {
 				"type": RoadObject.VOID,
 				"id": null
+			},
+			"finishConnection": {
+				"type": RoadObject.JUNCTION,
+				"id": 0
 			}
 		},
 
@@ -41,7 +41,7 @@ var roads_json = {
 			"finishY": 38,
 			"forwardLanes":2,
 			"forwardLanesSpawnPoints": [
-				1,
+				null,
 				null
 			],
 			"backwardLanes":2,
@@ -309,12 +309,12 @@ var roads_json = {
 
 		{
 			"id": 11,
-			"direction": "UP_TO_BOTTOM",
+			"direction": "BOTTOM_TO_UP",
 			"length": 20,
 			"startX": 50,
-			"startY": 40,
+			"startY": 60,
 			"finishX": 50,
-			"finishY": 60,
+			"finishY": 40,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				null,
@@ -326,12 +326,12 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": RoadObject.JUNCTION,
-				"id": 3
-			},
-			"finishConnection": {
 				"type": RoadObject.VOID,
 				"id": null
+			},
+			"finishConnection": {
+				"type": RoadObject.JUNCTION,
+				"id": 3
 			}
 		},
 
@@ -533,12 +533,12 @@ var roads_json = {
 
 		{
 			"id": 19,
-			"direction": "UP_TO_BOTTOM",
+			"direction": "BOTTOM_TO_UP",
 			"length": 20,
 			"startX": 78,
-			"startY": 40,
+			"startY": 60,
 			"finishX": 78,
-			"finishY": 60,
+			"finishY": 40,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				null,
@@ -550,12 +550,12 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": RoadObject.JUNCTION,
-				"id": 4
-			},
-			"finishConnection": {
 				"type": RoadObject.VOID,
 				"id": null
+			},
+			"finishConnection": {
+				"type": RoadObject.JUNCTION,
+				"id": 4
 			}
 		},
 

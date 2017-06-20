@@ -131,25 +131,11 @@ const COEF4 = 0.225403;
 // x3, y3 - coordinates of end point
 function getBezierCurveLength(t, startPoint, controlPoint, endPoint)
 {
-	// This formula taken from "Approximate Arc Length Parametrization"
-	// MARCELO WALTER and ALAIN FOURNIER. Formula 7
-	// let b = t / 2;
-	//
-	// let s = b; // length of the curve
-	//
-	// s *=
-	// 	COEF1 * getNormOfCurve(COEF3 * b, startPoint, controlPoint, endPoint) +
-	// 	COEF2 * getNormOfCurve(b, startPoint, controlPoint, endPoint) +
-	// 	COEF1 * getNormOfCurve(COEF4 * b, startPoint, controlPoint, endPoint);
-
 	let A0 = new Point(controlPoint.x - startPoint.x,
 					   controlPoint.y - startPoint.y);
 
 	let A1 = new Point(startPoint.x - 2 * controlPoint.x + endPoint.x,
 					   startPoint.y - 2 * controlPoint.y + endPoint.y);
-
-	// V3D A0 = B - A;
-	// V3D A1 = A - 2.0 * B + C;
 
 	if (A1.x == 0 && A1.y == 0)
 		return 2 * A1.length();
@@ -171,8 +157,6 @@ function getBezierCurveLength(t, startPoint, controlPoint, endPoint)
 		 Math.log(2 * Math.sqrt(c * a) + b));
 
 	return l0 + l1;
-
-	// return s;
 }
 
 function getNormOfCurve(t, startPoint, controlPoint, endPoint)
@@ -192,8 +176,8 @@ function getBezierCurveCoord(t, coord1, coord2, coord3)
 
 function getBezierTangent(t, startCoord, controlCoord, endCoord)
 {
-	return 2 * ( t * (startCoord -2 * controlCoord + endCoord) +
-				 controlCoord - startCoord );
+	return 2 * t * ( startCoord - 2 * controlCoord + endCoord)
+			- 2 * startCoord + 2 * controlCoord;
 }
 
 // calculate points for turn on each of *turnLanes* required
@@ -355,6 +339,9 @@ function getTangentVectorAngle(vehicle)
 	vehicle.turnAngle = Math.atan(y / x) + Math.PI;
 }
 
+var controlPoint = new Point(0, 0);
+var endPoint = new Point(0, 0);
+
 function calculateTurnDistance( vehicle, pathCalcFunction )
 {
 	let turnLane = vehicle.turnLane;
@@ -369,8 +356,13 @@ function calculateTurnDistance( vehicle, pathCalcFunction )
 
 	getTangentVectorAngle(vehicle);
 
+	controlPoint.x = turnLane.startPoint.x;
+	controlPoint.y = vehicle.turnY;
+
+	endPoint.x = vehicle.turnX;
+	endPoint.y = vehicle.turnY;
+
 	return pathCalcFunction( vehicle.turnCompletion,
 							 turnLane.startPoint,
-							 turnLane.controlPoint,
-							 turnLane.endPoint);
+							 controlPoint, endPoint);
 }
