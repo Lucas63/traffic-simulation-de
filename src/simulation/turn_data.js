@@ -16,7 +16,7 @@ function Point( _x, _y )
 
 Point.prototype.length = function()
 {
-	return Max.sqrt( this.x * this.x + this.y * this.y);
+	return Math.sqrt( this.x * this.x + this.y * this.y);
 }
 
 Point.prototype.dotProduct = function(point)
