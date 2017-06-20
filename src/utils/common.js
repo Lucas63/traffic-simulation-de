@@ -222,9 +222,9 @@ function getTangentVectorAngle(vehicle)
 	// that's why used actual coordinates of vehicle as end point for
 	// Bezier curve
 	let x = getBezierTangent(vehicle.turnCompletion, turnLane.startPoint.x,
-							 turnLane.controlPoint.x, vehicle.turnX ) ;
+							 turnLane.controlPoint.x, turnLane.endPoint.x );
 	let y = getBezierTangent(vehicle.turnCompletion, turnLane.startPoint.y,
-							 turnLane.controlPoint.y, vehicle.turny ) ;
+							 turnLane.controlPoint.y, turnLane.endPoint.y );
 
 	// if (x == 0)
 	// {
@@ -241,13 +241,13 @@ function getTangentVectorAngle(vehicle)
 		if (x > 0)
 			vehicle.turnAngle = 0;
 		else
-			vehicle.turnAngle = 180;
+			vehicle.turnAngle = Math.PI;
 
 		return;
 	}
 
 	// + Pi, because positive Y axis oriented to the bottom, not the top
-	vehicle.turnAngle = Math.atan(y / x) * RADIANS_TO_DEGREES_CONVERTION + 180;
+	vehicle.turnAngle = Math.atan(y / x) + Math.PI;
 }
 
 function calculateTurnDistance( vehicle, pathCalcFunction )
