@@ -66,20 +66,18 @@ var CAR_ROAD_SAFE_DISTANCE = 3 * CAR_LENGTH;
 var TRUCK_ROAD_SAFE_DISTANCE = 2 * TRUCK_LENGTH;
 
 
-function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed,  _startX, _startY) {
+function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed,  _startX, _startY, _angle) {
 	this.type = _type;
 	this.routeId = _routeId;
 	this.uCoord = _uCoord;
 	this.speed = _initialSpeed;
 
-	let angle = 0;
-	if (!is_vertical_road(roads[_routeId]))
-		angle = 89;
+	//this.angle = _angle;
 
 	this.canvas_object = get_canvas_object(this.type,
 			_startX,
 			_startY,
-			angle);
+			this.angle);
 
 	//draw_car(this.canvas_object);
 }
@@ -191,7 +189,9 @@ function Vehicle(config) {
 	this.turnY = 0;
 	this.turnAngle = 0;
 
-	// lane where vehicle is turninng now
+    this.canvas_object.angle = this.turnAngle;
+
+    // lane where vehicle is turninng now
 	this.turnLane = null;
 
 	// lane where vehicle is moving on during lane change

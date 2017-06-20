@@ -46,6 +46,9 @@ Lane.prototype.isEmpty = function()
 
 Lane.prototype.pushVehicle = function( vehicle )
 {
+	vehicle.angle = this.angle;
+	vehicle.canvas_object.angle = this.angle;
+
 	this.vehicles.push( vehicle );
 
 	// set virtaul vehicle as leader
