@@ -30,10 +30,10 @@ var x = 2;
 Renderer.prototype.update_map = function () {
 
 
-	context.clearRect(0, 0, canvas.width, canvas.height);
+	//context.clearRect(0, 0, canvas.width, canvas.height);
 
 	//сontext.moveTo(0,0);
-	this.draw_map();
+	//this.draw_map();
 	//context.restore();
 
 
