@@ -120,10 +120,10 @@ function printError( functionName, message )
 // TODO move this code for appropriate place in renderer
 
 // just already computed fixed coefficients for calculating Bezier curve length
-const COEF1 = 5/9;
-const COEF2 = 8/9;
-const COEF3 = 1.774597;
-const COEF4 = 0.225403;
+// const COEF1 = 5/9;
+// const COEF2 = 8/9;
+// const COEF3 = 1.774597;
+// const COEF4 = 0.225403;
 
 // t - parameter for Bezier curve
 // x1,y1 - coordinates of start point

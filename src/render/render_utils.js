@@ -353,22 +353,27 @@ function draw_tree(startX, startY, finishX, finishY) {
 }
 
 function draw_car(canvas_object) {
+    let RAD = Math.PI/180;
 
-	//context.save();
-	//context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
-	// context.rotate(canvas_object.angle * Math.PI / 180);
-	//context.rotate(canvas_object.angle);
+    // save context
+    context.save();
 
-	// console.log(canvas_object.X * logic_to_canvas_multiplier);
-	// console.log(canvas_object.Y * logic_to_canvas_multiplier);
+    // move to point
+    context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
 
+    //rotating
+    context.rotate(canvas_object.angle);
 
-	context.drawImage(canvas_object,
-		(canvas_object.X)* logic_to_canvas_multiplier,
-		(canvas_object.Y) * logic_to_canvas_multiplier,
+    console.log("------->"+canvas_object.angle);
+
+    context.drawImage(canvas_object,
+		- car_width/2,
+        - car_width/2,
+        //(canvas_object.X)* logic_to_canvas_multiplier,
+		//(canvas_object.Y) * logic_to_canvas_multiplier,
 		canvas_object.width * logic_to_canvas_multiplier,
 		canvas_object.height * logic_to_canvas_multiplier);
-	//context.restore();
+	context.restore();
 
 }
 

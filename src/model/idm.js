@@ -114,7 +114,7 @@ IDM.prototype.calculateAcceleration = function( gap, currentSpeed, leaderSpeed )
 	let speed = currentSpeed;
 
 	// determine valid local desired speed
-	let desiredSpeed = this.desiredSpeed
+	let desiredSpeed = this.desiredSpeed;
 
 	// actual acceleration model
 	// 4 is an acceleration exponent
@@ -179,20 +179,20 @@ function ACC( modelConfig )
 }
 
 
-IDM.prototype.isUpstream = function( vehicle )
-{
-	console.log("isUpstream()");
-}
-
-IDM.prototype.isJam = function( vehicle )
-{
-	console.log("isJam()");
-}
-
-IDM.prototype.isUpstream = function( vehicle )
-{
-	console.log("isDownstream()");
-}
+// IDM.prototype.isUpstream = function( vehicle )
+// {
+// 	console.log("isUpstream()");
+// };
+//
+// IDM.prototype.isJam = function( vehicle )
+// {
+// 	console.log("isJam()");
+// };
+//
+// IDM.prototype.isUpstream = function( vehicle )
+// {
+// 	console.log("isDownstream()");
+// };
 
 
 /**
@@ -209,17 +209,13 @@ ACC.prototype.calculateAcceleration = function( gap, speed,
 												leadSpeed, leadAcceleration )
 {
 	if ( gap < 0.0001 )
-	{
 		return -this.bMax;
-	}
 
 	// determine valid local v0
 	let valid_v0 = Math.min(this.desiredSpeed, this.speedlimit, this.speedMax);
 
 	if (valid_v0 < 0.001)
-	{
 		return 0;
-	}
 
 	// actual acceleration model
 	// 4 is an acceleration exponent
@@ -231,7 +227,7 @@ ACC.prototype.calculateAcceleration = function( gap, speed,
 
 	// calculate desired dynamical distance s*
 	let dynamicDistance = speed * this.timeHeadway;
-	dynamicDistance += (0.5 * delta_v) / this.sqrt_of_AB;
+	dynamicDistance += (0.5 * delta_v) / this.square_root_of_ab;
 
 	dynamicDistance = Math.max( 0, dynamicDistance );
 	dynamicDistance += this.minimumGap;
@@ -239,8 +235,8 @@ ACC.prototype.calculateAcceleration = function( gap, speed,
 	let actualGap = Math.max( gap, this.minimumGap );
 	let deceleration =
 		this.comfortAcceleration *
-		Math.pow( dynamicDistance / actualGap, 2)
+		Math.pow( dynamicDistance / actualGap, 2);
 
 	// return original IDM
 	return Math.max(-this.bMax, freeRoadAcceleration - deceleration);
-}
+};

@@ -46,6 +46,9 @@ Lane.prototype.isEmpty = function()
 
 Lane.prototype.pushVehicle = function( vehicle )
 {
+	vehicle.angle = this.angle;
+	vehicle.canvas_object.angle = this.angle;
+
 	this.vehicles.push( vehicle );
 
 	// set virtaul vehicle as leader
@@ -60,7 +63,7 @@ function removeVehicle( lane, index )
 	// update new leading vehicle on lane
 	if (index == 0 && lane.vehicles.empty() == false)
 		lane.vehicles[0].leader = lane.virtualVehicle;
-};
+}
 
 // check if lane has enough space to place new vehicle
 // requiredSpace is the least distance between the last vehicle on the lane
