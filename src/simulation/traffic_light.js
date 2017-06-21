@@ -47,6 +47,7 @@ TrafficLight.prototype.update =function( dt )
 {
 	this.elapsedTime += dt;
 
+
 	// wrap up time from the last update
 	this.elapsed %= this.allPeriodsTime;
 
