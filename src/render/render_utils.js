@@ -364,8 +364,6 @@ function draw_car(canvas_object) {
     //rotating
     context.rotate(canvas_object.angle);
 
-    //console.log("------->"+canvas_object.angle);
-
     context.drawImage(canvas_object,
 		- car_width/2,
         - car_width/2,

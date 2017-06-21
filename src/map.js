@@ -9,7 +9,7 @@ logic_junction_length = 4;
 map_routes = [];
 
 function Map(_roads, _junctions, _turns, _onramps, _offramps, _routes) {
-    print_function_start(Map.name);
+    //print_function_start(Map.name);
 
     this.roads = _roads;
     this.junctions = _junctions;
@@ -19,7 +19,7 @@ function Map(_roads, _junctions, _turns, _onramps, _offramps, _routes) {
     //this.routes = _routes;
     map_routes = _routes;
 
-    print_function_end(Map.name);
+    //print_function_end(Map.name);
 }
 
 

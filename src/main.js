@@ -2,6 +2,7 @@
  * Created by lucas63 on 11.06.17.
  */
 
+logger = null;
 spawn_points = null;
 
 roads = null;
@@ -42,7 +43,9 @@ function step(timestamp)
 }
 
 function load_objects() {
-	print_function_start(load_objects.name);
+	//print_function_start(load_objects.name);
+	logger = new Logger();
+
 
 	load_vehicle_configuration();
 
@@ -74,11 +77,11 @@ function load_objects() {
 	renderer = new Renderer(map);
 	road_engine = new RoadEngine(map);
 
-	print_function_end(load_objects.name);
+	//print_function_end(load_objects.name);
 }
 
 function main() {
-	print_function_start(main.name);
+	//print_function_start(main.name);
 
 	load_objects();
 
@@ -87,5 +90,5 @@ function main() {
 
 	requestId = window.requestAnimationFrame(step);
 
-	print_function_end(main.name);
+	//print_function_end(main.name);
 }
