@@ -13,8 +13,8 @@ function Renderer(_map) {
     this.dotted_line_color = "";
     this.boiled_line_color = "";
     this.road_side_line_color = "";
-    //this.draw_map();
-    //context.save();
+
+    logger.messages.push(new Message(ActionType.CREATED,"Object renderer created",Renderer.name));
 }
 
 
@@ -29,7 +29,6 @@ y = 10;
 
 var x = 2;
 Renderer.prototype.update_map = function () {
-
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -52,8 +51,15 @@ Renderer.prototype.update_map = function () {
     }
 
     let junctions = this.map_object.junctions;
-    for (let i = 0; i < junctions.length; ++i)
+    for (let i = 0; i < junctions.length; ++i){
         drawVehiclesOnJunction(junctions[i]);
+
+        update_canvas_traffic_light(junctions[i].verticalTrafficLight.canvas_object);
+        update_canvas_traffic_light(junctions[i].horizontalTrafficLight.canvas_object);
+
+        draw_traffic_light(junctions[i].verticalTrafficLight.canvas_object);
+        draw_traffic_light(junctions[i].horizontalTrafficLight.canvas_object);
+    }
 
     let offramps = this.map_object.offramps;
     for (let i = 0; i < offramps.length; ++i) {
@@ -128,7 +134,7 @@ function drawVehiclesOnLane(bases, lane) {
         x = lane.startX + dx * vehicle.uCoord;
         y = lane.startY + dy * vehicle.uCoord;
 
-        update_canvas_object(vehicle.canvas_object, x, y, vehicle.angle);
+        update_canvas_car(vehicle.canvas_object, x, y, vehicle.angle);
 
         draw_car(vehicle.canvas_object);
     }
@@ -142,7 +148,7 @@ function drawTurningVehicles(lane) {
         console.log("vehicle on junction" + vehicle);
 
         vehicle.canvas_object.angle = vehicle.turnAngle;
-        update_canvas_object(vehicle.canvas_object,
+        update_canvas_car(vehicle.canvas_object,
             vehicle.turnX, vehicle.turnY);
 
         draw_car(vehicle.canvas_object);
@@ -182,7 +188,7 @@ function drawVehiclesOnJunctionRoad(road) {
 /*
  Creating canvas object for car
  */
-function get_canvas_object(type, spawnX, spawnY, angle) {
+function get_canvas_car(type, spawnX, spawnY, angle) {
     let img_string = 'sources/truck.ico';
 
     if (type == 0)
@@ -202,8 +208,62 @@ function get_canvas_object(type, spawnX, spawnY, angle) {
     return canvas_object;
 }
 
-function update_canvas_object(canvas_object, X, Y, angle) {
+function update_canvas_car(canvas_object, X, Y, angle) {
     canvas_object.X = X;
     canvas_object.Y = Y;
     canvas_object.angle = angle;
+}
+
+
+function get_canvas_traffic_light(spawnX, spawnY, angle, color,is_vertical) {
+    let img_string = 'sources/';
+    let canvas_object = new Image();
+
+    canvas_object.color = color;
+    canvas_object.is_vertical = is_vertical;
+
+    switch(color){
+        case TrafficLightColor.RED:
+            img_string += 'red.png';
+
+            break;
+        case TrafficLightColor.YELLOW:
+            img_string += 'yellow.png';
+            break;
+        case TrafficLightColor.GREEN:
+            img_string += 'green.png';
+            break;
+    }
+
+    canvas_object.src = img_string;
+
+    canvas_object.X = spawnX;
+    canvas_object.Y = spawnY;
+
+    canvas_object.width = 1;
+    canvas_object.height = 3;
+    canvas_object.angle = angle;
+
+    return canvas_object;
+}
+
+
+function update_canvas_traffic_light(canvas_object) {
+    let img_string = 'sources/';
+
+
+    switch(canvas_object.color){
+        case TrafficLightColor.RED:
+            img_string += 'red.png';
+
+            break;
+        case TrafficLightColor.YELLOW:
+            img_string += 'yellow.png';
+            break;
+        case TrafficLightColor.GREEN:
+            img_string += 'green.png';
+            break;
+    }
+
+    canvas_object.src = img_string;
 }

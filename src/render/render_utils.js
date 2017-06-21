@@ -252,20 +252,19 @@ function draw_offramp(offramp) {
 	let offramp_height = 0;
 
 	if (is_vertical_road(offramp.source.direction)) {
-		startX = offramp.source.finishX - offramp.source.getForwardLanesAmount() * logic_lane_width / 2;
-		startY = offramp.source.finishY;
+		startX = offramp.source.startX - offramp.source.getLanesAmount() * logic_lane_width / 2;
+		startY = offramp.source.startY;
 
-		offramp_width = offramp.source.getForwardLanesAmount() * logic_lane_width;
-		offramp_height = offramp.outflow.getForwardLanesAmount() * logic_lane_width;
+		offramp_width = offramp.source.getLanesAmount() * logic_lane_width;
+		offramp_height = offramp.outflow.getLanesAmount() * logic_lane_width / 2;
 
 	}
 	else {
 		startX = offramp.source.finishX;
 		startY = offramp.source.finishY - offramp.source.getLanesAmount() * logic_lane_width / 2;
 
-		offramp_width = offramp.source.getLanesAmount() * logic_lane_width / 2;
-		offramp_height = offramp.outflow.getLanesAmount() * logic_lane_width;
-
+		offramp_width = offramp.destination.getLanesAmount() * logic_lane_width ;
+		offramp_height = offramp.source.getLanesAmount() * logic_lane_width;
 
 	}
 
@@ -367,14 +366,28 @@ function draw_car(canvas_object) {
     context.drawImage(canvas_object,
 		- car_width/2,
         - car_width/2,
-        //(canvas_object.X)* logic_to_canvas_multiplier,
-		//(canvas_object.Y) * logic_to_canvas_multiplier,
-		canvas_object.width * logic_to_canvas_multiplier,
+        canvas_object.width * logic_to_canvas_multiplier,
 		canvas_object.height * logic_to_canvas_multiplier);
 	context.restore();
-
 }
 
+function draw_traffic_light(canvas_object) {
+    // save context
+    context.save();
+
+    // move to point
+    context.translate(canvas_object.X * logic_to_canvas_multiplier, canvas_object.Y * logic_to_canvas_multiplier);
+
+    //rotating
+    context.rotate(canvas_object.angle);
+
+    context.drawImage(canvas_object,
+        2,
+        4,
+        canvas_object.width * logic_to_canvas_multiplier,
+        canvas_object.height * logic_to_canvas_multiplier);
+    context.restore();
+}
 
 
 // -------------- UTILS --------------
@@ -391,3 +404,4 @@ function find_road_type(lines_number, line) {
 			return "dotted";
 	}
 }
+

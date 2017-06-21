@@ -134,11 +134,6 @@ function add_logs(doc) {
     doc.setFontSize(loggs_text_size);
     doc.setFontType('normal');
 
-    logger.messages.push(new Message(ActionType.ACTION,'Nice draw','draw()'));
-    logger.messages.push(new Message(ActionType.DELETED,'Nice draw','draw()'));
-    logger.messages.push(new Message(ActionType.ACTION,'Nice draw','draw()'));
-    logger.messages.push(new Message(ActionType.ACTION,'Nice draw','draw()'));
-
 
     doc.setTextColor(0, 0, 0);
     doc.setFontType('bold');

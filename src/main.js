@@ -83,12 +83,16 @@ function load_objects() {
 function main() {
 	//print_function_start(main.name);
 
-	load_objects();
+    load_objects();
+    logger.messages.push(new Message(ActionType.ACTION,"Objects loaded from configs",main.name));
+
 
 	renderer.draw_map();
+    logger.messages.push(new Message(ActionType.ACTION,"Map rendered",main.name));
 
 
-	requestId = window.requestAnimationFrame(step);
+    requestId = window.requestAnimationFrame(step);
+    logger.messages.push(new Message(ActionType.ACTION,"Animation started",main.name));
 
 	//print_function_end(main.name);
 }
