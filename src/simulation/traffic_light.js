@@ -48,6 +48,7 @@ function TrafficLight( _x_coord, _y_coord, _angle, _initialColor, is_vertical )
 
 TrafficLight.prototype.update =function( dt )
 {
+	console.log('befor--->'+this.color);
 	this.elapsedTime += dt;
 
 
@@ -99,4 +100,6 @@ TrafficLight.prototype.update =function( dt )
 		default:
 			printError(arguments.callee.name, "Unknown traffic light state!!!");
 	}
+
+    console.log('after--->'+this.color);
 };

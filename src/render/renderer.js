@@ -251,7 +251,6 @@ function get_canvas_traffic_light(spawnX, spawnY, angle, color,is_vertical) {
 function update_canvas_traffic_light(canvas_object) {
     let img_string = 'sources/';
 
-
     switch(canvas_object.color){
         case TrafficLightColor.RED:
             img_string += 'red.png';
