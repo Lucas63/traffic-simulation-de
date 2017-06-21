@@ -44,6 +44,7 @@ function create_report() {
 function add_headers(doc) {
     doc.setFontSize(head_font_size);
     doc.setFontType('bold');
+
     doc.text(20, position, 'Report');
     position += footer_top;
 
@@ -51,7 +52,13 @@ function add_headers(doc) {
     doc.setFontSize(normal_text_size);
     doc.text(20,position, 'Created by : ');
     doc.text(40,position, '1231232323');
+    position += footer_top;
+
     doc.text(40,position, '1231232323');
+    position += footer_top;
+
+    doc.text(40,position, '1231232323');
+    position += footer_top;
 }
 
 function add_map(doc, width, height) {

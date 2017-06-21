@@ -578,12 +578,12 @@ var roads_json = {
 				null
 			],
 			"startConnection": {
-				"type": RoadObject.OFFRAMP,
-				"id": 1
-			},
-			"finishConnection": {
 				"type": RoadObject.JUNCTION,
 				"id": 4
+			},
+			"finishConnection": {
+				"type": RoadObject.OFFRAMP,
+				"id": 1
 			}
 		},
 
@@ -607,11 +607,11 @@ var roads_json = {
 			],
 			"startConnection": {
 				"type": RoadObject.OFFRAMP,
-				"id": 2
+				"id": 1
 			},
 			"finishConnection": {
 				"type": RoadObject.OFFRAMP,
-				"id": 1
+				"id": 2
 			}
 		},
 
