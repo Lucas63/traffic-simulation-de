@@ -17,7 +17,7 @@ function Onramp(_source, _destination, _inflow,
 
     this.forwardLanes = new Array(this.destination.getForwardLanesAmount());
     initJunctionLanes(this.forwardLanes);
-    setupPassLanes(this.forwardLanes, _length);
+    setupPassLanes(this.forwardLanes, _width);
 
     for (let i = 0; i < this.forwardLanes.length; ++i)
     {
@@ -29,7 +29,7 @@ function Onramp(_source, _destination, _inflow,
 
     this.backwardLanes = new Array(this.destination.getBackwardLanesAmount());
     initJunctionLanes(this.backwardLanes);
-    setupPassLanes(this.backwardLanes, _length);
+    setupPassLanes(this.backwardLanes, _width);
 
     for (let i = 0; i < this.backwardLanes.length; ++i)
     {

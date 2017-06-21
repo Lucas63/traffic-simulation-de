@@ -25,7 +25,7 @@ function Offramp(_source, _destination, _outflow,
 
     this.forwardLanes = new Array(this.source.getForwardLanesAmount());
     initJunctionLanes(this.forwardLanes);
-    setupPassLanes(this.forwardLanes, _length);
+    setupPassLanes(this.forwardLanes, _width);
 
     for (let i = 0; i < this.forwardLanes.length; ++i)
     {
@@ -36,7 +36,7 @@ function Offramp(_source, _destination, _outflow,
 
     this.backwardLanes = new Array(this.source.getBackwardLanesAmount());
     initJunctionLanes(this.backwardLanes);
-    setupPassLanes(this.backwardLanes, _length);
+    setupPassLanes(this.backwardLanes, _width);
 
     for (let i = 0; i < this.backwardLanes.length; ++i)
     {
