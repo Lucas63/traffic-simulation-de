@@ -28,4 +28,9 @@ VirtualVehicle.prototype.setFreeMovementValues = function()
 VirtualVehicle.prototype.getSafeDistance = function()
 {
 	return this.uCoord;
-}
+};
+
+VirtualVehicle.prototype.farFrom = function(distance)
+{
+	return this.uCoord > distance;
+};

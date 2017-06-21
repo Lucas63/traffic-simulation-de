@@ -99,6 +99,7 @@ function checkArrivedVehicle( currentObject, lane, laneIndex )
 	if ( nextObject == RoadObject.VOID )
 	{
 		// vehicle finished route and will be destroyed
+		vehicle.canvas_object = null;
 		removeVehicle(lane, 0);
 		return;
 	}

@@ -45,6 +45,9 @@ function updateNeighbours(current, adjacent, atLeft)
 	let leader = null;
 	let follower = null;
 
+	for (let i = 1; i < currentVehicles.length; ++i)
+		currentVehicles[i].leader = currentVehicles[i - 1];
+
 
 	// always start from the first vehicle on lane, it has the biggest
 	// u coordinate value

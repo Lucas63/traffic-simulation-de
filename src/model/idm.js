@@ -3,13 +3,13 @@ IDM_MAX_DECELERATION = -16;
 
 // if calculated acceleration < -upstreamDelta (actually it is deceleration),
 // then vehicle is located within upstream
-const upstreamDelta = 4;
+const upstreamDelta = 0.04;
 
 // if calculated acceleration > downstreamDelta,
 // then vehicle is located within upstream
-const downstreamDelta = 3;
+const downstreamDelta = 0.03;
 
-const congestedTrafficSpeed = 3;
+const congestedTrafficSpeed = 0.02;
 
 var carFreeRoadIDM = null;
 var truckFreeRoadIDM = null;
@@ -126,10 +126,10 @@ IDM.prototype.calculateAcceleration = function( gap, currentSpeed, leaderSpeed )
 
 	// calculate desired dynamical distance s*
 	let dynamicDistance = speed * this.timeHeadway;
-	dynamicDistance += (0.5 * delta_v) / this.square_root_of_ab;
+	dynamicDistance += (0.5 * currentSpeed * delta_v) / this.square_root_of_ab;
 
 	dynamicDistance = Math.max( 0, dynamicDistance );
-	dynamicDistance += this.minimumGap;
+	//dynamicDistance += this.minimumGap;
 
 	let actualGap = Math.max( gap, this.minimumGap );
 	let deceleration =

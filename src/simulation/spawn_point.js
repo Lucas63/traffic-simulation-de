@@ -16,7 +16,7 @@ function SpawnPoint(_id, _minPeriod, _maxPeriod, _truckFraction,
 	this.startX = _startX;
 	this.startY = _startY;
 
-	this.spawned = false;
+	//this.spawned = false;
 
 }
 
@@ -30,8 +30,8 @@ SpawnPoint.prototype.update = function( dt )
 SpawnPoint.prototype.ready = function()
 {
 
-    if (this.spawned)
-        return false;
+    // if (this.spawned)
+    //    return false;
 
 
 	if (this.elapsedTime < this.minPeriod)
@@ -49,7 +49,8 @@ SpawnPoint.prototype.ready = function()
 
 SpawnPoint.prototype.spawn = function()
 {
-	this.spawned = true;
+	//this.spawned = true;
+    console.log("SP elapsed time " + this.elapsedTime);
 
 	let truckCreationProbability = Math.random();
 
