@@ -61,6 +61,7 @@ TrafficLight.prototype.update =function( dt )
 			if (this.elapsedTime > this.greenLightPeriod)
 			{
 				this.color = TrafficLightColor.YELLOW;
+				this.canvas_object.color = this.color;
 				// this.elapsedTime = elapsed - this.greenLightPeriod;
 				this.elapsedTime = 0;
 				this.state = TrafficLightState.YELLOW_AFTER_GREEN;
@@ -71,6 +72,7 @@ TrafficLight.prototype.update =function( dt )
 			if (this.elapsedTime > this.yellowLightPeriod)
 			{
 				this.color = TrafficLightColor.RED;
+                this.canvas_object.color = this.color;
 				//this.elapsedTime = elapsed - this.yellowLightPeriod;
                 this.elapsedTime = 0;
 				this.state = TrafficLightState.RED;
@@ -81,6 +83,7 @@ TrafficLight.prototype.update =function( dt )
 			if (this.elapsedTime > this.redLightPeriod)
 			{
 				this.color = TrafficLightColor.YELLOW;
+                this.canvas_object.color = this.color;
 				//this.elapsedTime = elapsed - this.redLightPeriod;
                 this.elapsedTime = 0;
 				this.state = TrafficLightState.YELLOW_AFTER_RED;
@@ -91,6 +94,7 @@ TrafficLight.prototype.update =function( dt )
 			if (this.elapsedTime > this.yellowLightPeriod)
 			{
 				this.color = TrafficLightColor.GREEN;
+                this.canvas_object.color = this.color;
 				//this.elapsedTime = elapsed - this.yellowLightPeriod;
                 this.elapsedTime = 0;
 				this.state = TrafficLightState.GREEN;
