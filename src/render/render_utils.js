@@ -329,25 +329,20 @@ function draw_road_lines(rdCnfg, is_vertical) {
     }
 }
 
-function draw_tree(startX, startY, finishX, finishY) {
-    let windowX = finishX - startX;
-    let windowY = finishY - startY;
-
-    let X = Math.floor((Math.random() * windowX) + startX);
-    let Y = Math.floor((Math.random() * windowY) + startY);
+function draw_tree(X,Y) {
 
     let image_source = 'sources/top.png';
 
-    var img = new Image();
-    img.onload = function () {
-        context.drawImage(img,
-            X * logic_to_canvas_multiplier,
-            Y * logic_to_canvas_multiplier,
-            2 * logic_to_canvas_multiplier,
-            4 * logic_to_canvas_multiplier
-        );
-    };
-    img.src = image_source;//'https://mdn.mozillademos.org/files/5395/backdrop.png';
+    let img = new Image();
+    img.src = image_source;
+
+    context.drawImage(img,
+        X * logic_to_canvas_multiplier,
+        Y * logic_to_canvas_multiplier,
+        2 * logic_to_canvas_multiplier,
+        4 * logic_to_canvas_multiplier
+    );
+    //'https://mdn.mozillademos.org/files/5395/backdrop.png';
 }
 
 function draw_car(canvas_object) {

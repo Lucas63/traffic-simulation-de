@@ -27,6 +27,8 @@ function render_map(renderer) {
     //---- map properties
     draw_map();
 
+    draw_forest();
+
     //---- draw roads
     draw_roads(renderer.map_object.roads);
 
@@ -48,11 +50,8 @@ function render_map(renderer) {
 function draw_map() {
     canvas.style.backgroundColor = "lightyellow";
 
-    draw_trees(context,53, 1, 91, 11);
-    draw_trees(context,17, 1, 45, 11);
-    draw_trees(context,17, 20, 45, 32);
-
 }
+
 
 function draw_roads(roads) {
 
@@ -86,10 +85,30 @@ function draw_offramps( offramps) {
     }
 }
 
-function draw_trees(startX, startY, finishX, finishY) {
-    let object_number = Math.floor((Math.random() * 10) + 1);
+function draw_forest() {
 
-    for (let i = 0; i < object_number; i++) {
-        draw_tree(startX, startY, finishX, finishY);
+    for ( let i = 0 ; i < 8; i++){
+        draw_tree(22 + i * 2.5,11);
+        draw_tree(22 + i * 2.5,21);
+        draw_tree(22 + i * 2.5,31);
+        draw_tree(22 + i * 2.5,31);
     }
+
+    for ( let i = 0 ; i < 14; i++){
+
+        draw_tree(58 + i * 2.5,11);
+    }
+
+
+    for ( let i = 0 ; i < 14; i++){
+
+        draw_tree(58 + i * 2.5,11);
+    }
+
+    for ( let i = 0 ; i < 5; i++) {
+
+        draw_tree(58 + i * 2.5, 41);
+        draw_tree(62 + i * 2.5, 21);
+    }
+
 }
