@@ -47,8 +47,14 @@ function updateAccelerationForVehicle( currentVehicle, leaderVehicle )
 	let gap = leaderVehicle.uCoord - leaderVehicle.length -
 			  currentVehicle.uCoord;
 
-	let currentSpeed = currentVehicle.speed;
-	let leaderSpeed = leaderVehicle.speed;
+    let currentSpeed = currentVehicle.speed;
+    let leaderSpeed = leaderVehicle.speed;
+
+	if (gap > currentVehicle.safeDistance)
+    {
+        gap = currentVehicle.safeDistance;
+        leaderSpeed = currentVehicle.longModel.desiredSpeed;
+    }
 
 	return currentVehicle.longModel.
 		calculateAcceleration(gap, currentSpeed, leaderSpeed);
@@ -88,14 +94,23 @@ function updateStraightMove( vehicle, mapObject, dt )
 
 	// update velocity
 	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
-	vehicle.uCoord += Math.max(0, newPosition);
+	newPosition += Math.max(0, newPosition);
+	newPosition += vehicle.uCoord;
 
-	let safeDistance = mapObject.getLength();
-	if (vehicle.uCoord >= safeDistance)
-	{
-		vehicle.uCoord = safeDistance;
-		vehicle.arrived = true;
-	}
+	if (vehicle.leader.farFrom(newPosition) == false)
+    {
+        let safeDistance = mapObject.getLength();
+        if (newPosition >= safeDistance)
+        {
+            vehicle.uCoord = safeDistance;
+            vehicle.arrived = true;
+        }
+
+        return;
+    }
+
+	vehicle.uCoord = newPosition;
+
 
 	vehicle.speed += vehicle.acceleration * dt;
 	vehicle.speed = Math.max( 0, vehicle.speed);

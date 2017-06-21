@@ -53,6 +53,7 @@ var CAR_WIDTH = INVALID;
 var TRUCK_LENGTH = INVALID;
 var TRUCK_WIDTH = INVALID;
 
+// must be bigger than congestedTrafficSpeed
 var CAR_INITIAL_SPEED = 0.1;
 var TRUCK_INITIAL_SPEED = 0.1;
 

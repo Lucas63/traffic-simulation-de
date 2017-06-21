@@ -16,25 +16,25 @@ routes = null;
 renderer = null;
 road_engine = null;
 
-var start = 0;
+//var start = 0;
 
-var counter = 0;
+//var counter = 0;
 var requestId = null;
 
 function step(timestamp)
 {
-	if (counter > 600)
-		window.cancelAnimationFrame(requestId);
+	// if (counter > 600)
+	// 	window.cancelAnimationFrame(requestId);
+    //
+	// ++counter;
 
-	++counter;
-
-	let progress = timestamp - start;
+	//let progress = timestamp - start;
 	// progress = Math.round(progress);
 	// progress /= 1000;
 	//
 	// start = timestamp;
 
-	progress = 0.05;
+	let progress = 0.05;
 
 	road_engine.update(progress);
 	renderer.update_map();
