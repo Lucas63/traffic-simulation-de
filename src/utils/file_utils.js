@@ -476,7 +476,7 @@ function get_specific_lanes(road_id,
             shiftY =   0;
 
             for (let i = 0; i < lines_number; i++) {
-                spawn_point =
+                //spawn_point =
                 lanes.push(new Lane(
                     length,
                     type,
