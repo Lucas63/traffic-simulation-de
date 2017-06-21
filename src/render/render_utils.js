@@ -183,7 +183,7 @@ function draw_turn(turn) {
 	}
 
 
-	context.fillStyle = "black";
+	context.fillStyle = "#858c73";
 	context.fill();
 	context.closePath();
 	context.stroke();

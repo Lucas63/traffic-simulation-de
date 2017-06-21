@@ -186,7 +186,7 @@ function setTurnData( turnLanes, sourceRoad, sourceLanes, destinationLanes )
 {
 	// if source road has vertical orientation, then destination one
 	// has horizontal orientation
-	let vertical = is_vertical_road(sourceRoad);
+	let vertical = is_vertical_road(sourceRoad.direction);
 
 	let turnLength = 0;
 	for (let i = 0; i < turnLanes.length; ++i)
@@ -336,7 +336,8 @@ function getTangentVectorAngle(vehicle)
 	}
 
 	// + Pi, because positive Y axis oriented to the bottom, not the top
-	vehicle.turnAngle = Math.atan(y / x) + Math.PI;
+	//vehicle.turnAngle = Math.atan(y / x) + Math.PI;
+    vehicle.turnAngle = Math.atan(y / x);
 }
 
 var controlPoint = new Point(0, 0);
