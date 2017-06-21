@@ -6,8 +6,8 @@ var spawn_points_json = {
         {
             "id":0,
             "truck_variability": 0.3,
-            "min_period":1,
-            "max_period":2,
+            "min_period":4,
+            "max_period":6,
             "route_id":0,
             "lane_id":1,
             "lane_type":1
@@ -16,8 +16,8 @@ var spawn_points_json = {
         {
             "id":1,
             "truck_variability": 0.8,
-            "min_period":2,
-            "max_period":3,
+            "min_period":3,
+            "max_period":4,
             "route_id":1,
             "lane_id":2,
             "lane_type":1

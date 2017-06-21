@@ -7,6 +7,8 @@ function checkSpawnPoints(road, dt)
 function checkSpawnPointsForLanes( lanes, dt )
 {
 	let point = null;
+	let decision = false;
+
 	for (let i = 0;i < lanes.length; ++i)
 	{
 		point  = lanes[i].spawnPoint;
@@ -15,7 +17,8 @@ function checkSpawnPointsForLanes( lanes, dt )
 
 		point.update(dt);
 
-		if (point.ready())
+		decision = point.ready();
+		if (decision == true)
 		{
 			// hack! I want prevent sitation when spawn point generates vehicle
 			// and only after Road Engine checks whether enough space for it.

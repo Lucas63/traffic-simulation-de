@@ -34,7 +34,7 @@ function step(timestamp)
 	//
 	// start = timestamp;
 
-	progress = 0.1;
+	progress = 0.05;
 
 	road_engine.update(progress);
 	renderer.update_map();

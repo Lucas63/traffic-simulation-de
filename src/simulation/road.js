@@ -173,6 +173,11 @@ function Road( roadConfig )
 	this.backwardBases = roadConfig.backwardBases;
 }
 
+Road.prototype.getLength = function()
+{
+	return this.length;
+};
+
 Road.prototype.getId = function()
 {
 	return this.id;

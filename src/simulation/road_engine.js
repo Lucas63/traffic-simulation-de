@@ -42,9 +42,7 @@ RoadEngine.prototype.updateTrafficLights = function( dt )
 {
 	let junctions = this.map.junctions;
 	for (let i = 0;i < junctions.length; ++i)
-	{
 		junctions[i].updateTrafficLights(dt);
-	}
 };
 
 // all internal functions work on roads and vehicles on them,

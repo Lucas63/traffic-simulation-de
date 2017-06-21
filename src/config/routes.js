@@ -31,7 +31,7 @@ var routes_json =
 					},
 					{
 						"type": RouteItemType.JUNCTION,
-						"id": 2,
+						"id": 3,
 						"movement": MovementType["pass"]
 					},
 					{
