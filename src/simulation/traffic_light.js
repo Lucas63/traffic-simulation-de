@@ -18,10 +18,12 @@ const DEFAULT_RED_COLOR_DURATION = 12;
 const DEFAULT_YELLOW_COLOR_DURAION = 3;
 const DEFAULT_GREEN_COLOR_DURATION = 15;
 
-function TrafficLight( _x_coord, _y_coord, _initialColor )
+function TrafficLight( _x_coord, _y_coord, _angle, _initialColor, is_vertical )
 {
 	this.x_coord = _x_coord;
 	this.y_coord = _y_coord;
+
+	this.angle = _angle;
 
 	this.color = _initialColor;
 
@@ -41,6 +43,7 @@ function TrafficLight( _x_coord, _y_coord, _initialColor )
 						  this.yellowLightPeriod +
 						  this.redLightPeriod +
 						  this.yellowLightPeriod;
+	this.canvas_object = get_canvas_traffic_light(this.x_coord,this.y_coord,this.angle,this.color,is_vertical);
 }
 
 TrafficLight.prototype.update =function( dt )

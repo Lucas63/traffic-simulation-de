@@ -10,6 +10,8 @@
 function RoadEngine( _map )
 {
 	this.map = _map;
+    logger.messages.push(new Message(ActionType.CREATED,"Object RoadEngine created",RoadEngine.name));
+
 }
 
 RoadEngine.prototype.update = function( dt )

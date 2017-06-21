@@ -136,21 +136,23 @@ function load_junctions(roads) {
         let junction_string = array[i];
         let related_roads = get_roads_connected_to_junction(junction_string.id, roads);
 
+        let pos = get_center_coordinates(related_roads, i);
+
         let new_junction = new Junction
         (
             junction_string.id,
-            get_center_coordinates(related_roads, i),
+            pos,
             junction_side_length,
             related_roads[0],
             related_roads[1],
             related_roads[2],
             related_roads[3],
 
-            new TrafficLight(0, 0,
-                junction_string.verticalTrafficLight.initialLight),
+            new TrafficLight(pos[0], pos[1], 0,
+                junction_string.verticalTrafficLight.initialLight,true),
 
-            new TrafficLight(0, 0,
-                junction_string.horizontalTrafficLight.initialLight)
+            new TrafficLight(pos[0], pos[1], Math.PI/2,
+                junction_string.horizontalTrafficLight.initialLight,false)
         );
         junctions.push(new_junction);
     }
@@ -439,7 +441,7 @@ function get_specific_lanes(road_id,
                             length,
                             type,
                             lines_number,
-                            spawn_points,
+                            spawning_points,
                             is_vertical, is_forward, is_direct,
                             startX, startY, finishX, finishY) {
 
@@ -464,8 +466,6 @@ function get_specific_lanes(road_id,
     let shiftY = 0;
 
 
-    let spawn_point = null;
-
     // TODO : errors in road direction maybe!!!!
     if (is_vertical) {
 
@@ -476,12 +476,10 @@ function get_specific_lanes(road_id,
             shiftY =   0;
 
             for (let i = 0; i < lines_number; i++) {
-                //spawn_point =
                 lanes.push(new Lane(
                     length,
                     type,
-                    get_spawn_point_by_id(spawn_points[0], road_id),
-
+                    (spawning_points[i] == null)?null:spawn_points[spawning_points[i]],
                     new LaneBases(leftLC_bases[direction].dx,
                         leftLC_bases[direction].dy,
                         rightLC_bases[direction].dx,
@@ -505,8 +503,7 @@ function get_specific_lanes(road_id,
                 lanes.push(new Lane(
                     length,
                     type,
-                    get_spawn_point_by_id(spawn_points[i], road_id),
-
+                    (spawning_points[i] == null)?null:spawn_points[spawning_points[i]],
                     new LaneBases(leftLC_bases[direction].dx,
                         leftLC_bases[direction].dy,
                         rightLC_bases[direction].dx,
@@ -533,7 +530,7 @@ function get_specific_lanes(road_id,
                 lanes.push(new Lane(
                     length,
                     type,
-                    get_spawn_point_by_id(spawn_points[i], road_id),
+                    (spawning_points[i] == null)?null:spawn_points[spawning_points[i]],
                     new LaneBases(leftLC_bases[direction].dx,
                         leftLC_bases[direction].dy,
                         rightLC_bases[direction].dx,
@@ -557,8 +554,7 @@ function get_specific_lanes(road_id,
                 lanes.push(new Lane(
                     length,
                     type,
-                    get_spawn_point_by_id(spawn_points[i], road_id),
-
+                    (spawning_points[i] == null)?null:spawn_points[spawning_points[i]],
                     new LaneBases(leftLC_bases[direction].dx,
                         leftLC_bases[direction].dy,
                         rightLC_bases[direction].dx,

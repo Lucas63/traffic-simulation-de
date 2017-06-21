@@ -74,7 +74,7 @@ function VehicleConfig(_type, _routeId, _uCoord, _initialSpeed,  _startX, _start
 
 	//this.angle = _angle;
 
-	this.canvas_object = get_canvas_object(this.type,
+	this.canvas_object = get_canvas_car(this.type,
 			_startX,
 			_startY,
 			this.angle);
@@ -196,6 +196,9 @@ function Vehicle(config) {
 
 	// lane where vehicle is moving on during lane change
 	this.sourceLane = null;
+
+    logger.messages.push(new Message(ActionType.CREATED,"Vehicle created",Vehicle.name));
+
 }
 
 

@@ -19,7 +19,7 @@ function Map(_roads, _junctions, _turns, _onramps, _offramps, _routes) {
     //this.routes = _routes;
     map_routes = _routes;
 
-    //print_function_end(Map.name);
+    logger.messages.push(new Message(ActionType.CREATED,"Object map created",Map.name));
 }
 
 
