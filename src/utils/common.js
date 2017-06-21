@@ -336,8 +336,8 @@ function getTangentVectorAngle(vehicle)
 	}
 
 	// + Pi, because positive Y axis oriented to the bottom, not the top
-	//vehicle.turnAngle = Math.atan(y / x) + Math.PI;
-    vehicle.turnAngle = Math.atan(y / x);
+	vehicle.turnAngle = Math.atan(y / x) + Math.PI;
+    //vehicle.turnAngle = Math.atan(y / x);
 }
 
 var controlPoint = new Point(0, 0);
