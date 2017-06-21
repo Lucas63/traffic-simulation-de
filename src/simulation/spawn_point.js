@@ -29,13 +29,10 @@ SpawnPoint.prototype.update = function( dt )
 // is this spawn point ready to create vehicle
 SpawnPoint.prototype.ready = function()
 {
-    console.log("spawned = " + this.spawned);
 
-    if (this.spawned) {
-
+    if (this.spawned)
         return false;
 
-    }
 
 	if (this.elapsedTime < this.minPeriod)
 		return false;
@@ -53,7 +50,6 @@ SpawnPoint.prototype.ready = function()
 SpawnPoint.prototype.spawn = function()
 {
 	this.spawned = true;
-	console.log("spawned now true");
 
 	let truckCreationProbability = Math.random();
 

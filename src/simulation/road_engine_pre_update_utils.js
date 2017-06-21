@@ -18,7 +18,6 @@ function checkSpawnPointsForLanes( lanes, dt )
 		point.update(dt);
 
 		decision = point.ready();
-		console.log("decision = " + decision);
 		if (decision == true)
 		{
 			// hack! I want prevent sitation when spawn point generates vehicle

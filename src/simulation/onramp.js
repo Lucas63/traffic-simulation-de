@@ -21,14 +21,24 @@ function Onramp( _source, _destination, _inflow,
 	setupPassLanes(this.forwardLanes, _length);
 
 	for (let i = 0; i < this.forwardLanes.length; ++i)
-		this.forwardLanes[i].angle = _destination.forwardLanes[i].angle;
+	{
+        this.forwardLanes[i].angle = _destination.forwardLanes[i].angle;
+        this.forwardLanes[i].startX = _inflow.forwardLanes[i].finishX;
+        this.forwardLanes[i].startY = _inflow.forwardLanes[i].finishY;
+	}
+
 
 	this.backwardLanes = new Array( this.destination.getBackwardLanesAmount() );
 	initJunctionLanes(this.backwardLanes);
 	setupPassLanes(this.backwardLanes, _length);
 
 	for (let i = 0; i < this.backwardLanes.length; ++i)
-		this.backwardLanes[i].angle = _destination.backwardLanes[i].angle;
+	{
+        this.backwardLanes[i].angle = _destination.backwardLanes[i].angle;
+        this.backwardLanes[i].startX = _destination.backwardLanes[i].finishX;
+        this.backwardLanes[i].startY = _destination.backwardLanes[i].finishY;
+	}
+
 
 	let turnDestinationLane = null;
 
@@ -134,7 +144,7 @@ Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 	if (vehiclesAmount == 0)
 		return true;
 
-	return false; // clutch
+	//return false; // clutch
 
 	// check vehicles in reverse order
 	// try to avoid conflicts with vehicles added recently
@@ -154,8 +164,8 @@ Onramp.prototype.canTurn = function( sourceLaneIndex, requiredSpace )
 				return false;
 
 			case VehicleState.CHANGE_LANE:
-				printDebug(this.arguments.calle, "No lane change on onramp!!!");
-				return false;;
+				printDebug(this.arguments.callee, "No lane change on onramp!!!");
+				return false;
 		}
 	}
 

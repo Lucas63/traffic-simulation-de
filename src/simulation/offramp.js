@@ -13,23 +13,38 @@ function Offramp(_source, _destination, _outflow,
     this.destinationId = this.destination.getId();
     this.outflowId = this.outflow.getId();
 
-    this.destLanesAmount = this.destination.getLanesAmount();
+    let destLanes = null;
+    if (_destination.startConnection.type == RoadObject.OFFRAMP)
+        destLanes = _destination.forwardLanes;
+    else
+        destLanes = _destination.backwardLanes;
+
+    this.destLanesAmount = destLanes.length;
 
     this.connectedLaneType = _connectedLaneType;
 
     this.forwardLanes = new Array(this.source.getForwardLanesAmount());
     initJunctionLanes(this.forwardLanes);
-    setupPassLanes(this.forwardLanes);
+    setupPassLanes(this.forwardLanes, _length);
 
     for (let i = 0; i < this.forwardLanes.length; ++i)
+    {
         this.forwardLanes[i].angle = _source.forwardLanes[i].angle;
+        this.forwardLanes[i].startX = _source.forwardLanes[i].finishX;
+        this.forwardLanes[i].startY = _source.forwardLanes[i].finishY;
+    }
 
     this.backwardLanes = new Array(this.source.getBackwardLanesAmount());
     initJunctionLanes(this.backwardLanes);
-    setupPassLanes(this.backwardLanes);
+    setupPassLanes(this.backwardLanes, _length);
 
     for (let i = 0; i < this.backwardLanes.length; ++i)
+    {
         this.backwardLanes[i].angle = _source.backwardLanes[i].angle;
+        this.backwardLanes[i].startX = _outflow.backwardLanes[i].finishX;
+        this.backwardLanes[i].startY = _source.backwardLanes[i].finishY;
+    }
+
 
     let turnSourceLane = {};
     if (_connectedLaneType == LaneType["forward"]) {
@@ -48,8 +63,7 @@ function Offramp(_source, _destination, _outflow,
     initJunctionLanes(this.turnLanes);
     addVehiclesArray(this.turnLanes);
 
-    setOfframpTurnData(this.turnLanes, _source, turnSourceLane,
-        _destination.forwardLanes);
+    setOfframpTurnData(this.turnLanes, _source, turnSourceLane, destLanes);
 
     this.forwardBases = null;
     this.backwardBases = null;
@@ -67,7 +81,7 @@ function Offramp(_source, _destination, _outflow,
         this.backwardBases = _source.forwardBases;
     }
 
-    let destBases = _destination.forwardLanes[0].bases;
+    let destBases = destLanes[0].bases;
 
     this.dx = sourceBases.move_dx == 0 ?
         destBases.move_dx : sourceBases.move_dx;
