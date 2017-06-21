@@ -463,6 +463,7 @@ function get_specific_lanes(road_id,
     let shiftX = 0;
     let shiftY = 0;
 
+    let spawn_point = null;
 
     // TODO : errors in road direction maybe!!!!
     if (is_vertical) {
@@ -474,7 +475,7 @@ function get_specific_lanes(road_id,
             shiftY =   0;
 
             for (let i = 0; i < lines_number; i++) {
-
+                spawn_point =
                 lanes.push(new Lane(
                     length,
                     type,
@@ -532,12 +533,10 @@ function get_specific_lanes(road_id,
                     length,
                     type,
                     get_spawn_point_by_id(spawn_points[i], road_id),
-
                     new LaneBases(leftLC_bases[direction].dx,
                         leftLC_bases[direction].dy,
                         rightLC_bases[direction].dx,
                         rightLC_bases[direction].dy),
-
                     Math.PI / 2,
                     startX + shiftX,
                     startY + shift + way_multiplier * (  i * logic_lane_width) + shiftY,
