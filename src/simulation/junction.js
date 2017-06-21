@@ -237,6 +237,11 @@ function Junction( _id, _pos, _side,
 	this.pathCalcFunction = getBezierCurveLength;
 }
 
+Junction.prototype.getLength = function()
+{
+    return this.side;
+};
+
 Junction.prototype.getTrafficLight = function( roadId )
 {
 	let side = this.getSideForRoad( roadId );

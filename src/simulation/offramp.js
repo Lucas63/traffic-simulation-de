@@ -97,6 +97,11 @@ function Offramp(_source, _destination, _outflow,
     this.pathCalcFunction = getBezierCurveLength;
 }
 
+Offramp.prototype.getLength = function()
+{
+    return this.width;
+};
+
 // check is it possible to turn now and return index of lane on destination
 // road in case of success, otherwise INVALID
 Offramp.prototype.canTurn = function (vehicleRequiredSpace) {

@@ -90,7 +90,7 @@ function updateStraightMove( vehicle, mapObject, dt )
 	let newPosition = vehicle.speed * dt + 0.5 * vehicle.acceleration * dt * dt;
 	vehicle.uCoord += Math.max(0, newPosition);
 
-	let safeDistance = mapObject.length;
+	let safeDistance = mapObject.getLength();
 	if (vehicle.uCoord >= safeDistance)
 	{
 		vehicle.uCoord = safeDistance;
