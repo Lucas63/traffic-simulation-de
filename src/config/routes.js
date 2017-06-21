@@ -121,6 +121,38 @@ var routes_json =
 						"movement": MovementType["pass"]
 					}
 				]
+			},
+
+			{
+				"id": 2,
+				"items":
+				[
+					{
+						"type": RouteItemType.ROAD,
+						"id": 0,
+						"movement": MovementType["pass"]
+					},
+                    {
+                        "type": RouteItemType.JUNCTION,
+                        "id": 0,
+                        "movement": MovementType["pass"]
+                    },
+                    {
+                        "type": RouteItemType.ROAD,
+                        "id": 3,
+                        "movement": MovementType["pass"]
+                    },
+                    {
+                        "type": RouteItemType.JUNCTION,
+                        "id": 1,
+                        "movement": MovementType["pass"]
+                    },
+                    {
+                        "type": RouteItemType.ROAD,
+                        "id": 4,
+                        "movement": MovementType["pass"]
+                    }
+				]
 			}
 		]
 	};

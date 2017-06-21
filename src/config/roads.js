@@ -14,7 +14,7 @@ var roads_json = {
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				0,
-				null
+				2
 			],
 			"backwardLanes": 2,
 			"backwardLanesSpawnPoints": [
@@ -42,7 +42,7 @@ var roads_json = {
 			"forwardLanes":2,
 			"forwardLanesSpawnPoints": [
 				null,
-				null
+				1
 			],
 			"backwardLanes":2,
 			"backwardLanesSpawnPoints": [

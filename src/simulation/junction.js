@@ -372,7 +372,7 @@ Junction.prototype.getDestinationLanesForPass = function(_source, _destination)
 Junction.prototype.trafficLightAllowToMove = function( side )
 {
 	let trafficLight = this.getTrafficLightForSide(side);
-	console.log(trafficLight.color);
+	//console.log(trafficLight.color);
 	return trafficLight.color == TrafficLightColor["GREEN"];
 };
 

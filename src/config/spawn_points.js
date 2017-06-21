@@ -21,7 +21,16 @@ var spawn_points_json = {
             "route_id":1,
             "lane_id":2,
             "lane_type":1
-        }
+        },
 
+        {
+            "id": 2,
+            "truck_variability": 0.3,
+            "min_period":30,
+            "max_period":40,
+            "route_id":2,
+            "lane_id":2,
+            "lane_type":1
+        }
     ]
 };
