@@ -51,13 +51,13 @@ function add_headers(doc) {
     doc.setFontType('normal');
     doc.setFontSize(normal_text_size);
     doc.text(20,position, 'Created by : ');
-    doc.text(40,position, '1231232323');
+    doc.text(50,position, 'Artem Malynovskyi');
     position += footer_top;
 
-    doc.text(40,position, '1231232323');
+    doc.text(50,position, 'Katerina Dubok');
     position += footer_top;
 
-    doc.text(40,position, '1231232323');
+    doc.text(50,position, 'Olexii Checkanin');
     position += footer_top;
 }
 

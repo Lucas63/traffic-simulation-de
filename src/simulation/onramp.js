@@ -64,6 +64,7 @@ function Onramp(_source, _destination, _inflow,
 
     let destBases = null;
 
+
     if (_destination.startConnection.type == RoadObject.ONRAMP) {
         destBases = _destination.forwardBases;
         this.forwardBases = _source.forwardBases;
