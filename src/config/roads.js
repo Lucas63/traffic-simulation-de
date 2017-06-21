@@ -561,18 +561,18 @@ var roads_json = {
 
 		{
 			"id": 20,
-			"direction": "UP_TO_BOTTOM",
+			"direction": "BOTTOM_TO_UP",
 			"length": 8,
 			"startX": 78,
-			"startY": 27,
+			"startY": 36,
 			"finishX": 78,
-			"finishY": 36,
+			"finishY": 27,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				null,
 				null
 			],
-			"backwardLanes": 0,
+			"backwardLanes": 2,
 			"backwardLanesSpawnPoints": [
 				null,
 				null
@@ -592,15 +592,15 @@ var roads_json = {
 			"direction": "UP_TO_BOTTOM",
 			"length": 1,
 			"startX": 78,
-			"startY": 20,
+			"startY": 25,
 			"finishX": 78,
-			"finishY": 25,
+			"finishY": 20,
 			"forwardLanes": 2,
 			"forwardLanesSpawnPoints": [
 				null,
 				null
 			],
-			"backwardLanes": 0,
+			"backwardLanes": 2,
 			"backwardLanesSpawnPoints": [
 				null,
 				null

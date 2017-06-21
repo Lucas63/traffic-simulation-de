@@ -2,6 +2,7 @@
  * Created by lucas63 on 11.06.17.
  */
 
+logger = null;
 spawn_points = null;
 
 roads = null;
@@ -43,6 +44,8 @@ function step(timestamp)
 
 function load_objects() {
 	//print_function_start(load_objects.name);
+	logger = new Logger();
+
 
 	load_vehicle_configuration();
 
